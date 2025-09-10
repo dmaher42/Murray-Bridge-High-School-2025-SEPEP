@@ -1,8 +1,6 @@
-// Adapted for direct browser execution (no bundler).
-// Removed ES module import/export; relying on global React & ReactDOM from UMD scripts in index.html.
-// NOTE: If you later move to a build setup, reintroduce: import React from 'react'; export default App;
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import ReactDOM from "react-dom/client";
 
-const { useEffect, useMemo, useState, useCallback } = React;
 
 /************************************************************
  * SEEPEP Fixture & Results Tracker (Browser Version)
@@ -438,7 +436,7 @@ function AdminView({ division, data, onImportJSON, onPushAll }) {
 
 // ========================= Main App =========================
 const YEARS = ["2025", "2024", "2023"];
-function App() {
+export default function App() {
   const [division, setDivision] = useState(YEARS[0]);
   const [loading, setLoading] = useState({ type: null, message: "" });
   const [toast, setToast] = useState({ message: "", type: "success" });
