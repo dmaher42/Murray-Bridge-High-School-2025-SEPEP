@@ -217,7 +217,7 @@ function TeamsView({ division, data, onUpsertTeam }) {
         </form>
       </Section>
       <Section title="Teams" actions={<TextInput label="Search teams" value={q} onChange={setQ} className="w-64" placeholder="Search by name, coach, or neighbourhood" />}> 
-        <Table caption={`Teams in ${division} division`} columns=[
+        <Table caption={`Teams in ${division} division`} columns={[
           { key: "name", header: "Team" },
           { key: "coach", header: "Coach" },
           { key: "neighbourhood", header: "Neighbourhood" },
@@ -226,7 +226,7 @@ function TeamsView({ division, data, onUpsertTeam }) {
               <Button variant="ghost" ariaLabel={`Edit ${t.name}`} onClick={() => setDraft({ id: t.id, name: t.name, coach: t.coach || "", neighbourhood: t.neighbourhood || "" })}>Edit</Button>
             </div>
           ) }
-        ] rows={filtered} />
+        ]} rows={filtered} />
       </Section>
     </div>
   );
