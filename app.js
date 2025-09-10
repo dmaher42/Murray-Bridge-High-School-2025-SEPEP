@@ -9,7 +9,10 @@ const { useEffect, useMemo, useState, useCallback } = React;
  ************************************************************/
 
 // ========================= Backend Config =========================
-const API = (window.__SEEPEP_API__ ?? "https://script.google.com/macros/s/AKfycbxQF1jPP2EjOt8RH81onVHgxazq1uxzZpQ7WBt214pcsV7IkXLzxxS72uwNJQoy7n2F/exec");
+const USE_MOCK_SERVER = Boolean(window.__SEEPEP_USE_MOCK__ || new URLSearchParams(window.location.search).has('mock'));
+const API = USE_MOCK_SERVER
+  ? "/api"
+  : (window.__SEEPEP_API__ ?? "https://script.google.com/macros/s/AKfycbxQF1jPP2EjOt8RH81onVHgxazq1uxzZpQ7WBt214pcsV7IkXLzxxS72uwNJQoy7n2F/exec");
 const TOKEN = (window.__SEEPEP_TOKEN__ ?? "");
 
 // ========================= Validation =========================
