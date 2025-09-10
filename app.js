@@ -9,8 +9,21 @@ const { useEffect, useMemo, useState, useCallback } = React;
  ************************************************************/
 
 // ========================= Backend Config =========================
-const API = (window.__SEEPEP_API__ ?? "https://script.google.com/macros/s/AKfycbxQF1jPP2EjOt8RH81onVHgxazq1uxzZpQ7WBt214pcsV7IkXLzxxS72uwNJQoy7n2F/exec");
-const TOKEN = (window.__SEEPEP_TOKEN__ ?? "");
+// Backend endpoint and token are injected via environment variables
+// Prefer values supplied by the hosting page (window.__SEEPEP_*), then fall back
+// to Vite style environment variables. If neither is provided we operate in
+// "mock" mode where network calls are replaced with local placeholders.
+const API = window.__SEEPEP_API__ || import.meta.env.VITE_API || "";
+const TOKEN = window.__SEEPEP_TOKEN__ || import.meta.env.VITE_TOKEN || "";
+
+// When no API is configured the app should still function locally using empty
+// placeholder data. This allows development without a backend and provides a
+// clear warning in the console so users know the data is not persisted.
+const USE_MOCK_API = !API;
+const MOCK_RESPONSE = { teams: [], fixtures: [], results: [] };
+if (USE_MOCK_API) {
+  console.warn("SEEPEP API endpoint not configured – running with mock data only");
+}
 
 // ========================= Validation =========================
 function validateTeam(team) {
@@ -45,6 +58,9 @@ function sanitizeInput(input) {
 
 // ========================= API Helpers =========================
 async function apiGet(params) {
+  if (USE_MOCK_API) {
+    return MOCK_RESPONSE;
+  }
   const url = `${API}?${new URLSearchParams({ ...params, token: TOKEN })}`;
   const res = await fetch(url, { method: "GET" });
   if (!res.ok) {
@@ -54,6 +70,10 @@ async function apiGet(params) {
   return res.json();
 }
 async function apiPost(action, payload) {
+  if (USE_MOCK_API) {
+    console.warn(`Mock API: ${action} ignored`);
+    return { ok: true };
+  }
   const res = await fetch(API, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
