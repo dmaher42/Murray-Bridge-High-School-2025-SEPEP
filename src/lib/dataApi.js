@@ -43,3 +43,9 @@ export function saveFixtures(rounds) {
   localStorage.setItem('fixtures', JSON.stringify(rounds));
   return rounds;
 }
+
+export function refreshAll() {
+  localStorage.removeItem('results');
+  localStorage.removeItem('fixtures');
+  for (const key in cache) delete cache[key];
+}
