@@ -45,13 +45,17 @@ export default function App() {
     localStorage.setItem('teacherMode', next ? '1' : '0');
   }
   return (
-    <div className="h-screen flex overflow-hidden">
-      <AppSidebar current={view} navigate={navigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col">
-        <AppTopbar onMenu={() => setSidebarOpen(true)} teacherMode={teacherMode} toggleTeacher={toggleTeacher} />
-        <main className="flex-1 overflow-y-auto p-4 bg-slate-50">
-          <Current teacherMode={teacherMode} />
-        </main>
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+      <div className="h-screen flex overflow-hidden">
+        <AppSidebar current={view} navigate={navigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 flex flex-col">
+          <AppTopbar onMenu={() => setSidebarOpen(true)} teacherMode={teacherMode} toggleTeacher={toggleTeacher} />
+          <main className="flex-1 overflow-y-auto">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+              <Current teacherMode={teacherMode} />
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );
