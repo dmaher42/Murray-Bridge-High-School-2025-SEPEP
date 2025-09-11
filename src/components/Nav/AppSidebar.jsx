@@ -13,15 +13,26 @@ const links = [
 
 export default function AppSidebar({ current, navigate, open, onClose }) {
   return (
-    <div className={`${open ? 'block' : 'hidden'} md:block fixed md:relative inset-0 z-40`}>
-      <div className="absolute inset-0 bg-black/50 md:hidden" onClick={onClose}></div>
-      <nav className="absolute md:relative bg-white w-64 h-full p-4 space-y-2 overflow-y-auto">
-        {links.map(l => (
-          <button key={l.id} onClick={() => { navigate(l.id); onClose(); }} className={`block w-full text-left px-2 py-1 rounded ${current === l.id ? 'bg-blue-100' : 'hover:bg-blue-50'}`}>
-            {l.label}
-          </button>
-        ))}
-      </nav>
+    <div className={`drawer z-40 ${open ? 'drawer-open' : ''} md:drawer-open`}>
+      <input id="app-sidebar-drawer" type="checkbox" className="drawer-toggle" checked={open} readOnly />
+      <div className="drawer-content"></div>
+      <div className="drawer-side">
+        <label htmlFor="app-sidebar-drawer" className="drawer-overlay" onClick={onClose}></label>
+        <nav className="w-64 min-h-full bg-white/90 backdrop-blur shadow-lg rounded-r-xl p-4 space-y-2">
+          {links.map(l => (
+            <button
+              key={l.id}
+              onClick={() => {
+                navigate(l.id);
+                onClose();
+              }}
+              className={`block w-full text-left rounded-lg px-4 py-2 text-sm font-medium hover:bg-indigo-50 ${current === l.id ? 'bg-indigo-100' : ''}`}
+            >
+              {l.label}
+            </button>
+          ))}
+        </nav>
+      </div>
     </div>
   );
 }
