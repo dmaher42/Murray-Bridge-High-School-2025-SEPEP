@@ -7,15 +7,21 @@ export default function Fixtures() {
     getFixtures().then(setRounds);
   }, []);
   return (
-    <section className="max-w-5xl mx-auto py-10 space-y-6">
-      <h2 className="text-3xl font-semibold tracking-tight">Fixtures & Results</h2>
-      <div className="bg-white shadow-sm rounded-xl p-6 space-y-4">
+    <section id="fixtures" className="py-8 sm:py-10 lg:py-14">
+      <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Fixtures & Results</h2>
+      <div className="mt-6 space-y-6">
         {rounds.map(r => (
-          <div key={r.round} className="">
-            <h3 className="font-medium">Round {r.round} - {r.date}</h3>
-            <ul className="ml-4 list-disc">
+          <div key={r.round} className="rounded-2xl overflow-hidden ring-1 ring-black/5">
+            <div className="px-4 py-2 bg-slate-50/80 dark:bg-slate-800/40 text-slate-500 uppercase text-xs tracking-wide">Round {r.round} – {r.date}</div>
+            <ul className="divide-y divide-slate-200/60 dark:divide-slate-800">
               {r.matches.map(m => (
-                <li key={m.id}>{m.home} vs {m.away} @ {m.venue} {m.time}</li>
+                <li key={m.id} className="p-4 flex items-center justify-between">
+                  <span className="font-medium text-slate-900 dark:text-slate-100">{m.home} vs {m.away}</span>
+                  <span className="flex items-center gap-2 text-sm text-slate-500">
+                    {m.venue} {m.time}
+                    <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 bg-slate-50 text-slate-900 ring-slate-200">Scheduled</span>
+                  </span>
+                </li>
               ))}
             </ul>
           </div>

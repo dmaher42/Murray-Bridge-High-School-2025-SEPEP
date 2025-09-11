@@ -28,15 +28,15 @@ export default function Admin() {
     reader.readAsText(file);
   }
   return (
-    <section className="max-w-5xl mx-auto py-10 space-y-6">
-      <h2 className="text-3xl font-semibold tracking-tight">Admin</h2>
-      <div className="bg-white shadow-sm rounded-xl p-6 space-y-4">
-        <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={exportData}>
+    <section id="admin" className="py-8 sm:py-10 lg:py-14">
+      <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Admin</h2>
+      <div className="mt-6 rounded-2xl ring-1 ring-black/5 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/60 dark:ring-white/10 p-5 sm:p-6 space-y-4">
+        <button className="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900" onClick={exportData}>
           Export Results JSON
         </button>
-        <div>
-          <label className="block mb-2 font-medium">Upload Fixtures JSON</label>
-          <input type="file" accept="application/json" onChange={importFixtures} />
+        <div className="space-y-2">
+          <label className="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON</label>
+          <input className="block w-full rounded-xl border-slate-300/60 bg-white/80 dark:bg-slate-900/60 px-3 py-2 focus:ring-2 focus:ring-slate-900/20 outline-none" type="file" accept="application/json" onChange={importFixtures} />
         </div>
       </div>
     </section>
