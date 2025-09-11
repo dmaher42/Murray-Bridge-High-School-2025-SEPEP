@@ -14,6 +14,8 @@ export async function getTeams() {
 }
 
 export async function getFixtures() {
+  const stored = localStorage.getItem('fixtures');
+  if (stored) return JSON.parse(stored);
   const data = await fetchJSON('/data/fixtures.json');
   return data.rounds ?? [];
 }
@@ -35,4 +37,9 @@ export function upsertResult(result) {
 export async function getFixturesByRound(round) {
   const rounds = await getFixtures();
   return rounds.find(r => r.round === round);
+}
+
+export function saveFixtures(rounds) {
+  localStorage.setItem('fixtures', JSON.stringify(rounds));
+  return rounds;
 }
