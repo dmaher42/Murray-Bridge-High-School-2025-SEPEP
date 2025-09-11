@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/Murray-Bridge-High-School-2025-SEPEP/',
-  plugins: [react()]
-});
+  plugins: [react()],
+  base: '/Murray-Bridge-High-School-2025-SEPEP/'
+})
