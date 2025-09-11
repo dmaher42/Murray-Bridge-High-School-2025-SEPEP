@@ -7,7 +7,7 @@ export default function Ladder() {
   useEffect(() => {
     async function load() {
       const teams = (await getTeams())[0]?.teams || [];
-      const fixtures = (await getFixtures())[0]?.matches || [];
+      const fixtures = (await getFixtures()).flatMap(r => r?.matches || []);
       const results = (await getResults()).results || [];
       setRows(computeLadder(teams, fixtures, results));
     }
