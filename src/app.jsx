@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
+import ThemeToggle from "./components/ThemeToggle.jsx";
+import Announcements from "./components/Announcements.jsx";
+import Fixtures from "./components/Fixtures.jsx";
 
 
 /************************************************************
@@ -119,9 +123,9 @@ function Toast({ message, type = "success", onClose }) {
 }
 function Section({ title, children, actions }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 md:p-6">
+    <section className="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-4 md:p-6">
       <div className="flex items-center justify-between gap-4 mb-3">
-        <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
+        <h2 className="text-xl font-semibold text-slate-800 dark:text-gray-100">{title}</h2>
         {actions}
       </div>
       {children}
@@ -132,8 +136,8 @@ function TextInput({ label, value, onChange, placeholder = "", type = "text", cl
   const id = `input-${Math.random().toString(36).slice(2, 8)}`;
   return (
     <label className={`flex flex-col gap-1 ${className}`} htmlFor={id}>
-      <span className="text-sm text-slate-600">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
-      <input id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300'}`} value={value} onChange={(e) => onChange(sanitizeInput(e.target.value))} placeholder={placeholder} type={type} maxLength={maxLength} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} />
+      <span className="text-sm text-slate-600 dark:text-gray-400">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
+      <input id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 dark:border-gray-600'}`} value={value} onChange={(e) => onChange(sanitizeInput(e.target.value))} placeholder={placeholder} type={type} maxLength={maxLength} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} />
       {error && <span id={`${id}-error`} className="text-sm text-red-600" role="alert">{error}</span>}
     </label>
   );
@@ -142,8 +146,8 @@ function Select({ label, value, onChange, options, className = "", error, requir
   const id = `select-${Math.random().toString(36).slice(2, 8)}`;
   return (
     <label className={`flex flex-col gap-1 ${className}`} htmlFor={id}>
-      <span className="text-sm text-slate-600">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
-      <select id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300'}`} value={value} onChange={(e) => onChange(e.target.value)} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined}>
+      <span className="text-sm text-slate-600 dark:text-gray-400">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
+      <select id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 dark:border-gray-600'}`} value={value} onChange={(e) => onChange(e.target.value)} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined}>
         {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
       {error && <span id={`${id}-error`} className="text-sm text-red-600" role="alert">{error}</span>}
@@ -152,22 +156,26 @@ function Select({ label, value, onChange, options, className = "", error, requir
 }
 function Button({ children, onClick, variant = "primary", disabled, type = "button", loading = false, ariaLabel }) {
   const baseClasses = "h-10 px-4 rounded-xl text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2";
-  const variantClasses = { primary: "bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 focus:ring-indigo-500", ghost: "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 focus:ring-slate-500", danger: "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500" };
+  const variantClasses = { 
+    primary: "bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 focus:ring-indigo-500", 
+    ghost: "bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-700 focus:ring-slate-500 dark:focus:ring-gray-500", 
+    danger: "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500" 
+  };
   return (<button type={type} onClick={onClick} disabled={disabled || loading} className={`${baseClasses} ${variantClasses[variant]}`} aria-label={ariaLabel}>{loading ? "Loading..." : children}</button>);
 }
 function Table({ columns, rows, rowKey = (r) => r.id, caption }) {
   return (
-    <div className="overflow-auto rounded-xl border border-slate-200">
-      <table className="min-w-full text-sm" role="table">
+    <div className="overflow-auto rounded-xl border border-slate-200 dark:border-gray-700">
+      <table className="min-w-full text-sm dark:text-gray-300" role="table">
         {caption && <caption className="sr-only">{caption}</caption>}
-        <thead className="bg-slate-50 text-slate-600">
+        <thead className="bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-gray-300">
           <tr>{columns.map((c) => <th key={c.key} className="text-left font-semibold px-3 py-2 whitespace-nowrap" scope="col">{c.header}</th>)}</tr>
         </thead>
-        <tbody>
+        <tbody className="dark:bg-gray-800">
           {rows.length === 0 ? (
-            <tr><td className="px-3 py-3 text-slate-500" colSpan={columns.length}>No data available</td></tr>
+            <tr><td className="px-3 py-3 text-slate-500 dark:text-gray-400" colSpan={columns.length}>No data available</td></tr>
           ) : rows.map((row, index) => (
-            <tr key={rowKey(row)} className="border-t border-slate-100" role="row">
+            <tr key={rowKey(row)} className="border-t border-slate-100 dark:border-gray-600" role="row">
               {columns.map((c) => <td key={c.key} className="px-3 py-2 align-top whitespace-nowrap" role="gridcell">{c.cell ? c.cell(row, index) : row[c.key]}</td>)}
             </tr>
           ))}
@@ -178,6 +186,15 @@ function Table({ columns, rows, rowKey = (r) => r.id, caption }) {
 }
 
 // ========================= Views =========================
+function HomeView() {
+  return (
+    <div className="grid gap-6">
+      <Announcements />
+      <Fixtures />
+    </div>
+  );
+}
+
 function TeamsView({ division, data, onUpsertTeam }) {
   const [q, setQ] = useState("");
   const [draft, setDraft] = useState({ id: "", name: "", coach: "", neighbourhood: "" });
@@ -296,11 +313,11 @@ function ProfilesView({ division, data, onUpsertTeam }) {
             <div className="md:col-span-1" />
             <label className="flex flex-col gap-1 md:col-span-2">
               <span className="text-sm text-slate-600">Roster (one per line)</span>
-              <textarea className="min-h-[200px] rounded-xl border border-slate-300 p-3 focus:ring-2 focus:ring-indigo-500" value={rosterText} onChange={(e) => setRosterText(e.target.value)} placeholder="Player A&#10;Player B&#10;Player C" aria-label="Team roster, one player per line" />
+              <textarea className="min-h-[200px] rounded-xl border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 p-3 focus:ring-2 focus:ring-indigo-500" value={rosterText} onChange={(e) => setRosterText(e.target.value)} placeholder="Player A&#10;Player B&#10;Player C" aria-label="Team roster, one player per line" />
             </label>
             <label className="flex flex-col gap-1">
               <span className="text-sm text-slate-600">Notes</span>
-              <textarea className="min-h-[200px] rounded-xl border border-slate-300 p-3 focus:ring-2 focus:ring-indigo-500" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Coaching notes, rotations, special instructions…" aria-label="Team notes and coaching instructions" />
+              <textarea className="min-h-[200px] rounded-xl border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 p-3 focus:ring-2 focus:ring-indigo-500" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Coaching notes, rotations, special instructions…" aria-label="Team notes and coaching instructions" />
             </label>
           </div>
         ) : (<p className="text-slate-600">No teams in this division yet.</p>)}
@@ -418,16 +435,16 @@ function AdminView({ division, data, onImportJSON, onPushAll }) {
       </Section>
       <Section title="Data Statistics">
         <div className="grid md:grid-cols-4 gap-4">
-          <div className="bg-slate-50 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800">{data.teams.length}</div><div className="text-sm text-slate-600">Teams</div></div>
-          <div className="bg-slate-50 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800">{data.fixtures.length}</div><div className="text-sm text-slate-600">Fixtures</div></div>
-          <div className="bg-slate-50 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800">{data.results.length}</div><div className="text-sm text-slate-600">Results</div></div>
-          <div className="bg-slate-50 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800">{data.fixtures.length > 0 ? Math.round((data.results.length / data.fixtures.length) * 100) : 0}%</div><div className="text-sm text-slate-600">Complete</div></div>
+          <div className="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800 dark:text-gray-100">{data.teams.length}</div><div className="text-sm text-slate-600 dark:text-gray-400">Teams</div></div>
+          <div className="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800 dark:text-gray-100">{data.fixtures.length}</div><div className="text-sm text-slate-600 dark:text-gray-400">Fixtures</div></div>
+          <div className="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800 dark:text-gray-100">{data.results.length}</div><div className="text-sm text-slate-600 dark:text-gray-400">Results</div></div>
+          <div className="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 text-center"><div className="text-2xl font-bold text-slate-800 dark:text-gray-100">{data.fixtures.length > 0 ? Math.round((data.results.length / data.fixtures.length) * 100) : 0}%</div><div className="text-sm text-slate-600 dark:text-gray-400">Complete</div></div>
         </div>
       </Section>
       <Section title="Debug Data">
         <details className="group">
-          <summary className="cursor-pointer text-sm font-medium text-slate-700 hover:text-slate-900">View raw data (click to expand)</summary>
-          <pre className="mt-3 bg-slate-50 rounded-xl p-3 overflow-auto text-xs max-h-96">{JSON.stringify({ division, ...data }, null, 2)}</pre>
+          <summary className="cursor-pointer text-sm font-medium text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-gray-100">View raw data (click to expand)</summary>
+          <pre className="mt-3 bg-slate-50 dark:bg-gray-700 rounded-xl p-3 overflow-auto text-xs max-h-96 text-slate-900 dark:text-gray-100">{JSON.stringify({ division, ...data }, null, 2)}</pre>
         </details>
       </Section>
     </div>
@@ -517,34 +534,59 @@ export default function App() {
   }, [division, setLoadingState, showToast]);
   const handleImportJSON = useCallback((imported) => { setState((s) => ({ ...s, divisions: { ...s.divisions, [division]: imported } })); showToast("Data imported successfully (local only)"); }, [division, showToast]);
   const handlePushAll = useCallback(async () => { setLoadingState("push", "Pushing all data to backend..."); try { const promises = [...data.teams.map(t => upsertTeam(t)), ...data.fixtures.map(f => upsertFixture(f)), ...data.results.map(r => upsertResult(r))]; await Promise.all(promises); showToast("All data pushed to backend successfully"); } catch (e) { console.error('Push all error:', e); showToast(`Failed to push data: ${e.message}`, "error"); } finally { setLoadingState(null); } }, [data, setLoadingState, showToast]);
-  const [tab, setTab] = useState("teams");
-  const tabs = [ { id: "teams", label: "Teams", count: data.teams.length }, { id: "fixtures", label: "Fixtures", count: data.fixtures.length }, { id: "profiles", label: "Profiles" }, { id: "ladder", label: "Ladder" }, { id: "admin", label: "Admin" } ];
+  
+  const [tab, setTab] = useState("home");
+  
+  // Handle tab changes and scroll to fixtures if needed
+  const handleTabChange = useCallback((newTab) => {
+    setTab(newTab);
+    
+    // If switching to fixtures tab and we're on home, scroll to fixtures section
+    if (newTab === "fixtures" && tab === "home") {
+      setTimeout(() => {
+        const fixturesElement = document.getElementById('fixtures');
+        if (fixturesElement) {
+          fixturesElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [tab]);
+  const tabs = [ 
+    { id: "home", label: "Home" },
+    { id: "teams", label: "Teams", count: data.teams.length }, 
+    { id: "fixtures", label: "Fixtures", count: data.fixtures.length }, 
+    { id: "profiles", label: "Profiles" }, 
+    { id: "ladder", label: "Ladder" }, 
+    { id: "admin", label: "Admin" } 
+  ];
   return (
-    <div className="min-h-screen bg-slate-100">
-      <header className="sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div className="min-h-screen bg-slate-100 dark:bg-gray-900">
+      <header className="sticky top-0 z-10 backdrop-blur bg-white/80 dark:bg-gray-900/80 border-b border-slate-200 dark:border-gray-700">
         <div className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-3">
-          <div className="text-lg font-semibold">{state.settings.seasonTitle}</div>
+          <div className="text-lg font-semibold text-slate-900 dark:text-gray-100">{state.settings.seasonTitle}</div>
           <div className="grow" />
           <Select label="Division" value={division} onChange={setDivision} options={YEARS.map((y) => ({ label: y, value: y }))} />
           <Button variant="ghost" onClick={refresh} loading={loading.type === "refresh"} ariaLabel="Refresh data">{loading.type === "refresh" ? loading.message : "Refresh"}</Button>
+          <ThemeToggle />
         </div>
         <div className="mx-auto max-w-6xl px-4 pb-3">
           <nav className="flex gap-2" role="tablist">
             {tabs.map((t) => (
-              <button key={t.id} onClick={() => setTab(t.id)} className={`h-10 px-4 rounded-xl text-sm font-medium border transition ${tab === t.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"}`} role="tab" aria-selected={tab === t.id} aria-controls={`panel-${t.id}`}>{t.label}{t.count !== undefined && (<span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${tab === t.id ? "bg-indigo-500" : "bg-slate-200 text-slate-600"}`}>{t.count}</span>)}</button>
+              <button key={t.id} onClick={() => handleTabChange(t.id)} className={`h-10 px-4 rounded-xl text-sm font-medium border transition ${tab === t.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-300 border-slate-300 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700"}`} role="tab" aria-selected={tab === t.id} aria-controls={`panel-${t.id}`}>{t.label}{t.count !== undefined && (<span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${tab === t.id ? "bg-indigo-500" : "bg-slate-200 dark:bg-gray-700 text-slate-600 dark:text-gray-300"}`}>{t.count}</span>)}</button>
             ))}
           </nav>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6" role="main">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700" role="alert">
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400" role="alert">
             <div className="font-medium">Error</div>
             <div className="text-sm">{error}</div>
             <Button variant="ghost" onClick={() => setError(null)} className="mt-2">Dismiss</Button>
           </div>
         )}
         <div id={`panel-${tab}`} role="tabpanel">
+          {tab === "home" && <HomeView />}
           {tab === "teams" && <TeamsView division={division} data={data} onUpsertTeam={handleUpsertTeam} />}
           {tab === "fixtures" && <FixturesView division={division} data={data} onUpsertFixture={handleUpsertFixture} onUpsertResult={handleUpsertResult} onDeleteFixture={handleDeleteFixture} />}
           {tab === "profiles" && <ProfilesView division={division} data={data} onUpsertTeam={handleUpsertTeam} />}
@@ -552,8 +594,8 @@ export default function App() {
           {tab === "admin" && <AdminView division={division} data={data} onImportJSON={handleImportJSON} onPushAll={handlePushAll} />}
         </div>
       </main>
-      <footer className="mx-auto max-w-6xl px-4 pb-8 text-xs text-slate-500">
-        Backend: Google Apps Script · Frontend: React + Tailwind · {loading.type && <span className="ml-2 text-indigo-600">{loading.message || "Processing..."}</span>}
+      <footer className="mx-auto max-w-6xl px-4 pb-8 text-xs text-slate-500 dark:text-gray-400">
+        Backend: Google Apps Script · Frontend: React + Tailwind · {loading.type && <span className="ml-2 text-indigo-600 dark:text-indigo-400">{loading.message || "Processing..."}</span>}
       </footer>
       <Toast message={toast.message} type={toast.type} onClose={clearToast} />
     </div>

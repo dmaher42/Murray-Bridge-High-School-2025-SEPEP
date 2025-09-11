@@ -1,0 +1,56 @@
+[
+  {
+    "round": 1,
+    "date": "2025-03-04",
+    "time": "10:30",
+    "court": "A",
+    "home": "Team Alpha",
+    "away": "Team Delta",
+    "score": "25-18"
+  },
+  {
+    "round": 1,
+    "date": "2025-03-04",
+    "time": "11:10",
+    "court": "B",
+    "home": "Team Beta",
+    "away": "Team Gamma",
+    "score": "19-22"
+  },
+  {
+    "round": 1,
+    "date": "2025-03-04",
+    "time": "11:50",
+    "court": "A",
+    "home": "Team Epsilon",
+    "away": "Team Zeta",
+    "score": "21-21"
+  },
+  {
+    "round": 2,
+    "date": "2025-03-11",
+    "time": "10:30",
+    "court": "A",
+    "home": "Team Gamma",
+    "away": "Team Alpha",
+    "score": null
+  },
+  {
+    "round": 2,
+    "date": "2025-03-11",
+    "time": "11:10",
+    "court": "B",
+    "home": "Team Delta",
+    "away": "Team Beta",
+    "score": null
+  },
+  {
+    "round": 2,
+    "date": "2025-03-11",
+    "time": "11:50",
+    "court": "A",
+    "home": "Team Zeta",
+    "away": "Team Epsilon",
+    "score": null
+  }
+]
