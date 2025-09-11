@@ -19,7 +19,7 @@ export default function AppTopbar({ onMenu, teacherMode, toggleTeacher, darkMode
           <a href="#news" className="text-slate-700 hover:text-accent dark:text-slate-300 dark:hover:text-accent">News</a>
         </nav>
         <div className="flex items-center gap-2">
-          <button onClick={toggleTeacher} className="hidden sm:inline-flex items-center gap-2 rounded-xl ring-1 ring-accent/30 bg-white/80 px-4 py-2 hover:bg-accent/10 dark:bg-slate-800 dark:text-slate-200 dark:ring-accent/30 text-sm" aria-label="Toggle teacher mode">
+          <button onClick={toggleTeacher} className="inline-flex items-center gap-2 rounded-xl ring-1 ring-accent/30 bg-white/80 px-4 py-2 hover:bg-accent/10 dark:bg-slate-800 dark:text-slate-200 dark:ring-accent/30 text-sm" aria-label="Toggle teacher mode">
             {teacherMode ? 'Teacher' : 'Student'}
           </button>
           <button onClick={toggleDark} className="inline-flex items-center gap-2 rounded-xl ring-1 ring-accent/30 bg-white/80 px-2 py-2 hover:bg-accent/10 dark:bg-slate-800 dark:text-slate-200 dark:ring-accent/30" aria-label="Toggle dark mode">
