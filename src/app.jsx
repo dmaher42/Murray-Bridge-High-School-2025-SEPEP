@@ -132,8 +132,8 @@ function TextInput({ label, value, onChange, placeholder = "", type = "text", cl
   const id = `input-${Math.random().toString(36).slice(2, 8)}`;
   return (
     <label className={`flex flex-col gap-1 ${className}`} htmlFor={id}>
-      <span className="text-sm text-slate-600">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
-      <input id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300'}`} value={value} onChange={(e) => onChange(sanitizeInput(e.target.value))} placeholder={placeholder} type={type} maxLength={maxLength} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} />
+      <span className="text-sm text-slate-600 dark:text-slate-300">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
+      <input id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200'}`} value={value} onChange={(e) => onChange(sanitizeInput(e.target.value))} placeholder={placeholder} type={type} maxLength={maxLength} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} />
       {error && <span id={`${id}-error`} className="text-sm text-red-600" role="alert">{error}</span>}
     </label>
   );
@@ -142,8 +142,8 @@ function Select({ label, value, onChange, options, className = "", error, requir
   const id = `select-${Math.random().toString(36).slice(2, 8)}`;
   return (
     <label className={`flex flex-col gap-1 ${className}`} htmlFor={id}>
-      <span className="text-sm text-slate-600">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
-      <select id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300'}`} value={value} onChange={(e) => onChange(e.target.value)} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined}>
+      <span className="text-sm text-slate-600 dark:text-slate-300">{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
+      <select id={id} className={`h-10 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-indigo-500 ${error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200'}`} value={value} onChange={(e) => onChange(e.target.value)} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined}>
         {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
       {error && <span id={`${id}-error`} className="text-sm text-red-600" role="alert">{error}</span>}
@@ -152,22 +152,26 @@ function Select({ label, value, onChange, options, className = "", error, requir
 }
 function Button({ children, onClick, variant = "primary", disabled, type = "button", loading = false, ariaLabel }) {
   const baseClasses = "h-10 px-4 rounded-xl text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2";
-  const variantClasses = { primary: "bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 focus:ring-indigo-500", ghost: "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 focus:ring-slate-500", danger: "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500" };
+  const variantClasses = {
+    primary: "bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 focus:ring-indigo-500",
+    ghost: "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 focus:ring-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus:ring-slate-400",
+    danger: "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500"
+  };
   return (<button type={type} onClick={onClick} disabled={disabled || loading} className={`${baseClasses} ${variantClasses[variant]}`} aria-label={ariaLabel}>{loading ? "Loading..." : children}</button>);
 }
 function Table({ columns, rows, rowKey = (r) => r.id, caption }) {
   return (
-    <div className="overflow-auto rounded-xl border border-slate-200">
+    <div className="overflow-auto rounded-xl border border-slate-200 dark:border-slate-700">
       <table className="min-w-full text-sm" role="table">
         {caption && <caption className="sr-only">{caption}</caption>}
-        <thead className="bg-slate-50 text-slate-600">
+        <thead className="bg-slate-50 text-slate-600 dark:bg-slate-700 dark:text-slate-200">
           <tr>{columns.map((c) => <th key={c.key} className="text-left font-semibold px-3 py-2 whitespace-nowrap" scope="col">{c.header}</th>)}</tr>
         </thead>
         <tbody>
           {rows.length === 0 ? (
-            <tr><td className="px-3 py-3 text-slate-500" colSpan={columns.length}>No data available</td></tr>
+            <tr><td className="px-3 py-3 text-slate-500 dark:text-slate-400" colSpan={columns.length}>No data available</td></tr>
           ) : rows.map((row, index) => (
-            <tr key={rowKey(row)} className="border-t border-slate-100" role="row">
+            <tr key={rowKey(row)} className="border-t border-slate-100 dark:border-slate-700" role="row">
               {columns.map((c) => <td key={c.key} className="px-3 py-2 align-top whitespace-nowrap" role="gridcell">{c.cell ? c.cell(row, index) : row[c.key]}</td>)}
             </tr>
           ))}
@@ -441,6 +445,7 @@ export default function App() {
   const [loading, setLoading] = useState({ type: null, message: "" });
   const [toast, setToast] = useState({ message: "", type: "success" });
   const [error, setError] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [state, setState] = useState({
     settings: { seasonTitle: "SEEPEP Fixture & Results", classLine: "HPE" },
     divisions: Object.fromEntries(YEARS.map((y) => [y, { teams: [], fixtures: [], results: [] }])),
@@ -459,6 +464,10 @@ export default function App() {
     finally { setLoadingState(null); }
   }, [division, setLoadingState]);
   useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    if (darkMode) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
+  }, [darkMode]);
   const handleUpsertTeam = useCallback(async (team) => {
     setLoadingState("team", "Saving team...");
     try {
@@ -520,25 +529,26 @@ export default function App() {
   const [tab, setTab] = useState("teams");
   const tabs = [ { id: "teams", label: "Teams", count: data.teams.length }, { id: "fixtures", label: "Fixtures", count: data.fixtures.length }, { id: "profiles", label: "Profiles" }, { id: "ladder", label: "Ladder" }, { id: "admin", label: "Admin" } ];
   return (
-    <div className="min-h-screen bg-slate-100">
-      <header className="sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div className="min-h-screen bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+      <header className="sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-slate-200 dark:bg-slate-800/80 dark:border-slate-700">
         <div className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center gap-3">
           <div className="text-lg font-semibold">{state.settings.seasonTitle}</div>
           <div className="grow" />
           <Select label="Division" value={division} onChange={setDivision} options={YEARS.map((y) => ({ label: y, value: y }))} />
           <Button variant="ghost" onClick={refresh} loading={loading.type === "refresh"} ariaLabel="Refresh data">{loading.type === "refresh" ? loading.message : "Refresh"}</Button>
+          <Button variant="ghost" onClick={() => setDarkMode((d) => !d)} ariaLabel="Toggle dark mode">{darkMode ? "Light" : "Dark"}</Button>
         </div>
         <div className="mx-auto max-w-6xl px-4 pb-3">
           <nav className="flex gap-2" role="tablist">
             {tabs.map((t) => (
-              <button key={t.id} onClick={() => setTab(t.id)} className={`h-10 px-4 rounded-xl text-sm font-medium border transition ${tab === t.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"}`} role="tab" aria-selected={tab === t.id} aria-controls={`panel-${t.id}`}>{t.label}{t.count !== undefined && (<span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${tab === t.id ? "bg-indigo-500" : "bg-slate-200 text-slate-600"}`}>{t.count}</span>)}</button>
+              <button key={t.id} onClick={() => setTab(t.id)} className={`h-10 px-4 rounded-xl text-sm font-medium border transition ${tab === t.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700"}`} role="tab" aria-selected={tab === t.id} aria-controls={`panel-${t.id}`}>{t.label}{t.count !== undefined && (<span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${tab === t.id ? "bg-indigo-500" : "bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-200"}`}>{t.count}</span>)}</button>
             ))}
           </nav>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6" role="main">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700" role="alert">
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-200" role="alert">
             <div className="font-medium">Error</div>
             <div className="text-sm">{error}</div>
             <Button variant="ghost" onClick={() => setError(null)} className="mt-2">Dismiss</Button>
@@ -552,7 +562,7 @@ export default function App() {
           {tab === "admin" && <AdminView division={division} data={data} onImportJSON={handleImportJSON} onPushAll={handlePushAll} />}
         </div>
       </main>
-      <footer className="mx-auto max-w-6xl px-4 pb-8 text-xs text-slate-500">
+      <footer className="mx-auto max-w-6xl px-4 pb-8 text-xs text-slate-500 dark:text-slate-400">
         Backend: Google Apps Script · Frontend: React + Tailwind · {loading.type && <span className="ml-2 text-indigo-600">{loading.message || "Processing..."}</span>}
       </footer>
       <Toast message={toast.message} type={toast.type} onClose={clearToast} />
