@@ -1,0 +1,21 @@
+<!-- Admin: Load SEPEP data -->
+<button id="loadJsonBtn" class="btn">Load SEPEP JSON</button>
+<pre id="jsonPreview" style="max-height:14rem;overflow:auto;"></pre>
+
+<script>
+document.getElementById('loadJsonBtn').addEventListener('click', async () => {
+  const url = './data/sepep_all_sheets.json?v=2'; // bump v= when you replace the file
+  try {
+    const res = await fetch(url, { cache: 'no-store' });       // Fetch JSON
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();                              // Parse JSON
+    // Show a small preview (first keys + length)
+    const sheets = Object.keys(data);
+    const summary = sheets.map(k => `${k}: ${Array.isArray(data[k]) ? data[k].length : 0} rows`).join('\n');
+    document.getElementById('jsonPreview').textContent = `Loaded:\n${summary}`;
+    // TODO: call your existing render/update functions here
+  } catch (err) {
+    document.getElementById('jsonPreview').textContent = 'Load failed: ' + err.message;
+  }
+});
+</script>
