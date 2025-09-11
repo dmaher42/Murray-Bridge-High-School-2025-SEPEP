@@ -25,6 +25,11 @@ export default function App() {
   const [view, setView] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [teacherMode, setTeacherMode] = useState(() => localStorage.getItem('teacherMode') === '1');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === '1');
+  useEffect(() => {
+    if (darkMode) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }, [darkMode]);
   useEffect(() => {
     function onHash() {
       const v = window.location.hash.replace('#', '');
@@ -44,18 +49,21 @@ export default function App() {
     setTeacherMode(next);
     localStorage.setItem('teacherMode', next ? '1' : '0');
   }
+  function toggleDark() {
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem('darkMode', next ? '1' : '0');
+  }
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
-      <div className="h-screen flex overflow-hidden">
-        <AppSidebar current={view} navigate={navigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="flex-1 flex flex-col">
-          <AppTopbar onMenu={() => setSidebarOpen(true)} teacherMode={teacherMode} toggleTeacher={toggleTeacher} />
-          <main className="flex-1 overflow-y-auto">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-              <Current teacherMode={teacherMode} />
-            </div>
-          </main>
-        </div>
+    <div className="min-h-screen bg-transparent">
+      <AppSidebar current={view} navigate={navigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="min-h-screen flex flex-col">
+        <AppTopbar onMenu={() => setSidebarOpen(true)} teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
+        <main className="flex-1 py-8 sm:py-10 lg:py-14">
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
+            <Current teacherMode={teacherMode} />
+          </div>
+        </main>
       </div>
     </div>
   );

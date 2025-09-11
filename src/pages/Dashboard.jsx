@@ -3,10 +3,13 @@ import React from 'react';
 export default function Dashboard() {
   return (
     <div>
-      <section className="text-center py-20 bg-gradient-to-b from-white to-indigo-50">
-        <h1 className="text-4xl font-bold mb-4">SEPEP Tournament Hub</h1>
-        <p className="text-slate-600 mb-8">Welcome to the central dashboard.</p>
-        <div className="mx-auto max-w-4xl rounded-xl shadow-lg overflow-hidden">
+      <section id="dashboard" className="py-8 sm:py-10 lg:py-14 text-center">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white mb-4">
+          SEPEP Tournament Hub
+          <span className="mt-2 block h-1 w-24 bg-gradient-to-r from-fuchsia-500 to-cyan-500 rounded-full mx-auto"></span>
+        </h1>
+        <p className="text-slate-600 dark:text-slate-300 mb-8 leading-7">Welcome to the central dashboard.</p>
+        <div className="mx-auto max-w-4xl rounded-2xl ring-1 ring-accent/20 overflow-hidden">
           <img
             src="https://via.placeholder.com/800x400"
             alt="Dashboard preview"
@@ -15,19 +18,19 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white shadow-sm rounded-xl p-6">
-            <h3 className="text-lg font-medium mb-2">Fixtures</h3>
-            <p className="text-sm text-slate-600">Upcoming matches and results.</p>
+      <section className="py-8 sm:py-10 lg:py-14 border-t border-slate-200/60 dark:border-slate-800">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="rounded-2xl ring-1 ring-accent/20 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/60 dark:ring-accent/30 p-5 sm:p-6">
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Fixtures</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-7">Upcoming matches and results.</p>
           </div>
-          <div className="bg-white shadow-sm rounded-xl p-6">
-            <h3 className="text-lg font-medium mb-2">Teams</h3>
-            <p className="text-sm text-slate-600">Profiles for every team.</p>
+          <div className="rounded-2xl ring-1 ring-accent/20 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/60 dark:ring-accent/30 p-5 sm:p-6">
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Teams</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-7">Profiles for every team.</p>
           </div>
-          <div className="bg-white shadow-sm rounded-xl p-6">
-            <h3 className="text-lg font-medium mb-2">Ladder</h3>
-            <p className="text-sm text-slate-600">Current standings and points.</p>
+          <div className="rounded-2xl ring-1 ring-accent/20 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/60 dark:ring-accent/30 p-5 sm:p-6">
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Ladder</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-7">Current standings and points.</p>
           </div>
         </div>
       </section>
