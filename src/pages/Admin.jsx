@@ -11,9 +11,13 @@ export default function Admin() {
     a.click();
   }
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Admin</h2>
-      <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={exportData}>Export Results JSON</button>
-    </div>
+    <section className="max-w-5xl mx-auto py-10 space-y-6">
+      <h2 className="text-3xl font-semibold tracking-tight">Admin</h2>
+      <div className="bg-white shadow-sm rounded-xl p-6">
+        <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={exportData}>
+          Export Results JSON
+        </button>
+      </div>
+    </section>
   );
 }

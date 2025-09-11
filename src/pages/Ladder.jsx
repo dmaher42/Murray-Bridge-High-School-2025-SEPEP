@@ -14,38 +14,40 @@ export default function Ladder() {
     load();
   }, []);
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Ladder / Standings</h2>
-      <table className="min-w-full text-sm">
-        <thead>
-          <tr className="text-left border-b">
-            <th className="p-2">Team</th>
-            <th className="p-2">GP</th>
-            <th className="p-2">W</th>
-            <th className="p-2">L</th>
-            <th className="p-2">D</th>
-            <th className="p-2">PF</th>
-            <th className="p-2">PA</th>
-            <th className="p-2">Pts</th>
-            <th className="p-2">%</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(r => (
-            <tr key={r.teamId} className="border-b">
-              <td className="p-2">{r.name}</td>
-              <td className="p-2">{r.GP}</td>
-              <td className="p-2">{r.W}</td>
-              <td className="p-2">{r.L}</td>
-              <td className="p-2">{r.D}</td>
-              <td className="p-2">{r.PF}</td>
-              <td className="p-2">{r.PA}</td>
-              <td className="p-2">{r.Pts}</td>
-              <td className="p-2">{r['%']}</td>
+    <section className="max-w-5xl mx-auto py-10 space-y-6">
+      <h2 className="text-3xl font-semibold tracking-tight">Ladder / Standings</h2>
+      <div className="bg-white shadow-sm rounded-xl p-6 overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="text-left border-b">
+              <th className="p-2">Team</th>
+              <th className="p-2">GP</th>
+              <th className="p-2">W</th>
+              <th className="p-2">L</th>
+              <th className="p-2">D</th>
+              <th className="p-2">PF</th>
+              <th className="p-2">PA</th>
+              <th className="p-2">Pts</th>
+              <th className="p-2">%</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {rows.map(r => (
+              <tr key={r.teamId} className="border-b">
+                <td className="p-2">{r.name}</td>
+                <td className="p-2">{r.GP}</td>
+                <td className="p-2">{r.W}</td>
+                <td className="p-2">{r.L}</td>
+                <td className="p-2">{r.D}</td>
+                <td className="p-2">{r.PF}</td>
+                <td className="p-2">{r.PA}</td>
+                <td className="p-2">{r.Pts}</td>
+                <td className="p-2">{r['%']}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
