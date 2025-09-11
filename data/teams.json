@@ -1,0 +1,318 @@
+{
+  "teams": [
+    {
+      "id": "kopia",
+      "name": "Kopia",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Kye",
+        "Sarah",
+        "Tali",
+        "Seth",
+        "Oliver",
+        "Imogen",
+        "Jemia",
+        "Ronald",
+        "Patrick",
+        "Jordan"
+      ]
+    },
+    {
+      "id": "no-ri-2",
+      "name": "No:ri 2",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Isaac",
+        "Henry",
+        "Storm",
+        "Hayden",
+        "Lucas",
+        "Alyssa",
+        "Isabella",
+        "Matt",
+        "Jacob"
+      ]
+    },
+    {
+      "id": "hotneth",
+      "name": "Hotneth",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Ivan",
+        "Casey",
+        "Kade",
+        "Lachlan",
+        "Zak",
+        "Felicity",
+        "Paige",
+        "Charlotte"
+      ]
+    },
+    {
+      "id": "chapma-s-allstars",
+      "name": "Chapma's Allstars",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Molly",
+        "Paul",
+        "Peter",
+        "Olivia",
+        "Bree",
+        "Feyin",
+        "Shilo"
+      ]
+    },
+    {
+      "id": "blue-swans",
+      "name": "Blue Swans",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Hallie",
+        "lashyia",
+        "Riley",
+        "Zedino",
+        "Tamkia",
+        "Ella",
+        "Josh",
+        "Nhial",
+        "Jay",
+        "Jacob",
+        "Shpray",
+        "Mia Dun",
+        "Katie",
+        "Khaly"
+      ]
+    },
+    {
+      "id": "blue-tongues",
+      "name": "Blue Tongues",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Rocco",
+        "Enchi",
+        "Kobi P",
+        "Carter",
+        "Jordan",
+        "Zion",
+        "Calliope",
+        "CJ",
+        "Anbella",
+        "Dom",
+        "Tantini",
+        "Scarlett"
+      ]
+    },
+    {
+      "id": "stingrays",
+      "name": "Stingrays",
+      "division": "Year 9 Line 7",
+      "roster": [
+        "Shayla",
+        "Nate",
+        "Emily",
+        "Mia N",
+        "Kedan",
+        "Kobe",
+        "Eddy",
+        "Steph",
+        "Jaiden",
+        "Sam Smith",
+        "Patrick",
+        "Chelsea",
+        "Matilda"
+      ]
+    },
+    {
+      "id": "tilted-towers-kungari-1",
+      "name": "Tilted Towers Kungari 1",
+      "division": "Year 7 (Line 2)",
+      "roster": []
+    },
+    {
+      "id": "watermelon-goats-kungari-2",
+      "name": "Watermelon Goats Kungari 2",
+      "division": "Year 7 (Line 2)",
+      "roster": []
+    },
+    {
+      "id": "mingle-masters-kungari-3",
+      "name": "Mingle Masters Kungari 3",
+      "division": "Year 7 (Line 2)",
+      "roster": []
+    },
+    {
+      "id": "pondi-predators",
+      "name": "Pondi Predators",
+      "division": "Year 7 (Line 2)",
+      "roster": []
+    },
+    {
+      "id": "pondi-pelicans",
+      "name": "Pondi Pelicans",
+      "division": "Year 7 (Line 2)",
+      "roster": []
+    },
+    {
+      "id": "no-ri-nutz",
+      "name": "No:Ri Nutz",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "wirakuthi-1",
+      "name": "Wirakuthi 1",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "no-ri-nuggets",
+      "name": "No:Ri Nuggets",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "wirakuthi-2",
+      "name": "Wirakuthi 2",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "no-ri-nightmares",
+      "name": "No:Ri Nightmares",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "wirakuthi-3",
+      "name": "Wirakuthi 3",
+      "division": "Year 7 (Line 5)",
+      "roster": []
+    },
+    {
+      "id": "kungari",
+      "name": "Kungari",
+      "division": "Year 8",
+      "roster": []
+    },
+    {
+      "id": "nori",
+      "name": "NoRi",
+      "division": "Year 8",
+      "roster": []
+    },
+    {
+      "id": "pondi",
+      "name": "Pondi",
+      "division": "Year 8",
+      "roster": []
+    },
+    {
+      "id": "wirakuthi",
+      "name": "Wirakuthi",
+      "division": "Year 8",
+      "roster": []
+    },
+    {
+      "id": "pondi-1",
+      "name": "Pondi 1",
+      "division": "Year 9 (Line 1)",
+      "roster": []
+    },
+    {
+      "id": "pondi-2",
+      "name": "Pondi 2",
+      "division": "Year 9 (Line 1)",
+      "roster": []
+    },
+    {
+      "id": "pondi-3",
+      "name": "Pondi 3",
+      "division": "Year 9 (Line 1)",
+      "roster": []
+    },
+    {
+      "id": "kopia-n1",
+      "name": "Kopia N1",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "blue-tongues-k2",
+      "name": "Blue Tongues K2",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "hotneth-n2",
+      "name": "Hotneth N2",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "stingrays-k3",
+      "name": "Stingrays K3",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "chapman-all-stars-n3",
+      "name": "chapman all stars N3",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "blue-swans-k1",
+      "name": "Blue swans K1",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "hotneth-n3",
+      "name": "Hotneth N3",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "blue-tounges-k2",
+      "name": "Blue tounges K2",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "chapman-all-stars-no4",
+      "name": "chapman all stars No4",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "nori-2",
+      "name": "Nori 2",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "kopia-no1",
+      "name": "Kopia No1",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "hotneth-no3",
+      "name": "Hotneth No3",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "chapman-all-stars-n4",
+      "name": "chapman all stars N4",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    },
+    {
+      "id": "chapman-allstars-n3",
+      "name": "Chapman allstars N3",
+      "division": "Year 9 (Line 7)",
+      "roster": []
+    }
+  ]
+}

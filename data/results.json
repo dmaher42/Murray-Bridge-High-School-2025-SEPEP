@@ -1,0 +1,974 @@
+[
+  {
+    "matchId": "year-7-line-2-round-1-tilted-towers-kungari-1-vs-watermelon-goats-kungari-2-3",
+    "homeTeam": "Tilted Towers Kungari 1",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-1-mingle-masters-kungari-3-vs-pondi-predators-4",
+    "homeTeam": "Mingle Masters Kungari 3",
+    "awayTeam": "Pondi Predators",
+    "homePoints": 41.0,
+    "awayPoints": 66.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-2-pondi-pelicans-vs-watermelon-goats-kungari-2-7",
+    "homeTeam": "Pondi Pelicans",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": 43.0,
+    "awayPoints": 67.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-2-tilted-towers-kungari-1-vs-mingle-masters-kungari-3-8",
+    "homeTeam": "Tilted Towers Kungari 1",
+    "awayTeam": "Mingle Masters Kungari 3",
+    "homePoints": 39.5,
+    "awayPoints": 64.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-3-mingle-masters-kungari-3-vs-pondi-pelicans-11",
+    "homeTeam": "Mingle Masters Kungari 3",
+    "awayTeam": "Pondi Pelicans",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-3-pondi-predators-vs-watermelon-goats-kungari-2-12",
+    "homeTeam": "Pondi Predators",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-4-pondi-pelicans-vs-tilted-towers-kungari-1-16",
+    "homeTeam": "Pondi Pelicans",
+    "awayTeam": "Tilted Towers Kungari 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-4-mingle-masters-kungari-3-vs-pondi-predators-17",
+    "homeTeam": "Mingle Masters Kungari 3",
+    "awayTeam": "Pondi Predators",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-5-tilted-towers-kungari-1-vs-watermelon-goats-kungari-2-20",
+    "homeTeam": "Tilted Towers Kungari 1",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-5-mingle-masters-kungari-3-vs-pondi-pelicans-21",
+    "homeTeam": "Mingle Masters Kungari 3",
+    "awayTeam": "Pondi Pelicans",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-6-pondi-predators-vs-watermelon-goats-kungari-2-24",
+    "homeTeam": "Pondi Predators",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-6-tilted-towers-kungari-1-vs-mingle-masters-kungari-3-25",
+    "homeTeam": "Tilted Towers Kungari 1",
+    "awayTeam": "Mingle Masters Kungari 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-7-mingle-masters-kungari-3-vs-pondi-predators-28",
+    "homeTeam": "Mingle Masters Kungari 3",
+    "awayTeam": "Pondi Predators",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-2-round-7-pondi-pelicans-vs-watermelon-goats-kungari-2-29",
+    "homeTeam": "Pondi Pelicans",
+    "awayTeam": "Watermelon Goats Kungari 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-1-no-ri-nutz-vs-wirakuthi-1-3",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-1-no-ri-nuggets-vs-wirakuthi-2-4",
+    "homeTeam": "No:Ri Nuggets",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": 5.0,
+    "awayPoints": 68.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-2-no-ri-nightmares-vs-wirakuthi-3-8",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": 8.0,
+    "awayPoints": 56.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-2-no-ri-nutz-vs-no-ri-nuggets-9",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": 12.0,
+    "awayPoints": 56.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-3-no-ri-nightmares-vs-wirakuthi-1-13",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-3-wirakuthi-3-vs-wirakuthi-2-14",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-4-no-ri-nutz-vs-wirakuthi-3-18",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-4-wirakuthi-1-vs-no-ri-nuggets-19",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-5-wirakuthi-2-vs-wirakuthi-1-23",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-5-no-ri-nightmares-vs-no-ri-nuggets-24",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-6-wirakuthi-2-vs-no-ri-nutz-28",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "No:Ri Nutz",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-6-wirakuthi-3-vs-no-ri-nuggets-29",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-7-no-ri-nutz-vs-no-ri-nightmares-33",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "No:Ri Nightmares",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-7-wirakuthi-1-vs-wirakuthi-3-34",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-8-no-ri-nutz-vs-wirakuthi-1-38",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-8-no-ri-nuggets-vs-wirakuthi-2-39",
+    "homeTeam": "No:Ri Nuggets",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-9-no-ri-nightmares-vs-wirakuthi-3-43",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-9-no-ri-nutz-vs-no-ri-nuggets-44",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-10-no-ri-nightmares-vs-wirakuthi-2-48",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-10-wirakuthi-1-vs-wirakuthi-3-49",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-11-no-ri-nightmares-vs-no-ri-nuggets-53",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-11-no-ri-nutz-vs-wirakuthi-2-54",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-12-wirakuthi-2-vs-wirakuthi-3-58",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-12-wirakuthi-1-vs-no-ri-nuggets-59",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-13-no-ri-nuggets-vs-wirakuthi-3-63",
+    "homeTeam": "No:Ri Nuggets",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-13-no-ri-nightmares-vs-no-ri-nutz-64",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nutz",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-14-no-ri-nightmares-vs-wirakuthi-1-68",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-14-no-ri-nutz-vs-wirakuthi-2-69",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-15-wirakuthi-3-vs-no-ri-nightmares-73",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "No:Ri Nightmares",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-15-wirakuthi-1-vs-no-ri-nuggets-74",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-16-no-ri-nightmares-vs-wirakuthi-2-78",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-16-wirakuthi-1-vs-wirakuthi-3-79",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-17-no-ri-nightmares-vs-no-ri-nuggets-83",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-17-no-ri-nutz-vs-wirakuthi-2-84",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-18-wirakuthi-2-vs-wirakuthi-3-88",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-18-wirakuthi-1-vs-no-ri-nuggets-89",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-19-no-ri-nuggets-vs-wirakuthi-3-93",
+    "homeTeam": "No:Ri Nuggets",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-19-no-ri-nightmares-vs-no-ri-nutz-94",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nutz",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-20-no-ri-nightmares-vs-wirakuthi-1-98",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-20-no-ri-nutz-vs-wirakuthi-2-99",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-21-no-ri-nutz-vs-wirakuthi-1-103",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-21-no-ri-nuggets-vs-wirakuthi-2-104",
+    "homeTeam": "No:Ri Nuggets",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-22-no-ri-nightmares-vs-wirakuthi-3-108",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-22-no-ri-nutz-vs-no-ri-nuggets-109",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-23-no-ri-nightmares-vs-wirakuthi-1-113",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-23-wirakuthi-3-vs-wirakuthi-2-114",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-24-no-ri-nutz-vs-wirakuthi-3-118",
+    "homeTeam": "No:Ri Nutz",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-24-wirakuthi-1-vs-no-ri-nuggets-119",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-25-wirakuthi-2-vs-wirakuthi-1-123",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-25-no-ri-nightmares-vs-no-ri-nuggets-124",
+    "homeTeam": "No:Ri Nightmares",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-26-wirakuthi-2-vs-no-ri-nightmares-128",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "No:Ri Nightmares",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-7-line-5-round-26-wirakuthi-3-vs-no-ri-nuggets-129",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "No:Ri Nuggets",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-1-kungari-vs-nori-11",
+    "homeTeam": "Kungari",
+    "awayTeam": "NoRi",
+    "homePoints": 1.0,
+    "awayPoints": 30.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-1-pondi-vs-wirakuthi-12",
+    "homeTeam": "Pondi",
+    "awayTeam": "Wirakuthi",
+    "homePoints": 7.0,
+    "awayPoints": 45.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-2-kungari-vs-pondi-15",
+    "homeTeam": "Kungari",
+    "awayTeam": "Pondi",
+    "homePoints": 2.0,
+    "awayPoints": 51.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-2-wirakuthi-vs-nori-16",
+    "homeTeam": "Wirakuthi",
+    "awayTeam": "NoRi",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-3-kungari-vs-wirakuthi-19",
+    "homeTeam": "Kungari",
+    "awayTeam": "Wirakuthi",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-8-round-3-nori-vs-pondi-20",
+    "homeTeam": "NoRi",
+    "awayTeam": "Pondi",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-1-pondi-1-vs-wirakuthi-1-3",
+    "homeTeam": "Pondi 1",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-1-pondi-2-vs-wirakuthi-2-4",
+    "homeTeam": "Pondi 2",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": 15.0,
+    "awayPoints": 21.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-1-pondi-3-vs-wirakuthi-3-5",
+    "homeTeam": "Pondi 3",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": 30.0,
+    "awayPoints": 45.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-2-pondi-1-vs-pondi-2-7",
+    "homeTeam": "Pondi 1",
+    "awayTeam": "Pondi 2",
+    "homePoints": 14.0,
+    "awayPoints": 24.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-2-pondi-3-vs-wirakuthi-1-8",
+    "homeTeam": "Pondi 3",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": 11.5,
+    "awayPoints": 17.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-2-wirakuthi-3-vs-wirakuthi-2-9",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": 11.0,
+    "awayPoints": 19.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-3-pondi-1-vs-pondi-3-11",
+    "homeTeam": "Pondi 1",
+    "awayTeam": "Pondi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-3-wirakuthi-3-vs-pondi-2-12",
+    "homeTeam": "Wirakuthi 3",
+    "awayTeam": "Pondi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-3-wirakuthi-2-vs-wirakuthi-1-13",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Wirakuthi 1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-4-pondi-1-vs-wirakuthi-3-15",
+    "homeTeam": "Pondi 1",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-4-wirakuthi-2-vs-pondi-3-16",
+    "homeTeam": "Wirakuthi 2",
+    "awayTeam": "Pondi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-4-wirakuthi-1-vs-pondi-2-17",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "Pondi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-5-pondi-1-vs-wirakuthi-2-19",
+    "homeTeam": "Pondi 1",
+    "awayTeam": "Wirakuthi 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-5-wirakuthi-1-vs-wirakuthi-3-20",
+    "homeTeam": "Wirakuthi 1",
+    "awayTeam": "Wirakuthi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-1-round-5-pondi-2-vs-pondi-3-21",
+    "homeTeam": "Pondi 2",
+    "awayTeam": "Pondi 3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-1-blue-swans-vs-kopia-n1-3",
+    "homeTeam": "blue swans",
+    "awayTeam": "Kopia N1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-1-blue-tongues-k2-vs-hotneth-n2-4",
+    "homeTeam": "Blue Tongues K2",
+    "awayTeam": "Hotneth N2",
+    "homePoints": 50.0,
+    "awayPoints": 83.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-1-stingrays-k3-vs-chapman-all-stars-n3-5",
+    "homeTeam": "Stingrays K3",
+    "awayTeam": "chapman all stars N3",
+    "homePoints": 51.0,
+    "awayPoints": 84.0,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-2-blue-swans-k1-vs-hotneth-n3-8",
+    "homeTeam": "Blue swans K1",
+    "awayTeam": "Hotneth N3",
+    "homePoints": 31.5,
+    "awayPoints": 57.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-2-blue-tounges-k2-vs-chapman-all-stars-no4-9",
+    "homeTeam": "Blue tounges K2",
+    "awayTeam": "chapman all stars No4",
+    "homePoints": 50.5,
+    "awayPoints": 78.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-2-nori-2-vs-stingrays-k3-10",
+    "homeTeam": "Nori 2",
+    "awayTeam": "Stingrays K3",
+    "homePoints": 31.5,
+    "awayPoints": 52.5,
+    "status": "Final",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-3-kopia-no1-vs-stingrays-k3-13",
+    "homeTeam": "Kopia No1",
+    "awayTeam": "Stingrays K3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-3-hotneth-no3-vs-chapman-all-stars-n4-14",
+    "homeTeam": "Hotneth No3",
+    "awayTeam": "chapman all stars N4",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-3-nori-2-vs-blue-tongues-k2-15",
+    "homeTeam": "Nori 2",
+    "awayTeam": "Blue Tongues K2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-4-blue-tongues-k2-vs-blue-swans-k1-18",
+    "homeTeam": "Blue Tongues K2",
+    "awayTeam": "Blue swans K1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-4-nori-2-vs-chapman-all-stars-n3-19",
+    "homeTeam": "Nori 2",
+    "awayTeam": "chapman all stars N3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-4-kopia-no1-vs-hotneth-no3-20",
+    "homeTeam": "Kopia No1",
+    "awayTeam": "Hotneth No3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-5-blue-tongues-k2-vs-stingrays-k3-23",
+    "homeTeam": "Blue Tongues K2",
+    "awayTeam": "Stingrays K3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-5-hotneth-no3-vs-nori-2-24",
+    "homeTeam": "Hotneth No3",
+    "awayTeam": "Nori 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-5-kopia-no1-vs-blue-swans-k1-25",
+    "homeTeam": "Kopia No1",
+    "awayTeam": "Blue swans K1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-6-blue-tongues-k2-vs-kopia-no1-28",
+    "homeTeam": "Blue Tongues K2",
+    "awayTeam": "Kopia No1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-6-blue-swans-k1-vs-chapman-allstars-n3-29",
+    "homeTeam": "Blue swans K1",
+    "awayTeam": "Chapman allstars N3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-6-nori-2-vs-stingrays-k3-30",
+    "homeTeam": "Nori 2",
+    "awayTeam": "Stingrays K3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-7-chapman-allstars-n3-vs-kopia-no1-33",
+    "homeTeam": "Chapman allstars N3",
+    "awayTeam": "Kopia No1",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-7-blue-swans-k1-vs-nori-2-34",
+    "homeTeam": "Blue swans K1",
+    "awayTeam": "Nori 2",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  },
+  {
+    "matchId": "year-9-line-7-round-7-hotneth-no3-vs-stingrays-k3-35",
+    "homeTeam": "Hotneth No3",
+    "awayTeam": "Stingrays K3",
+    "homePoints": null,
+    "awayPoints": null,
+    "status": "Scheduled",
+    "notes": "TPSR/Total Points columns parsed if present; verify mapping"
+  }
+]
