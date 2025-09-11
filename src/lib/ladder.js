@@ -8,6 +8,7 @@ export function computeLadder(teams, fixtures, results) {
     D: 0,
     PF: 0,
     PA: 0,
+    PD: 0,
     Pts: 0,
     '%': 0
   }));
@@ -27,6 +28,7 @@ export function computeLadder(teams, fixtures, results) {
   });
   stats.forEach(s => {
     s['%'] = s.PA ? Number(((s.PF / s.PA) * 100).toFixed(2)) : 0;
+    s.PD = s.PF - s.PA;
   });
-  return stats.sort((a,b) => b.Pts - a.Pts || b['%'] - a['%']);
+  return stats.sort((a,b) => b.Pts - a.Pts || b.PD - a.PD || b['%'] - a['%']);
 }
