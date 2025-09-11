@@ -8,6 +8,14 @@ React + Tailwind demo for managing school sports tournaments.
 npm install
 ```
 
+### UI Elements
+
+Tailwind Plus Elements are sourced from npm (`@tailwindplus/elements`) using the npm registry. If installing via npm isn't possible, they can be loaded from the CDN:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"></script>
+```
+
 ## Development
 
 ```bash
