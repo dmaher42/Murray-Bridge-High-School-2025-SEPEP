@@ -1,0 +1,19 @@
+{
+  "divisions": [
+    {
+      "id": "A",
+      "name": "Division A",
+      "teams": [
+        {
+          "id": "A01",
+          "name": "Kestrels",
+          "coach": "Name",
+          "captain": "Name",
+          "contact": "email@school.sa.edu.au",
+          "color": "#2563eb",
+          "roster": ["Player A", "Player B"]
+        }
+      ]
+    }
+  ]
+}
