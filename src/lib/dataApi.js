@@ -120,5 +120,5 @@ export async function refreshAll() {
   localStorage.removeItem('fixtures');
   localStorage.removeItem('results');
   localStorage.removeItem('players');
-  await Promise.all([getTeams(), getFixtures(), getResults(), getPlayers()]);
+  await Promise.all([getTeams(), getFixtures(), getResults()]);
 }
