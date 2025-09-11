@@ -37,16 +37,16 @@ export default function Teams() {
                           key={p.id}
                           type="button"
                           onClick={() => setSelected(p)}
-                          className="relative inline-block rounded-full ring-2 ring-white"
+                          className="relative inline-flex items-center justify-center p-2 rounded-full"
                         >
                           {p.photo ? (
                             <img
                               src={p.photo}
                               alt={p.name}
-                              className="h-8 w-8 rounded-full object-cover"
+                              className="h-8 w-8 rounded-full object-cover ring-2 ring-white"
                             />
                           ) : (
-                              <span className="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center text-xs font-medium text-slate-700">
+                            <span className="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center text-xs font-medium text-slate-700 ring-2 ring-white">
                               {initials(p.name)}
                             </span>
                           )}
@@ -66,7 +66,7 @@ export default function Teams() {
           <div className="relative bg-white dark:bg-slate-800 rounded-lg p-6 max-w-sm w-full">
             <button
               type="button"
-              className="absolute top-2 right-2 text-slate-500 hover:text-slate-700"
+              className="absolute top-2 right-2 inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-700"
               onClick={() => setSelected(null)}
             >
               ×
