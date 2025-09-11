@@ -13,12 +13,9 @@ const links = [
 
 export default function AppSidebar({ current, navigate, open, onClose }) {
   return (
-    <div className={`drawer z-40 ${open ? 'drawer-open' : ''} md:drawer-open`}>
-      <input id="app-sidebar-drawer" type="checkbox" className="drawer-toggle" checked={open} readOnly />
-      <div className="drawer-content"></div>
-      <div className="drawer-side">
-        <label htmlFor="app-sidebar-drawer" className="drawer-overlay" onClick={onClose}></label>
-        <nav className="w-64 min-h-full bg-white/90 backdrop-blur shadow-lg rounded-r-xl p-4 space-y-2">
+    <div className={`${open ? 'block' : 'hidden'} md:block fixed md:relative inset-0 z-40`}>
+      <div className="absolute md:relative bg-white/90 backdrop-blur shadow-lg rounded-r-xl w-64 h-full p-4 space-y-2 overflow-y-auto">
+        <nav className="space-y-2">
           {links.map(l => (
             <button
               key={l.id}
@@ -33,6 +30,12 @@ export default function AppSidebar({ current, navigate, open, onClose }) {
           ))}
         </nav>
       </div>
+      {open && (
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 md:hidden" 
+          onClick={onClose}
+        ></div>
+      )}
     </div>
   );
 }
