@@ -25,6 +25,19 @@ export async function getTeams() {
     const data = await fetchJSON('/data/teams.json');
     cache.teams = data.divisions ?? [];
   }
+
+  // attach players to each team
+  try {
+    const players = await getPlayers();
+    cache.teams.forEach(div => {
+      (div.teams || []).forEach(team => {
+        team.players = players.filter(p => p.team === team.id);
+      });
+    });
+  } catch {
+    // ignore player errors; teams will simply have empty player lists
+  }
+
   return cache.teams;
 }
 
