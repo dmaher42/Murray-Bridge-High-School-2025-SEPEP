@@ -1,6 +1,5 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.info-box {
-  @apply mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded;
-}
+
+html, body, #root { height: 100%; }
