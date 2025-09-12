@@ -1,3 +1,5 @@
+import { sanitizeHtml } from './sanitizeHtml.js';
+
 const BASE = import.meta.env.VITE_API_BASE || "https://script.google.com/macros/s/APP_SCRIPT_ID/exec";
 
 function noCache() {
@@ -134,9 +136,10 @@ export function getAnnouncements() {
 }
 
 export function saveAnnouncement(html) {
-  localStorage.setItem('announcement', html);
-  cache.announcement = html;
-  return html;
+  const sanitized = sanitizeHtml(html);
+  localStorage.setItem('announcement', sanitized);
+  cache.announcement = sanitized;
+  return sanitized;
 }
 
 export async function refreshAll() {
