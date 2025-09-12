@@ -126,10 +126,24 @@ export function saveFixtures(rounds) {
   return rounds;
 }
 
+export function getAnnouncements() {
+  if (cache.announcement) return cache.announcement;
+  const stored = localStorage.getItem('announcement') || '';
+  cache.announcement = stored;
+  return stored;
+}
+
+export function saveAnnouncement(html) {
+  localStorage.setItem('announcement', html);
+  cache.announcement = html;
+  return html;
+}
+
 export async function refreshAll() {
   clearCache();
   localStorage.removeItem('fixtures');
   localStorage.removeItem('results');
   localStorage.removeItem('players');
+  localStorage.removeItem('announcement');
   await Promise.all([getTeams(), getFixtures(), getResults(), getPlayers()]);
 }

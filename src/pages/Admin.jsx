@@ -1,8 +1,14 @@
 import React from 'react';
-import { getResults, saveFixtures, refreshAll } from '../lib/dataApi.js';
+import { getResults, saveFixtures, refreshAll, getAnnouncements, saveAnnouncement } from '../lib/dataApi.js';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 export default function Admin() {
   const [message, setMessage] = React.useState('');
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: getAnnouncements(),
+  });
 
   async function exportData() {
     const data = await getResults();
@@ -34,6 +40,14 @@ export default function Admin() {
     await refreshAll();
     setMessage('Data refreshed');
     setTimeout(() => setMessage(''), 3000);
+  }
+
+  function handleSaveAnnouncement() {
+    if (editor) {
+      saveAnnouncement(editor.getHTML());
+      setMessage('Announcement saved');
+      setTimeout(() => setMessage(''), 3000);
+    }
   }
   return (
     <section id="admin" className="py-8 sm:py-10 lg:py-14">
@@ -80,6 +94,18 @@ export default function Admin() {
         <div className="space-y-2">
           <label className="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON</label>
           <input className="form-input w-full rounded-xl" type="file" accept="application/json" onChange={importFixtures} />
+        </div>
+        <div className="space-y-2">
+          <label className="block font-medium text-slate-900 dark:text-slate-200">Announcement</label>
+          <div className="border rounded-xl p-2">
+            <EditorContent editor={editor} />
+          </div>
+          <button
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-600 text-white px-4 py-2 hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+            onClick={handleSaveAnnouncement}
+          >
+            Save Announcement
+          </button>
         </div>
       </div>
     </section>
