@@ -9,18 +9,31 @@ export default function Fixtures() {
   const [division, setDivision] = useState('');
   const [round, setRound] = useState('');
   const [date, setDate] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    Promise.all([getFixtures(), getResults()]).then(([fx, { results }]) => {
-      const merged = fx.map(r => ({
-        ...r,
-        matches: r.matches.map(m => {
-          const res = results.find(res => res.matchId === m.id) || {};
-          return { ...m, ...res };
-        }),
-      }));
-      setRounds(merged);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [fx, { results }] = await Promise.all([getFixtures(), getResults()]);
+        const merged = fx.map(r => ({
+          ...r,
+          matches: r.matches.map(m => {
+            const res = results.find(res => res.matchId === m.id) || {};
+            return { ...m, ...res };
+          }),
+        }));
+        setRounds(merged);
+      } catch (err) {
+        setError('Failed to load fixtures');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   const divisions = Array.from(new Set(rounds.flatMap(r => r.matches.map(m => m.division))));
@@ -65,36 +78,39 @@ export default function Fixtures() {
         </select>
         <input type="date" className={inputClass} value={date} onChange={e => setDate(e.target.value)} />
       </div>
-      <div className="mt-6 space-y-6">
-        {filteredRounds.map(r => (
-          <div key={r.round} className="rounded-2xl overflow-hidden ring-1 ring-black/5">
-            <div className="px-4 py-2 bg-slate-50/80 dark:bg-slate-800/40 text-slate-500 uppercase text-xs tracking-wide">
-              Round {r.round} – {r.date}
-            </div>
-            <ul className="space-y-2 p-4">
-              {r.matches.map(m => (
-                <li key={m.id}>
-                  <div className="rounded-2xl p-4 ring-1 ring-transparent hover:ring-black/5 transition hover:shadow-sm bg-white/80 dark:bg-slate-900/60 flex items-center justify-between">
-                    <span className="font-medium text-slate-900 dark:text-slate-100">
-                      {m.home} vs {m.away}
-                    </span>
-                    <span className="flex items-center gap-2 text-sm text-slate-500">
-                      {m.venue} {m.time}
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${
-                          statusClasses[m.status || 'Scheduled']
-                        }`}
-                      >
-                        {m.status || 'Scheduled'}
-                      </span>
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+        <div className="mt-6 space-y-6">
+          {loading && <p>Loading fixtures...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+          {!loading && !error &&
+            filteredRounds.map(r => (
+              <div key={r.round} className="rounded-2xl overflow-hidden ring-1 ring-black/5">
+                <div className="px-4 py-2 bg-slate-50/80 dark:bg-slate-800/40 text-slate-500 uppercase text-xs tracking-wide">
+                  Round {r.round} – {r.date}
+                </div>
+                <ul className="space-y-2 p-4">
+                  {r.matches.map(m => (
+                    <li key={m.id}>
+                      <div className="rounded-2xl p-4 ring-1 ring-transparent hover:ring-black/5 transition hover:shadow-sm bg-white/80 dark:bg-slate-900/60 flex items-center justify-between">
+                        <span className="font-medium text-slate-900 dark:text-slate-100">
+                          {m.home} vs {m.away}
+                        </span>
+                        <span className="flex items-center gap-2 text-sm text-slate-500">
+                          {m.venue} {m.time}
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${
+                              statusClasses[m.status || 'Scheduled']
+                            }`}
+                          >
+                            {m.status || 'Scheduled'}
+                          </span>
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+        </div>
     </section>
   );
 }
