@@ -3,8 +3,16 @@ import React from 'react';
 export default function Dashboard() {
   return (
     <div>
+      <section className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-200 text-center px-4">
+        <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-emerald-400 to-teal-600 text-transparent bg-clip-text mb-8">
+          SEPEP Tournament Hub
+        </h1>
+        <a href="#dashboard" className="px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white">
+          Explore Dashboard
+        </a>
+      </section>
+
       <section id="dashboard" className="py-8 sm:py-10 lg:py-14 text-center">
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white mb-4">SEPEP Tournament Hub</h1>
         <p className="text-slate-600 dark:text-slate-300 mb-8 leading-7">Welcome to the central dashboard.</p>
         <div className="mx-auto max-w-4xl rounded-2xl ring-1 ring-black/5 overflow-hidden">
           <img
