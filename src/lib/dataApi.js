@@ -6,6 +6,10 @@ function noCache() {
 
 const cache = {};
 
+export function clearCache() {
+  for (const key in cache) delete cache[key];
+}
+
 async function fetchJSON(path) {
   if (cache[path]) return cache[path];
   const res = await fetch(path);
@@ -123,9 +127,9 @@ export function saveFixtures(rounds) {
 }
 
 export async function refreshAll() {
-  for (const key in cache) delete cache[key];
+  clearCache();
   localStorage.removeItem('fixtures');
   localStorage.removeItem('results');
   localStorage.removeItem('players');
-  await Promise.all([getTeams(), getFixtures(), getResults()]);
+  await Promise.all([getTeams(), getFixtures(), getResults(), getPlayers()]);
 }
