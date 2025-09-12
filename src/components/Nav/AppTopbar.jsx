@@ -14,19 +14,19 @@ const links = [
 
 export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggleDark }) {
   return (
-    <header className="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200/60 dark:border-slate-800">
+    <header className="sticky top-0 z-40 bg-gradient-to-r from-emerald-700 to-emerald-300">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <div className="flex items-center">
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">SEPEP Tournament Hub</span>
+          <span className="font-semibold text-white">SEPEP Tournament Hub</span>
         </div>
-        <nav className="flex items-center gap-4 text-sm font-medium overflow-x-auto">
+        <nav className="flex items-center gap-4 text-sm font-medium overflow-x-auto text-white">
           {links.map(l => (
             <NavLink
               key={l.to}
               to={l.to}
               end={l.end}
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md transition-colors hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-slate-800/40 ${isActive ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300'}`
+                `px-3 py-2 rounded-md transition-colors hover:bg-emerald-600/40 ${isActive ? 'bg-emerald-600/40 font-semibold' : ''}`
               }
             >
               {l.label}
@@ -36,14 +36,14 @@ export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggle
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTeacher}
-            className="hidden sm:inline-flex items-center gap-2 rounded-xl ring-1 ring-slate-300/60 bg-white px-4 py-2 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-white/10 text-sm"
+            className="hidden sm:inline-flex items-center gap-2 rounded-xl ring-1 ring-slate-300/60 bg-white px-4 py-2 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-white/10 text-sm text-slate-900"
             aria-label="Toggle teacher mode"
           >
             {teacherMode ? 'Teacher' : 'Student'}
           </button>
           <button
             onClick={toggleDark}
-            className="inline-flex items-center gap-2 rounded-xl ring-1 ring-slate-300/60 bg-white p-2 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-white/10"
+            className="inline-flex items-center gap-2 rounded-xl ring-1 ring-slate-300/60 bg-white p-2 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-white/10 text-slate-900"
             aria-label="Toggle dark mode"
           >
             {darkMode ? (
@@ -61,3 +61,4 @@ export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggle
     </header>
   );
 }
+
