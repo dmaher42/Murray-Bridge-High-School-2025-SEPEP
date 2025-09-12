@@ -9,6 +9,7 @@ import Stats from './pages/Stats.jsx';
 import MVP from './pages/MVP.jsx';
 import News from './pages/News.jsx';
 import Admin from './pages/Admin.jsx';
+import SepepHub from './pages/SepepHub.jsx';
 
 export default function App() {
   const [teacherMode, setTeacherMode] = useState(() => localStorage.getItem('teacherMode') === '1');
@@ -48,6 +49,7 @@ export default function App() {
                 <Route path="/mvp" element={<MVP teacherMode={teacherMode} />} />
                 <Route path="/news" element={<News teacherMode={teacherMode} />} />
                 <Route path="/admin" element={<Admin teacherMode={teacherMode} />} />
+                <Route path="/sepep" element={<SepepHub teacherMode={teacherMode} />} />
               </Routes>
             </div>
           </main>

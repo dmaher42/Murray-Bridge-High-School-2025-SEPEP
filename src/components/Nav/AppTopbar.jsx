@@ -9,7 +9,8 @@ const links = [
   { to: '/stats', label: 'Stats' },
   { to: '/mvp', label: 'MVP & Fair-Play' },
   { to: '/news', label: 'Announcements & Media' },
-  { to: '/admin', label: 'Admin' }
+  { to: '/admin', label: 'Admin' },
+  { to: '/sepep', label: 'SEPEP Hub' }
 ];
 
 export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggleDark }) {
