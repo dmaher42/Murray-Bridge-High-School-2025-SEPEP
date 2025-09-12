@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import AppTopbar from './components/Nav/AppTopbar.jsx';
-import AppSidebar from './components/Nav/AppSidebar.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Fixtures from './pages/Fixtures.jsx';
 import Ladder from './pages/Ladder.jsx';
@@ -31,9 +30,13 @@ export default function App() {
   return (
     <HashRouter>
       <div className="min-h-screen bg-white dark:bg-slate-900">
-        <AppSidebar />
         <div className="min-h-screen flex flex-col">
-          <AppTopbar teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
+          <AppTopbar
+            teacherMode={teacherMode}
+            toggleTeacher={toggleTeacher}
+            darkMode={darkMode}
+            toggleDark={toggleDark}
+          />
           <main className="flex-1 py-8 sm:py-10 lg:py-14">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
               <Routes>
