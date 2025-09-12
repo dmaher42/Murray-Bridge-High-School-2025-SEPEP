@@ -1,12 +1,515 @@
 {
   "players": [
-    {"id":"A01-1","team":"A01","name":"Alice Smith","photo":"","bio":"Captain and leading scorer."},
-    {"id":"A01-2","team":"A01","name":"Beth Jones","photo":"","bio":"Aggressive defender."},
-    {"id":"A01-3","team":"A01","name":"Cara Lee","photo":"","bio":"Midfielder with great vision."},
-    {"id":"A01-4","team":"A01","name":"Dana Liu","photo":"","bio":"Reliable goalkeeper."},
-    {"id":"A01-5","team":"A01","name":"Eva Moore","photo":"","bio":"Young talent on the rise."},
-    {"id":"A01-6","team":"A01","name":"Faye Kim","photo":"","bio":"Speedy winger."},
-    {"id":"A01-7","team":"A01","name":"Gia Singh","photo":"","bio":"Utility player who can cover many roles."},
-    {"id":"A01-8","team":"A01","name":"Hana Patel","photo":"","bio":"Defensive stalwart."}
+    {
+      "id": "kopia-01",
+      "team": "kopia",
+      "name": "Kye",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-02",
+      "team": "kopia",
+      "name": "Sarah",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-03",
+      "team": "kopia",
+      "name": "Tali",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-04",
+      "team": "kopia",
+      "name": "Seth",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-05",
+      "team": "kopia",
+      "name": "Oliver",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-06",
+      "team": "kopia",
+      "name": "Imogen",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-07",
+      "team": "kopia",
+      "name": "Jemia",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-08",
+      "team": "kopia",
+      "name": "Ronald",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-09",
+      "team": "kopia",
+      "name": "Patrick",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "kopia-10",
+      "team": "kopia",
+      "name": "Jordan",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-01",
+      "team": "no-ri-2",
+      "name": "Isaac",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-02",
+      "team": "no-ri-2",
+      "name": "Henry",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-03",
+      "team": "no-ri-2",
+      "name": "Storm",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-04",
+      "team": "no-ri-2",
+      "name": "Hayden",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-05",
+      "team": "no-ri-2",
+      "name": "Lucas",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-06",
+      "team": "no-ri-2",
+      "name": "Alyssa",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-07",
+      "team": "no-ri-2",
+      "name": "Isabella",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-08",
+      "team": "no-ri-2",
+      "name": "Matt",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "no-ri-2-09",
+      "team": "no-ri-2",
+      "name": "Jacob",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-01",
+      "team": "hotneth",
+      "name": "Ivan",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-02",
+      "team": "hotneth",
+      "name": "Casey",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-03",
+      "team": "hotneth",
+      "name": "Kade",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-04",
+      "team": "hotneth",
+      "name": "Lachlan",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-05",
+      "team": "hotneth",
+      "name": "Zak",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-06",
+      "team": "hotneth",
+      "name": "Felicity",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-07",
+      "team": "hotneth",
+      "name": "Paige",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "hotneth-08",
+      "team": "hotneth",
+      "name": "Charlotte",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-01",
+      "team": "chapma-s-allstars",
+      "name": "Molly",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-02",
+      "team": "chapma-s-allstars",
+      "name": "Paul",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-03",
+      "team": "chapma-s-allstars",
+      "name": "Peter",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-04",
+      "team": "chapma-s-allstars",
+      "name": "Olivia",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-05",
+      "team": "chapma-s-allstars",
+      "name": "Bree",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-06",
+      "team": "chapma-s-allstars",
+      "name": "Feyin",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "chapma-s-allstars-07",
+      "team": "chapma-s-allstars",
+      "name": "Shilo",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-01",
+      "team": "blue-swans",
+      "name": "Hallie",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-02",
+      "team": "blue-swans",
+      "name": "lashyia",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-03",
+      "team": "blue-swans",
+      "name": "Riley",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-04",
+      "team": "blue-swans",
+      "name": "Zedino",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-05",
+      "team": "blue-swans",
+      "name": "Tamkia",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-06",
+      "team": "blue-swans",
+      "name": "Ella",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-07",
+      "team": "blue-swans",
+      "name": "Josh",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-08",
+      "team": "blue-swans",
+      "name": "Nhial",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-09",
+      "team": "blue-swans",
+      "name": "Jay",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-10",
+      "team": "blue-swans",
+      "name": "Jacob",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-11",
+      "team": "blue-swans",
+      "name": "Shpray",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-12",
+      "team": "blue-swans",
+      "name": "Mia Dun",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-13",
+      "team": "blue-swans",
+      "name": "Katie",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-swans-14",
+      "team": "blue-swans",
+      "name": "Khaly",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-01",
+      "team": "blue-tongues",
+      "name": "Rocco",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-02",
+      "team": "blue-tongues",
+      "name": "Enchi",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-03",
+      "team": "blue-tongues",
+      "name": "Kobi P",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-04",
+      "team": "blue-tongues",
+      "name": "Carter",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-05",
+      "team": "blue-tongues",
+      "name": "Jordan",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-06",
+      "team": "blue-tongues",
+      "name": "Zion",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-07",
+      "team": "blue-tongues",
+      "name": "Calliope",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-08",
+      "team": "blue-tongues",
+      "name": "CJ",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-09",
+      "team": "blue-tongues",
+      "name": "Anbella",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-10",
+      "team": "blue-tongues",
+      "name": "Dom",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-11",
+      "team": "blue-tongues",
+      "name": "Tantini",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "blue-tongues-12",
+      "team": "blue-tongues",
+      "name": "Scarlett",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-01",
+      "team": "stingrays",
+      "name": "Shayla",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-02",
+      "team": "stingrays",
+      "name": "Nate",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-03",
+      "team": "stingrays",
+      "name": "Emily",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-04",
+      "team": "stingrays",
+      "name": "Mia N",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-05",
+      "team": "stingrays",
+      "name": "Kedan",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-06",
+      "team": "stingrays",
+      "name": "Kobe",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-07",
+      "team": "stingrays",
+      "name": "Eddy",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-08",
+      "team": "stingrays",
+      "name": "Steph",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-09",
+      "team": "stingrays",
+      "name": "Jaiden",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-10",
+      "team": "stingrays",
+      "name": "Sam Smith",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-11",
+      "team": "stingrays",
+      "name": "Patrick",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-12",
+      "team": "stingrays",
+      "name": "Chelsea",
+      "photo": "",
+      "bio": ""
+    },
+    {
+      "id": "stingrays-13",
+      "team": "stingrays",
+      "name": "Matilda",
+      "photo": "",
+      "bio": ""
+    }
   ]
 }
