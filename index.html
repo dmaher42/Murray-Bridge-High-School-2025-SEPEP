@@ -25,8 +25,69 @@
   </style>
 </head>
 <body class="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-200">
-  <div id="root"></div>
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200/60 dark:border-slate-800">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      <a href="#dashboard" class="font-semibold text-slate-900 dark:text-white">SEPEP Tournament Hub</a>
+      <nav class="flex items-center gap-6 text-sm font-medium">
+        <a href="#fixtures" class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Fixtures</a>
+        <a href="#ladder" class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Ladder</a>
+        <a href="#teams" class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Teams</a>
+        <a href="#admin" class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
+    <section id="dashboard">
+      <h2 class="sr-only">Dashboard</h2>
+      <p>Welcome to the SEPEP Tournament Hub.</p>
+    </section>
+
+    <section id="fixtures" hidden>
+      <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Fixtures & Results</h2>
+      <div id="fixtures-list" class="mt-6 space-y-6"></div>
+    </section>
+
+    <section id="ladder" hidden>
+      <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Ladder / Standings</h2>
+      <div class="mt-6 rounded-2xl ring-1 ring-black/5 overflow-x-auto">
+        <table class="w-full text-sm" id="ladder-table">
+          <thead>
+            <tr class="bg-slate-50/80 dark:bg-slate-800/40 text-slate-500 uppercase text-xs tracking-wide">
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">Team</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">GP</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">W</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">L</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">D</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">PF</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">PA</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">Pts</th>
+              <th class="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200">%</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200/60 dark:divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="teams" hidden>
+      <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Teams & Profiles</h2>
+      <div id="teams-list" class="mt-6 space-y-10"></div>
+    </section>
+
+    <section id="admin" hidden>
+      <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">Admin</h2>
+      <div class="mt-6 rounded-2xl ring-1 ring-black/5 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/60 dark:ring-white/10 p-5 sm:p-6 space-y-4">
+        <button id="export-results" class="inline-flex items-center gap-2 rounded-xl bg-brand-600 text-white px-4 py-2 hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700">
+          Export Results JSON
+        </button>
+        <div class="space-y-2">
+          <label class="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON</label>
+          <input id="fixtures-upload" class="block w-full rounded-xl border-slate-300/60 bg-white/80 dark:bg-slate-900/60 px-3 py-2 focus:ring-2 focus:ring-slate-900/20 outline-none" type="file" accept="application/json">
+        </div>
+      </div>
+    </section>
+  </main>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"></script>
-  <script type="module" src="/src/main.jsx"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
