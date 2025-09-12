@@ -39,6 +39,10 @@ export default function App() {
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
+  useEffect(() => {
+    const el = document.getElementById(view);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, [view]);
   function navigate(v) {
     window.location.hash = v;
     setView(v);
