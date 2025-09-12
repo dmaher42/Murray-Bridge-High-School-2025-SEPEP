@@ -47,7 +47,7 @@ Sample JSON files live in `public/data`:
 
 ## Import / Export
 
-The Admin page includes a button to export current results stored in the browser's localStorage as JSON.
+The Admin page includes tools to export current results as JSON and import fixtures from either JSON or Excel (`.xlsx`) files.
 
 ## Teacher Mode
 
