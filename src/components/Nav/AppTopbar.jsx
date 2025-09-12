@@ -1,18 +1,37 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+const links = [
+  { to: '/', label: 'Dashboard', end: true },
+  { to: '/fixtures', label: 'Fixtures & Results' },
+  { to: '/ladder', label: 'Ladder / Standings' },
+  { to: '/teams', label: 'Teams & Profiles' },
+  { to: '/stats', label: 'Stats' },
+  { to: '/mvp', label: 'MVP & Fair-Play' },
+  { to: '/news', label: 'Announcements & Media' },
+  { to: '/admin', label: 'Admin' }
+];
 
 export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggleDark }) {
   return (
     <header className="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200/60 dark:border-slate-800">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <div className="flex items-center">
-          <span className="font-semibold text-slate-900 dark:text-white">SEPEP Tournament Hub</span>
+          <span className="font-semibold text-emerald-700 dark:text-emerald-400">SEPEP Tournament Hub</span>
         </div>
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/fixtures" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Fixtures</Link>
-          <Link to="/ladder" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Ladder</Link>
-          <Link to="/teams" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Teams</Link>
-          <Link to="/news" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">News</Link>
+        <nav className="flex items-center gap-4 text-sm font-medium overflow-x-auto">
+          {links.map(l => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.end}
+              className={({ isActive }) =>
+                `px-3 py-2 rounded-md transition-colors hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-slate-800/40 ${isActive ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300'}`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
         </nav>
         <div className="flex items-center gap-2">
           <button
