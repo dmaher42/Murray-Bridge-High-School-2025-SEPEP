@@ -1,20 +1,11 @@
 import React from 'react';
 
-export default function AppTopbar({ onMenu, teacherMode, toggleTeacher, darkMode, toggleDark }) {
+export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggleDark }) {
   return (
     <header className="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200/60 dark:border-slate-800">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button
-            className="md:hidden inline-flex items-center gap-2 rounded-xl ring-1 ring-slate-300/60 bg-white p-2 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-white/10"
-            onClick={onMenu}
-            aria-label="Open menu"
-          >
-            <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5" />
-            </svg>
-          </button>
-          <a href="#dashboard" className="font-semibold text-slate-900 dark:text-white">SEPEP Tournament Hub</a>
+        <div className="flex items-center">
+          <span className="font-semibold text-slate-900 dark:text-white">SEPEP Tournament Hub</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <a href="#fixtures" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Fixtures</a>

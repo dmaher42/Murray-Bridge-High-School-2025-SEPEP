@@ -23,7 +23,6 @@ const views = {
 
 export default function App() {
   const [view, setView] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [teacherMode, setTeacherMode] = useState(() => localStorage.getItem('teacherMode') === '1');
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === '1');
   useEffect(() => {
@@ -60,9 +59,9 @@ export default function App() {
   }
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
-      <AppSidebar current={view} navigate={navigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AppSidebar current={view} navigate={navigate} />
       <div className="min-h-screen flex flex-col">
-        <AppTopbar onMenu={() => setSidebarOpen(true)} teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
+        <AppTopbar teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
         <main className="flex-1 py-8 sm:py-10 lg:py-14">
           <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
             <Current teacherMode={teacherMode} />
