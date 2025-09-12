@@ -1,7 +1,9 @@
 import React from 'react';
-import { getResults, saveFixtures, refreshAll } from '../lib/dataApi.js';
+import { getResults, saveFixtures, clearCache, getFixtures, getTeams, getPlayers } from '../lib/dataApi.js';
 
 export default function Admin() {
+  const [message, setMessage] = React.useState('');
+
   async function exportData() {
     const data = await getResults();
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -29,8 +31,13 @@ export default function Admin() {
   }
 
   async function handleRefresh() {
-    await refreshAll();
-    alert('Data refreshed');
+    clearCache();
+    localStorage.removeItem('fixtures');
+    localStorage.removeItem('results');
+    localStorage.removeItem('players');
+    await Promise.all([getTeams(), getFixtures(), getResults(), getPlayers()]);
+    setMessage('Data refreshed');
+    setTimeout(() => setMessage(''), 3000);
   }
   return (
     <section id="admin" className="py-8 sm:py-10 lg:py-14">
@@ -39,6 +46,11 @@ export default function Admin() {
         <p className="rounded-xl bg-brand-50 p-4 text-sm text-slate-700 dark:bg-brand-400/10 dark:text-slate-200">
           Use the forms below to submit updates. After submitting a form, click <em>Refresh Data</em> to reload the latest information.
         </p>
+        {message && (
+          <p className="rounded-xl bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">
+            {message}
+          </p>
+        )}
         <div className="flex flex-wrap gap-4">
           <a
             href="https://forms.gle/PLACEHOLDER_RESULTS"
