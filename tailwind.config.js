@@ -1,4 +1,6 @@
 import colors from 'tailwindcss/colors';
+import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -19,5 +21,5 @@ export default {
       }
     }
   },
-  plugins: []
+  plugins: [typography, forms]
 };

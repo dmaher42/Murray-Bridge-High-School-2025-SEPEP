@@ -79,7 +79,7 @@ export default function Admin() {
         </button>
         <div className="space-y-2">
           <label className="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON</label>
-          <input className="block w-full rounded-xl border-slate-300/60 bg-white/80 dark:bg-slate-900/60 px-3 py-2 focus:ring-2 focus:ring-slate-900/20 outline-none" type="file" accept="application/json" onChange={importFixtures} />
+          <input className="form-input w-full rounded-xl" type="file" accept="application/json" onChange={importFixtures} />
         </div>
       </div>
     </section>
