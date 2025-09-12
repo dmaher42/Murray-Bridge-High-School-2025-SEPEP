@@ -28,6 +28,16 @@ npm run dev
 npm run build
 ```
 
+## Environment Variables
+
+Set `VITE_API_BASE` to control the base URL used for data API requests. Define it in a `.env` file:
+
+```bash
+VITE_API_BASE=https://script.google.com/macros/s/APP_SCRIPT_ID/exec
+```
+
+If unset, the application falls back to a placeholder URL. See `.env.example` for a template.
+
 ## Data schema
 
 Sample JSON files live in `public/data`:

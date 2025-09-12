@@ -1,4 +1,4 @@
-const BASE = "https://script.google.com/macros/s/APP_SCRIPT_ID/exec";
+const BASE = import.meta.env.VITE_API_BASE || "https://script.google.com/macros/s/APP_SCRIPT_ID/exec";
 
 function noCache() {
   return `&_=${Date.now()}`;
