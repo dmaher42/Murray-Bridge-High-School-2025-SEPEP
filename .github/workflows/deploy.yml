@@ -33,11 +33,19 @@ jobs:
           pwd
           ls -la
           if [ -f package.json ]; then cat package.json | head -n 40; fi
+          if [ -f package-lock.json ]; then
+            echo "package-lock.json exists"
+            head -10 package-lock.json
+          else
+            echo "package-lock.json does not exist"
+          fi
 
       - name: Install deps (ci if lockfile; else install)
         run: |
           if [ -f package-lock.json ]; then
-            echo "Using npm ci"
+            echo "Using npm ci with package-lock.json"
+            echo "npm version: $(npm --version)"
+            echo "node version: $(node --version)"
             npm ci
           else
             echo "No package-lock.json found; falling back to npm install"
