@@ -88,9 +88,16 @@ export async function getPlayers() {
     if (!res.ok) throw new Error('Failed to fetch players');
     const data = await res.json();
     cache.players = normalize(data);
+    localStorage.setItem('players', JSON.stringify(cache.players));
   } catch {
+    const stored = localStorage.getItem('players');
+    if (stored) {
+      cache.players = JSON.parse(stored);
+      return cache.players;
+    }
     const data = await fetchJSON('/data/players.json');
     cache.players = normalize(data);
+    localStorage.setItem('players', JSON.stringify(cache.players));
   }
   return cache.players;
 }
