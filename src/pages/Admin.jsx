@@ -2,6 +2,7 @@ import React from 'react';
 import { getResults, saveFixtures, refreshAll, getAnnouncements, saveAnnouncement } from '../lib/dataApi.js';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import * as XLSX from 'xlsx';
 
 export default function Admin() {
   const [message, setMessage] = React.useState('');
@@ -22,18 +23,29 @@ export default function Admin() {
   function importFixtures(e) {
     const file = e.target.files[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = evt => {
       try {
-        const json = JSON.parse(evt.target.result);
-        const rounds = json.rounds ?? [];
+        let rounds = [];
+        if (file.name.toLowerCase().endsWith('.xlsx')) {
+          const data = new Uint8Array(evt.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          rounds = XLSX.utils.sheet_to_json(sheet);
+        } else {
+          const json = JSON.parse(evt.target.result);
+          rounds = Array.isArray(json) ? json : (json.rounds ?? []);
+        }
         saveFixtures(rounds);
         alert('Fixtures uploaded');
-      } catch (err) {
+      } catch {
         alert('Invalid fixtures file');
       }
     };
-    reader.readAsText(file);
+
+    if (file.name.toLowerCase().endsWith('.xlsx')) reader.readAsArrayBuffer(file);
+    else reader.readAsText(file);
   }
 
   async function handleRefresh() {
@@ -92,8 +104,8 @@ export default function Admin() {
           Export Results JSON
         </button>
         <div className="space-y-2">
-          <label className="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON</label>
-          <input className="form-input w-full rounded-xl" type="file" accept="application/json" onChange={importFixtures} />
+          <label className="block font-medium text-slate-900 dark:text-slate-200">Upload Fixtures JSON or XLSX</label>
+          <input className="form-input w-full rounded-xl" type="file" accept="application/json, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xlsx" onChange={importFixtures} />
         </div>
         <div className="space-y-2">
           <label className="block font-medium text-slate-900 dark:text-slate-200">Announcement</label>
