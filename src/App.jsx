@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import AppTopbar from './components/Nav/AppTopbar.jsx';
 import AppSidebar from './components/Nav/AppSidebar.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -10,43 +11,13 @@ import MVP from './pages/MVP.jsx';
 import News from './pages/News.jsx';
 import Admin from './pages/Admin.jsx';
 
-const views = {
-  dashboard: Dashboard,
-  fixtures: Fixtures,
-  ladder: Ladder,
-  teams: Teams,
-  stats: Stats,
-  mvp: MVP,
-  news: News,
-  admin: Admin
-};
-
 export default function App() {
-  const [view, setView] = useState('dashboard');
   const [teacherMode, setTeacherMode] = useState(() => localStorage.getItem('teacherMode') === '1');
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === '1');
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
   }, [darkMode]);
-  useEffect(() => {
-    function onHash() {
-      const v = window.location.hash.replace('#', '');
-      if (v && views[v]) setView(v);
-    }
-    onHash();
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
-  }, []);
-  useEffect(() => {
-    const el = document.getElementById(view);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }, [view]);
-  function navigate(v) {
-    window.location.hash = v;
-    setView(v);
-  }
-  const Current = views[view] || Dashboard;
   function toggleTeacher() {
     const next = !teacherMode;
     setTeacherMode(next);
@@ -58,16 +29,27 @@ export default function App() {
     localStorage.setItem('darkMode', next ? '1' : '0');
   }
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
-      <AppSidebar current={view} navigate={navigate} />
-      <div className="min-h-screen flex flex-col">
-        <AppTopbar teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
-        <main className="flex-1 py-8 sm:py-10 lg:py-14">
-          <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
-            <Current teacherMode={teacherMode} />
-          </div>
-        </main>
+    <HashRouter>
+      <div className="min-h-screen bg-white dark:bg-slate-900">
+        <AppSidebar />
+        <div className="min-h-screen flex flex-col">
+          <AppTopbar teacherMode={teacherMode} toggleTeacher={toggleTeacher} darkMode={darkMode} toggleDark={toggleDark} />
+          <main className="flex-1 py-8 sm:py-10 lg:py-14">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 leading-7 text-slate-600 dark:text-slate-300">
+              <Routes>
+                <Route path="/" element={<Dashboard teacherMode={teacherMode} />} />
+                <Route path="/fixtures" element={<Fixtures teacherMode={teacherMode} />} />
+                <Route path="/ladder" element={<Ladder teacherMode={teacherMode} />} />
+                <Route path="/teams" element={<Teams teacherMode={teacherMode} />} />
+                <Route path="/stats" element={<Stats teacherMode={teacherMode} />} />
+                <Route path="/mvp" element={<MVP teacherMode={teacherMode} />} />
+                <Route path="/news" element={<News teacherMode={teacherMode} />} />
+                <Route path="/admin" element={<Admin teacherMode={teacherMode} />} />
+              </Routes>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </HashRouter>
   );
 }

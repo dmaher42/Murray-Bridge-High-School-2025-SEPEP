@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggleDark }) {
   return (
@@ -8,10 +9,10 @@ export default function AppTopbar({ teacherMode, toggleTeacher, darkMode, toggle
           <span className="font-semibold text-slate-900 dark:text-white">SEPEP Tournament Hub</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#fixtures" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Fixtures</a>
-          <a href="#ladder" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Ladder</a>
-          <a href="#teams" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Teams</a>
-          <a href="#news" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">News</a>
+          <Link to="/fixtures" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Fixtures</Link>
+          <Link to="/ladder" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Ladder</Link>
+          <Link to="/teams" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Teams</Link>
+          <Link to="/news" className="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">News</Link>
         </nav>
         <div className="flex items-center gap-2">
           <button
