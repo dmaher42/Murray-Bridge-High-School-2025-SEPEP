@@ -1,5 +1,5 @@
 import React from 'react';
-import { getResults, saveFixtures, clearCache, getFixtures, getTeams, getPlayers } from '../lib/dataApi.js';
+import { getResults, saveFixtures, refreshAll } from '../lib/dataApi.js';
 
 export default function Admin() {
   const [message, setMessage] = React.useState('');
@@ -31,11 +31,7 @@ export default function Admin() {
   }
 
   async function handleRefresh() {
-    clearCache();
-    localStorage.removeItem('fixtures');
-    localStorage.removeItem('results');
-    localStorage.removeItem('players');
-    await Promise.all([getTeams(), getFixtures(), getResults(), getPlayers()]);
+    await refreshAll();
     setMessage('Data refreshed');
     setTimeout(() => setMessage(''), 3000);
   }
