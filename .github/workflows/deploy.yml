@@ -13,16 +13,44 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm run build
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            **/package-lock.json
+
+      - name: Show tree (debug)
+        run: |
+          pwd
+          ls -la
+          if [ -f package.json ]; then cat package.json | head -n 40; fi
+
+      - name: Install deps (ci if lockfile; else install)
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Using npm ci"
+            npm ci
+          else
+            echo "No package-lock.json found; falling back to npm install"
+            npm install --no-fund --no-audit
+          fi
+
+      - name: Build
+        run: npm run build
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -32,3 +60,4 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
