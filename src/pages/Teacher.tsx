@@ -18,12 +18,12 @@ function TeacherApp(){
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
       <div role="status" aria-live="polite" className="sr-only" id="a11y-updates" />
-      <header className="bg-white/80 backdrop-blur-lg border-b border-white/20 sticky top-0 z-40">
+      <header className="bg-mbhs-navy text-white sticky top-0 z-40">
         <div className="max-w-6xl mx-auto pad flex items-center justify-between">
-          <h1 className="h1">SEPEP Teacher</h1>
-          <div className="muted truncate max-w-[60%]">API: {apiUrl || 'not set (see sepep.config.json)'}</div>
+          <h1 className="text-2xl font-bold">SEPEP Teacher</h1>
+          <div className="muted truncate max-w-[60%] text-white/80">API: {apiUrl || 'not set (see sepep.config.json)'}</div>
         </div>
       </header>
 
