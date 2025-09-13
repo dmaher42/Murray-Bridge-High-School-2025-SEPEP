@@ -2,4 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root { color-scheme: light dark; }
+html, body { @apply antialiased; }
 html, body, #root { height: 100%; }
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition;
+       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 }
+.btn-primary { @apply bg-slate-900 text-white hover:bg-slate-800 focus-visible:ring-slate-900 }
+.btn-accent  { @apply bg-accent-500 text-white hover:bg-accent-600 focus-visible:ring-accent-600 }
+.btn-ghost   { @apply ring-1 ring-slate-300 bg-white text-slate-800 hover:bg-slate-50 }
+.card { @apply rounded-2xl border border-white/20 bg-white/80 dark:bg-slate-900/60 shadow-card hover:scale-[1.01] transition }
+.h1 { @apply text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight }
+.h2 { @apply text-2xl font-bold text-slate-800 dark:text-slate-100 }
+.sub { @apply text-slate-600 }
+.muted { @apply text-xs text-slate-500 }
+/* 8-pt rhythm helpers (optional) */
+.pad { @apply p-6 sm:p-8 } .gap { @apply gap-6 } .gap-lg { @apply gap-8 }
