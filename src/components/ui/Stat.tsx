@@ -4,8 +4,8 @@ export default function Stat({label, value, icon}:{label:string; value:React.Rea
     <div className="card p-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-600">{label}</p>
-          <p className="text-3xl font-bold text-slate-800">{value}</p>
+          <p className="text-sm font-medium text-mbhs-navy/70">{label}</p>
+          <p className="text-3xl font-bold text-mbhs-navy">{value}</p>
         </div>
         {icon}
       </div>

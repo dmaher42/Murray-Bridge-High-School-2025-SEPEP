@@ -44,12 +44,12 @@ function StudentApp() {
   const latest = toResults(rows).slice(0, 10);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
       <div role="status" aria-live="polite" className="sr-only" id="a11y-updates" />
-      <header className="bg-white/80 backdrop-blur-lg border-b border-white/20 sticky top-0 z-40">
+      <header className="bg-mbhs-navy text-white sticky top-0 z-40">
         <div className="max-w-6xl mx-auto pad flex items-center justify-between">
-          <h1 className="h1">SEPEP Student Hub</h1>
-          <div className="muted">Last update: {lastUpdated || '—'}</div>
+          <h1 className="text-2xl font-bold">SEPEP Student Hub</h1>
+          <div className="muted text-white/80">Last update: {lastUpdated || '—'}</div>
         </div>
       </header>
 
@@ -63,12 +63,12 @@ function StudentApp() {
         <Card title="Latest Matches">
           <div className="space-y-3">
             {latest.map((m,i)=>(
-              <div key={i} className="flex items-center justify-between bg-white odd:bg-slate-50 dark:bg-slate-800/60 dark:odd:bg-slate-800/40 rounded-lg p-3">
-                <span className="text-slate-800 font-medium">{m.homeTeam} vs {m.awayTeam}</span>
-                <span className="font-bold text-slate-900 text-right">{m.score}</span>
+              <div key={i} className="flex items-center justify-between bg-white odd:bg-slate-50 rounded-lg p-3">
+                <span className="text-mbhs-navy font-medium">{m.homeTeam} vs {m.awayTeam}</span>
+                <span className="font-bold text-mbhs-navy text-right">{m.score}</span>
               </div>
             ))}
-            {!latest.length && <p className="text-slate-600">No recent results yet.</p>}
+            {!latest.length && <p className="text-mbhs-navy/70">No recent results yet.</p>}
           </div>
         </Card>
       </main>

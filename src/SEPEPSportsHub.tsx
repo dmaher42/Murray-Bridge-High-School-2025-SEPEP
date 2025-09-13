@@ -201,7 +201,7 @@ const ScoreUpdateModal: React.FC<{
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-xl font-bold text-slate-800">Update Score</h3>
+          <h3 className="text-xl font-bold text-mbhs-navy">Update Score</h3>
           <button onClick={onClose} className="rounded-lg p-2 transition-colors hover:bg-slate-100">
             <X className="h-5 w-5 text-slate-600" />
           </button>
@@ -213,7 +213,7 @@ const ScoreUpdateModal: React.FC<{
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-500"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
             >
               <option value="">Select year level</option>
               {yearLevels.map((year) => (
@@ -230,7 +230,7 @@ const ScoreUpdateModal: React.FC<{
               <select
                 value={selectedTeam1}
                 onChange={(e) => setSelectedTeam1(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-500"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
               >
                 <option value="">Select team</option>
                 {teams.map((team) => (
@@ -246,7 +246,7 @@ const ScoreUpdateModal: React.FC<{
               <select
                 value={selectedTeam2}
                 onChange={(e) => setSelectedTeam2(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-500"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
               >
                 <option value="">Select team</option>
                 {teams
@@ -267,7 +267,7 @@ const ScoreUpdateModal: React.FC<{
                 type="number"
                 value={score1}
                 onChange={(e) => setScore1(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-500"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
                 min={0}
                 placeholder="0"
               />
@@ -278,7 +278,7 @@ const ScoreUpdateModal: React.FC<{
                 type="number"
                 value={score2}
                 onChange={(e) => setScore2(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-amber-500 focus:ring-2 focus:ring-amber-500"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
                 min={0}
                 placeholder="0"
               />
@@ -293,7 +293,7 @@ const ScoreUpdateModal: React.FC<{
           <button
             onClick={handleSave}
             disabled={saving || !selectedTeam1 || !selectedTeam2 || !score1 || !score2}
-            className="flex-1 inline-flex items-center justify-center space-x-2 rounded-lg bg-amber-600 px-4 py-2 font-medium text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 btn btn-accent justify-center space-x-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? (
               <>
@@ -338,10 +338,10 @@ const SEPEPSportsHub: React.FC = () => {
   const sheets = useGoogleSheets();
 
   const houseColors: Record<string, string> = {
-    Wirakuthi: "from-blue-500 to-blue-600",
-    Pondi: "from-red-500 to-red-600",
-    Kungari: "from-green-500 to-green-600",
-    "No:RI": "from-yellow-500 to-yellow-600",
+    Wirakuthi: "from-hood-wirakuthi to-hood-wirakuthi",
+    Pondi: "from-hood-pondi to-hood-pondi",
+    Kungari: "from-hood-kungari to-hood-kungari",
+    "No:RI": "from-hood-nori to-hood-nori",
   };
 
   const showNotification = useCallback((message: string, type: Notification["type"] = "info") => {
@@ -537,16 +537,16 @@ const SEPEPSportsHub: React.FC = () => {
   ] as const;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-white/20 bg-white/80 backdrop-blur-lg">
+      <header className="sticky top-0 z-40 bg-mbhs-navy text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Trophy className="h-8 w-8 text-amber-600" />
+              <Trophy className="h-8 w-8 text-mbhs-gold" />
               <div>
-                <h1 className="text-2xl font-bold text-slate-800">2024 Neighbourhood SEPEP</h1>
-                <p className="text-sm text-slate-600">Live Sports Hub with Google Sheets</p>
+                <h1 className="text-2xl font-bold">2024 Neighbourhood SEPEP</h1>
+                <p className="text-sm text-white/80">Live Sports Hub with Google Sheets</p>
               </div>
             </div>
 
@@ -554,13 +554,13 @@ const SEPEPSportsHub: React.FC = () => {
               <div className="flex items-center space-x-2">
                 {sheets.isConnected ? (
                   <>
-                    <Cloud className="h-4 w-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-600">Connected</span>
+                    <Cloud className="h-4 w-4 text-green-500" />
+                    <span className="text-sm font-medium text-green-400">Connected</span>
                   </>
                 ) : (
                   <>
-                    <CloudOff className="h-4 w-4 text-slate-400" />
-                    <span className="text-sm text-slate-400">Offline</span>
+                    <CloudOff className="h-4 w-4 text-white/70" />
+                    <span className="text-sm text-white/70">Offline</span>
                   </>
                 )}
               </div>
@@ -568,21 +568,21 @@ const SEPEPSportsHub: React.FC = () => {
               {sepepData.loaded && (
                 <button
                   onClick={() => setShowScoreModal(true)}
-                  className="inline-flex items-center space-x-1 rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700"
+                  className="btn btn-accent text-sm"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Update Score</span>
                 </button>
               )}
 
-              {sheets.lastSync && <span className="text-xs text-slate-500">Last sync: {sheets.lastSync.toLocaleTimeString()}</span>}
+              {sheets.lastSync && <span className="text-xs text-white/70">Last sync: {sheets.lastSync.toLocaleTimeString()}</span>}
             </div>
           </div>
         </div>
       </header>
 
       {/* Navigation */}
-      <nav className="border-b border-white/20 bg-white/60 backdrop-blur-lg">
+      <nav className="border-b border-slate-200/60 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-1 overflow-x-auto py-4">
             {navItems.map((item) => {
@@ -592,7 +592,7 @@ const SEPEPSportsHub: React.FC = () => {
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
                   className={`whitespace-nowrap rounded-full px-4 py-2 font-medium transition-all duration-200 ${
-                    activeSection === item.id ? "bg-slate-800 text-white shadow-lg" : "text-slate-600 hover:bg-white/60 hover:text-slate-800"
+                    activeSection === item.id ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
                   }`}
                 >
                   <span className="inline-flex items-center space-x-2">
@@ -612,7 +612,7 @@ const SEPEPSportsHub: React.FC = () => {
           <div
             key={n.id}
             className={`max-w-sm transform rounded-lg p-4 shadow-lg backdrop-blur-lg transition-all duration-300 ${
-              n.type === "success" ? "bg-green-500/90 text-white" : n.type === "error" ? "bg-red-500/90 text-white" : "bg-blue-500/90 text-white"
+              n.type === "success" ? "bg-green-500/90 text-white" : n.type === "error" ? "bg-red-500/90 text-white" : "bg-mbhs-blue/90 text-white"
             }`}
           >
             <p className="text-sm font-medium">{n.message}</p>
@@ -626,15 +626,15 @@ const SEPEPSportsHub: React.FC = () => {
         {activeSection === "upload" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-slate-800">Setup & Google Sheets Integration</h2>
+              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Setup & Google Sheets Integration</h2>
               <p className="text-slate-600">Connect your Google Sheet for real-time data sync</p>
             </div>
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Sheets connect */}
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl backdrop-blur-lg">
-                <h3 className="mb-6 flex items-center text-xl font-semibold text-slate-800">
-                  <Cloud className="mr-2 h-5 w-5 text-blue-600" />
+                <h3 className="mb-6 flex items-center text-xl font-semibold text-mbhs-navy">
+                  <Cloud className="mr-2 h-5 w-5 text-mbhs-blue" />
                   Google Sheets Integration
                 </h3>
 
@@ -645,7 +645,7 @@ const SEPEPSportsHub: React.FC = () => {
                       <input
                         type="text"
                         placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-blue focus:ring-2 focus:ring-mbhs-blue"
                         onChange={() => {
                           /* noop: controlled by connect button below */
                         }}
@@ -656,7 +656,7 @@ const SEPEPSportsHub: React.FC = () => {
                     <button
                       onClick={() => handleSheetsConnection("https://docs.google.com/spreadsheets/d/sample-demo-sheet")}
                       disabled={loading}
-                      className="flex w-full items-center justify-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                      className="btn btn-primary w-full items-center justify-center space-x-2 disabled:opacity-50"
                     >
                       {loading ? (
                         <>
@@ -701,13 +701,13 @@ const SEPEPSportsHub: React.FC = () => {
 
               {/* Sample Data */}
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl backdrop-blur-lg">
-                <h3 className="mb-6 text-xl font-semibold text-slate-800">Try Sample Data</h3>
+                <h3 className="mb-6 text-xl font-semibold text-mbhs-navy">Try Sample Data</h3>
                 <p className="mb-6 text-slate-600">Load demo data that matches your SEPEP format to see the app in action.</p>
 
                 <button
                   onClick={loadSampleData}
                   disabled={loading}
-                  className="flex w-full items-center justify-center space-x-2 rounded-lg bg-slate-800 px-4 py-3 font-medium text-white transition-colors hover:bg-slate-900 disabled:opacity-50"
+                  className="btn btn-primary w-full items-center justify-center space-x-2 disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -722,20 +722,20 @@ const SEPEPSportsHub: React.FC = () => {
                   )}
                 </button>
 
-                <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-6">
-                  <h4 className="mb-2 text-lg font-semibold text-blue-800">📋 How to Connect Your Google Sheet</h4>
+                <div className="mt-6 rounded-2xl border border-mbhs-blue/20 bg-mbhs-blue/10 p-6">
+                  <h4 className="mb-2 text-lg font-semibold text-mbhs-navy">📋 How to Connect Your Google Sheet</h4>
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                      <h5 className="mb-2 font-medium text-blue-700">Step 1: Prepare Your Sheet</h5>
-                      <ul className="list-inside list-disc space-y-1 text-sm text-blue-600">
+                      <h5 className="mb-2 font-medium text-mbhs-blue">Step 1: Prepare Your Sheet</h5>
+                      <ul className="list-inside list-disc space-y-1 text-sm text-mbhs-blue">
                         <li>Open your “2024 SEPEP Fixture and Results.xlsx”</li>
                         <li>Upload to Google Drive and convert to Google Sheets</li>
                         <li>Ensure tabs: Scoreboard, Fixture, Year level sheets</li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="mb-2 font-medium text-blue-700">Step 2: Share Your Sheet</h5>
-                      <ul className="list-inside list-disc space-y-1 text-sm text-blue-600">
+                      <h5 className="mb-2 font-medium text-mbhs-blue">Step 2: Share Your Sheet</h5>
+                      <ul className="list-inside list-disc space-y-1 text-sm text-mbhs-blue">
                         <li>Click “Share” in Google Sheets</li>
                         <li>Change to “Anyone with the link can view”</li>
                         <li>Copy the URL and connect above</li>
@@ -766,18 +766,18 @@ const SEPEPSportsHub: React.FC = () => {
         {activeSection === "overview" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="mb-2 text-3xl font-bold text-slate-800">Season Overview</h2>
+              <h2 className="mb-2 text-3xl font-bold text-mbhs-navy">Season Overview</h2>
               <p className="text-slate-600">Your 2024 Neighbourhood SEPEP at a glance</p>
             </div>
 
             {!sepepData.loaded ? (
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl backdrop-blur-lg">
                 <Settings className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-slate-800">No Data Loaded</h3>
+                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Data Loaded</h3>
                 <p className="mb-4 text-slate-600">Connect your Google Sheet or load sample data to see the overview.</p>
                 <button
                   onClick={() => setActiveSection("upload")}
-                  className="inline-flex items-center space-x-2 rounded-lg bg-amber-600 px-4 py-2 font-medium text-white transition-colors hover:bg-amber-700"
+                  className="btn btn-accent inline-flex items-center space-x-2"
                 >
                   <Settings className="h-4 w-4" />
                   <span>Go to Setup</span>
@@ -789,11 +789,11 @@ const SEPEPSportsHub: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-slate-600">Total Matches</p>
-                      <p className="text-3xl font-bold text-slate-800">
+                      <p className="text-3xl font-bold text-mbhs-navy">
                         {Object.values(sepepData.results).reduce((total, year) => total + (year.matches?.length || 0), 0)}
                       </p>
                     </div>
-                    <Target className="h-8 w-8 text-blue-600" />
+                    <Target className="h-8 w-8 text-mbhs-blue" />
                   </div>
                 </div>
 
@@ -801,7 +801,7 @@ const SEPEPSportsHub: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-slate-600">Active Teams</p>
-                      <p className="text-3xl font-bold text-slate-800">
+                      <p className="text-3xl font-bold text-mbhs-navy">
                         {Object.values(sepepData.results).reduce((total, year) => total + (year.standings?.length || 0), 0)}
                       </p>
                     </div>
@@ -813,7 +813,7 @@ const SEPEPSportsHub: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-slate-600">Year Levels</p>
-                      <p className="text-3xl font-bold text-slate-800">{sepepData.yearLevels.length}</p>
+                      <p className="text-3xl font-bold text-mbhs-navy">{sepepData.yearLevels.length}</p>
                     </div>
                     <BarChart3 className="h-8 w-8 text-purple-600" />
                   </div>
@@ -823,13 +823,13 @@ const SEPEPSportsHub: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-slate-600">{sheets.isConnected ? "Live Updates" : "Offline Mode"}</p>
-                      <p className="text-3xl font-bold text-slate-800">{sheets.isConnected ? "🔗" : "💾"}</p>
+                      <p className="text-3xl font-bold text-mbhs-navy">{sheets.isConnected ? "🔗" : "💾"}</p>
                     </div>
                     {sheets.isConnected ? <Cloud className="h-8 w-8 text-green-600" /> : <CloudOff className="h-8 w-8 text-slate-400" />}
                   </div>
                 </div>
 
-                <div className="lg:col-span-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 p-8 text-white">
+                <div className="lg:col-span-4 rounded-2xl bg-mbhs-gold p-8 text-white">
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="mb-2 text-2xl font-bold">Championship Leader</h3>
@@ -852,14 +852,14 @@ const SEPEPSportsHub: React.FC = () => {
         {activeSection === "houses" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-slate-800">House Championships</h2>
+              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">House Championships</h2>
               <p className="text-slate-600">{sheets.isConnected ? "Live standings synced with Google Sheets" : "Standings from local/sample data"}</p>
             </div>
 
             {!sepepData.loaded ? (
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
                 <Trophy className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-slate-800">No House Data Available</h3>
+                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No House Data Available</h3>
                 <p className="text-slate-600">Connect your Google Sheet or load sample data to see house scores.</p>
               </div>
             ) : (
@@ -900,27 +900,27 @@ const SEPEPSportsHub: React.FC = () => {
         {activeSection === "fixtures" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-slate-800">Competition Fixtures</h2>
+              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Competition Fixtures</h2>
               <p className="text-slate-600">Weekly sport schedules by year level</p>
             </div>
 
             {!sepepData.loaded ? (
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
                 <Calendar className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-slate-800">No Fixture Data Available</h3>
+                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Fixture Data Available</h3>
                 <p className="text-slate-600">Load your SEPEP data to see weekly fixtures.</p>
               </div>
             ) : (
               <div className="space-y-6">
                 {sepepData.fixtures.map((week) => (
                   <div key={String(week.week)} className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
-                    <h3 className="mb-6 text-2xl font-bold text-slate-800">Week {String(week.week)}</h3>
+                    <h3 className="mb-6 text-2xl font-bold text-mbhs-navy">Week {String(week.week)}</h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {Object.entries(week)
                         .filter(([k]) => k !== "week")
                         .map(([yearLevel, sport]) => (
-                          <div key={yearLevel} className="rounded-xl border-l-4 border-amber-500 bg-slate-50 p-6">
-                            <h4 className="mb-2 font-semibold text-slate-800">{yearLevel}</h4>
+                          <div key={yearLevel} className="rounded-xl border-l-4 border-mbhs-gold bg-slate-50 p-6">
+                            <h4 className="mb-2 font-semibold text-mbhs-navy">{yearLevel}</h4>
                             <p className="text-slate-600">{String(sport)}</p>
                           </div>
                         ))}
@@ -937,14 +937,14 @@ const SEPEPSportsHub: React.FC = () => {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <div className="flex-1 text-center">
-                <h2 className="mb-4 text-3xl font-bold text-slate-800">Live Results</h2>
+                <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Live Results</h2>
                 <p className="text-slate-600">Team standings and match results</p>
               </div>
 
               {sepepData.loaded && (
                 <button
                   onClick={() => setShowScoreModal(true)}
-                  className="inline-flex items-center space-x-2 rounded-lg bg-amber-600 px-4 py-2 font-medium text-white transition-colors hover:bg-amber-700"
+                  className="btn btn-accent inline-flex items-center space-x-2"
                 >
                   <Edit3 className="h-4 w-4" />
                   <span>Update Score</span>
@@ -959,7 +959,7 @@ const SEPEPSportsHub: React.FC = () => {
                     <button
                       onClick={() => setSelectedYearLevel("all")}
                       className={`rounded-full px-4 py-2 font-medium transition-colors ${
-                        selectedYearLevel === "all" ? "bg-slate-800 text-white" : "text-slate-600 hover:bg-white/60"
+                        selectedYearLevel === "all" ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
                       }`}
                     >
                       All Years
@@ -969,7 +969,7 @@ const SEPEPSportsHub: React.FC = () => {
                         key={year}
                         onClick={() => setSelectedYearLevel(year)}
                         className={`rounded-full px-4 py-2 font-medium transition-colors ${
-                          selectedYearLevel === year ? "bg-slate-800 text-white" : "text-slate-600 hover:bg-white/60"
+                          selectedYearLevel === year ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
                         }`}
                       >
                         {year.replace("Year ", "Y").replace(" (", " L").replace(")", "")}
@@ -983,7 +983,7 @@ const SEPEPSportsHub: React.FC = () => {
             {!sepepData.loaded ? (
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
                 <BarChart3 className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-slate-800">No Results Data Available</h3>
+                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Results Data Available</h3>
                 <p className="text-slate-600">Connect your Google Sheet or load sample data to see results.</p>
               </div>
             ) : (
@@ -994,8 +994,8 @@ const SEPEPSportsHub: React.FC = () => {
                     <div key={yearLevel} className="space-y-6">
                       <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
                         <div className="mb-6 flex items-center justify-between">
-                          <h3 className="flex items-center text-2xl font-bold text-slate-800">
-                            <Medal className="mr-2 h-6 w-6 text-amber-600" />
+                          <h3 className="flex items-center text-2xl font-bold text-mbhs-navy">
+                            <Medal className="mr-2 h-6 w-6 text-mbhs-gold" />
                             {yearLevel} - Team Standings
                           </h3>
                           {sheets.isConnected && (
@@ -1011,13 +1011,13 @@ const SEPEPSportsHub: React.FC = () => {
                             <table className="w-full">
                               <thead>
                                 <tr className="border-b border-slate-200">
-                                  <th className="py-3 px-4 text-left font-semibold text-slate-800">Position</th>
-                                  <th className="py-3 px-4 text-left font-semibold text-slate-800">Team</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-slate-800">W</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-slate-800">D</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-slate-800">L</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-slate-800">TPSR</th>
-                                  <th className="py-3 px-4 text-right font-semibold text-slate-800">Points</th>
+                                  <th className="py-3 px-4 text-left font-semibold text-mbhs-navy">Position</th>
+                                  <th className="py-3 px-4 text-left font-semibold text-mbhs-navy">Team</th>
+                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">W</th>
+                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">D</th>
+                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">L</th>
+                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">TPSR</th>
+                                  <th className="py-3 px-4 text-right font-semibold text-mbhs-navy">Points</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -1028,18 +1028,18 @@ const SEPEPSportsHub: React.FC = () => {
                                     <tr key={team.team} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
                                       <td className="py-4 px-4">
                                         <span className="flex items-center space-x-2">
-                                          <span className="font-bold text-slate-800">{index + 1}</span>
+                                          <span className="font-bold text-mbhs-navy">{index + 1}</span>
                                           {index === 0 && <span>🥇</span>}
                                           {index === 1 && <span>🥈</span>}
                                           {index === 2 && <span>🥉</span>}
                                         </span>
                                       </td>
-                                      <td className="py-4 px-4 font-semibold text-slate-800">{team.team}</td>
+                                      <td className="py-4 px-4 font-semibold text-mbhs-navy">{team.team}</td>
                                       <td className="py-4 px-4 text-center font-medium text-green-600">{team.wins}</td>
                                       <td className="py-4 px-4 text-center font-medium text-yellow-600">{team.draws}</td>
                                       <td className="py-4 px-4 text-center font-medium text-red-600">{team.losses}</td>
                                       <td className="py-4 px-4 text-center text-slate-600">{team.tpsr}</td>
-                                      <td className="py-4 px-4 text-right font-bold text-slate-800">{team.points}</td>
+                                      <td className="py-4 px-4 text-right font-bold text-mbhs-navy">{team.points}</td>
                                     </tr>
                                   ))}
                               </tbody>
@@ -1052,17 +1052,17 @@ const SEPEPSportsHub: React.FC = () => {
 
                       {data.matches && data.matches.length > 0 && (
                         <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
-                          <h3 className="mb-6 flex items-center text-2xl font-bold text-slate-800">
-                            <Target className="mr-2 h-6 w-6 text-blue-600" />
+                          <h3 className="mb-6 flex items-center text-2xl font-bold text-mbhs-navy">
+                            <Target className="mr-2 h-6 w-6 text-mbhs-blue" />
                             {yearLevel} - Recent Matches
                           </h3>
 
                           <div className="space-y-4">
                             {data.matches.slice(0, 10).map((match, idx) => (
-                              <div key={`${match.homeTeam}-${match.awayTeam}-${idx}`} className="rounded-xl border-l-4 border-blue-500 bg-slate-50 p-6">
+                              <div key={`${match.homeTeam}-${match.awayTeam}-${idx}`} className="rounded-xl border-l-4 border-mbhs-blue bg-slate-50 p-6">
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center space-x-4">
-                                    <span className="font-semibold text-slate-800">
+                                    <span className="font-semibold text-mbhs-navy">
                                       {match.homeTeam} vs {match.awayTeam}
                                     </span>
                                     {match.status === "Live" && (
@@ -1073,7 +1073,7 @@ const SEPEPSportsHub: React.FC = () => {
                                     )}
                                   </div>
                                   <div className="flex items-center space-x-2">
-                                    <span className="text-lg font-bold text-slate-800">{match.score}</span>
+                                    <span className="text-lg font-bold text-mbhs-navy">{match.score}</span>
                                     {match.round && <span className="text-sm text-slate-500">({match.round})</span>}
                                   </div>
                                 </div>
@@ -1093,26 +1093,26 @@ const SEPEPSportsHub: React.FC = () => {
         {activeSection === "teams" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-slate-800">Team Information</h2>
+              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Team Information</h2>
               <p className="text-slate-600">Team rosters and player lists</p>
             </div>
 
             {!sepepData.loaded ? (
               <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
                 <Users className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-slate-800">No Team Data Available</h3>
+                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Team Data Available</h3>
                 <p className="text-slate-600">Load your SEPEP data to see team rosters.</p>
               </div>
             ) : (
               <div className="space-y-8">
                 {Object.entries(sepepData.teams).map(([yearLevel, teams]) => (
                   <div key={yearLevel} className="space-y-6">
-                    <h3 className="text-2xl font-bold text-slate-800">{yearLevel}</h3>
+                    <h3 className="text-2xl font-bold text-mbhs-navy">{yearLevel}</h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {Object.entries(teams).map(([teamName, players]) => (
                         <div key={teamName} className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                          <h4 className="mb-4 flex items-center text-xl font-bold text-slate-800">
-                            <Users className="mr-2 h-5 w-5 text-blue-600" />
+                          <h4 className="mb-4 flex items-center text-xl font-bold text-mbhs-navy">
+                            <Users className="mr-2 h-5 w-5 text-mbhs-blue" />
                             {teamName}
                           </h4>
                           <p className="mb-3 text-sm font-medium text-slate-600">Players ({players.length})</p>
@@ -1130,12 +1130,12 @@ const SEPEPSportsHub: React.FC = () => {
                 ))}
 
                 {Object.keys(sepepData.teams).length === 0 && (
-                  <div className="rounded-xl border border-amber-200 bg-amber-50 p-6">
+                  <div className="rounded-xl border border-mbhs-gold/20 bg-mbhs-gold/10 p-6">
                     <div className="flex items-center space-x-3">
-                      <Users className="h-6 w-6 text-amber-600" />
+                      <Users className="h-6 w-6 text-mbhs-gold" />
                       <div>
-                        <h3 className="text-lg font-medium text-amber-800">Limited Team Data</h3>
-                        <p className="text-amber-700">Team roster information will appear after you connect your full Google Sheet.</p>
+                        <h3 className="text-lg font-medium text-mbhs-navy">Limited Team Data</h3>
+                        <p className="text-mbhs-navy/80">Team roster information will appear after you connect your full Google Sheet.</p>
                       </div>
                     </div>
                   </div>
@@ -1156,14 +1156,14 @@ const SEPEPSportsHub: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="mt-16 bg-slate-800 text-white">
+      <footer className="mt-16 bg-mbhs-navy text-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Trophy className="h-6 w-6 text-amber-400" />
+              <Trophy className="h-6 w-6 text-mbhs-gold" />
               <div>
                 <h3 className="font-semibold">2024 Neighbourhood SEPEP</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-white/70">
                   Live Sports Hub {sheets.isConnected ? "with Google Sheets Integration" : "with Local Storage"}
                 </p>
               </div>
@@ -1185,8 +1185,8 @@ const SEPEPSportsHub: React.FC = () => {
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div className="flex items-center space-x-4 rounded-2xl bg-white p-8 shadow-2xl">
-            <RefreshCw className="h-6 w-6 animate-spin text-amber-600" />
-            <span className="font-medium text-slate-800">Processing your SEPEP data...</span>
+            <RefreshCw className="h-6 w-6 animate-spin text-mbhs-gold" />
+            <span className="font-medium text-mbhs-navy">Processing your SEPEP data...</span>
           </div>
         </div>
       )}
