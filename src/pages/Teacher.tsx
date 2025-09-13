@@ -18,7 +18,7 @@ function TeacherApp(){
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-blue-50 to-green-50">
       <div role="status" aria-live="polite" className="sr-only" id="a11y-updates" />
       <header className="bg-white/80 backdrop-blur-lg border-b border-white/20 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto pad flex items-center justify-between">
@@ -34,7 +34,7 @@ function TeacherApp(){
             <p className="muted mt-3">Submissions appear in the Student Hub within ~15s.</p>
           </Card>
         ) : (
-          <div className="card pad text-amber-800 bg-amber-50 border-amber-200">
+          <div className="card pad text-warning bg-warning/10 border-warning/20">
             Add your Google Form embed URL to <code>public/sepep.config.json</code>.
           </div>
         )}

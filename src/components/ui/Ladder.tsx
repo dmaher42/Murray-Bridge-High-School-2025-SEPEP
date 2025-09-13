@@ -10,7 +10,7 @@ export default function Ladder({houses}:{houses:Record<string,number>}) {
   return (
     <div className="space-y-3">
       {sorted.map(([name,score],i)=>(
-        <div key={name} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3">
+        <div key={name} className="flex items-center justify-between bg-white odd:bg-slate-50 dark:bg-slate-800/60 dark:odd:bg-slate-800/40 rounded-xl p-3">
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-slate-500 w-6 text-right">{i+1}</span>
             <span className={`px-2 py-1 rounded ${color(name)} font-medium`}>{name}</span>
