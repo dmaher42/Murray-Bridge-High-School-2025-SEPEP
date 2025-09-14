@@ -17,6 +17,7 @@ import {
   Check,
   X,
 } from "lucide-react";
+import { loadConfig } from "./lib/config";
 
 /* =========================================
    Types
@@ -62,8 +63,7 @@ type Notification = {
 };
 
 /* =========================================
-   Google Sheets Mock Hook
-   (keeps structure; you can wire real API later)
+   Google Sheets integration
 ========================================= */
 
 const useGoogleSheets = () => {
@@ -93,27 +93,32 @@ const useGoogleSheets = () => {
   }, []);
 
   const readFromSheets = useCallback(async (sheetId: string, ranges: string[]) => {
-    // Simulated API response
-    return new Promise<{ valueRanges: Array<{ range: string; values: any[][] }> }>((resolve) => {
-      setTimeout(() => {
-        resolve({
-          valueRanges: ranges.map((range) => ({
-            range,
-            values: generateMockSheetData(range),
-          })),
-        });
-      }, 800);
-    });
-  }, []);
+    const cfg = await loadConfig();
+    const base = (cfg.apiUrl || "").replace(/\/exec.*$/, "");
+    const url = new URL(base ? base + "/exec" : "");
+    url.searchParams.set("action", "read");
+    url.searchParams.set("id", sheetId);
+    url.searchParams.set("ranges", ranges.join(","));
+    if (apiKey) url.searchParams.set("key", apiKey);
 
-  const writeToSheets = useCallback(async (_sheetId: string, _updates: any[]) => {
-    return new Promise<{ success: boolean }>((resolve) => {
-      setTimeout(() => {
-        setLastSync(new Date());
-        resolve({ success: true });
-      }, 500);
+    const r = await fetch(url.toString(), { cache: "no-store" });
+    if (!r.ok) throw new Error(`Sheets API ${r.status}`);
+    return r.json();
+  }, [apiKey]);
+
+  const writeToSheets = useCallback(async (sheetId: string, updates: any[]) => {
+    const cfg = await loadConfig();
+    const base = (cfg.apiUrl || "").replace(/\/exec.*$/, "");
+    const url = base ? base + "/exec" : "";
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "update", id: sheetId, updates, key: apiKey }),
     });
-  }, []);
+    if (!r.ok) throw new Error(`Sheets API ${r.status}`);
+    setLastSync(new Date());
+    return r.json();
+  }, [apiKey]);
 
   useEffect(() => {
     const savedUrl = localStorage.getItem("sepep_sheet_url");
@@ -135,24 +140,6 @@ const useGoogleSheets = () => {
     writeToSheets,
   };
 };
-
-/* =========================================
-   Mock sheet data generator (demo)
-========================================= */
-
-function generateMockSheetData(range: string): any[][] {
-  if (range.includes("Scoreboard")) {
-    return [
-      ["2024 Neighbourhood SEPEP Scoreboard"],
-      [""],
-      ["", "Wirakuthi", "532"],
-      ["", "Pondi", "390"],
-      ["", "Kungari", "643.5"],
-      ["", "No:RI", "754.5"],
-    ];
-  }
-  return [["Sample", "Data", "Row"]];
-}
 
 /* =========================================
    Score Update Modal
@@ -374,35 +361,77 @@ const SEPEPSportsHub: React.FC = () => {
     return null;
   }, []);
 
-  const parseGoogleSheetsData = useCallback((_data: any): SepepData => {
+  const parseGoogleSheetsData = useCallback((data: any): SepepData => {
+    const houses: Record<string, number> = {};
+    const yearLevels: string[] = [];
+    const fixtures: Array<Record<string, string | number>> = [];
+    const results: Record<string, YearData> = {};
+
+    data?.valueRanges?.forEach((vr: any) => {
+      const sheet = vr.range.split("!")[0];
+      const values = vr.values || [];
+      if (/^Scoreboard/i.test(sheet)) {
+        values.slice(2).forEach((row: any[]) => {
+          const name = row[1];
+          const pts = Number(row[2]);
+          if (name) houses[name] = pts;
+        });
+      } else if (/^Fixture/i.test(sheet)) {
+        if (values.length) {
+          const [header, ...rows] = values;
+          rows.forEach((r: any[]) => {
+            if (!r.length) return;
+            const obj: Record<string, string | number> = {};
+            header.forEach((h: string, i: number) => {
+              obj[h] = r[i];
+            });
+            fixtures.push(obj);
+          });
+        }
+      } else {
+        yearLevels.push(sheet);
+        const standings: Stand[] = [];
+        const matches: MatchRow[] = [];
+        let i = 1;
+        for (; i < values.length; i++) {
+          const row = values[i];
+          if (!row || !row[0]) break;
+          standings.push({
+            team: row[0],
+            wins: Number(row[1] || 0),
+            draws: Number(row[2] || 0),
+            losses: Number(row[3] || 0),
+            points: Number(row[4] || 0),
+            tpsr: Number(row[5] || 0),
+          });
+        }
+        while (i < values.length && (!values[i] || !values[i][0])) i++;
+        const matchHeaders = values[i] || [];
+        for (i = i + 1; i < values.length; i++) {
+          const row = values[i];
+          if (!row || !row[0]) continue;
+          const obj: any = {};
+          matchHeaders.forEach((h: string, idx: number) => {
+            obj[h] = row[idx];
+          });
+          matches.push({
+            homeTeam: obj.HomeTeam || obj.Home || row[0],
+            awayTeam: obj.AwayTeam || obj.Away || row[1],
+            score: obj.Score || obj.Result || row[2],
+            round: obj.Round,
+            status: obj.Status,
+          });
+        }
+        results[sheet] = { standings, matches };
+      }
+    });
+
     return {
-      houses: { Wirakuthi: 532, Pondi: 390, Kungari: 643.5, "No:RI": 754.5 },
-      yearLevels: ["Year 7 (Line 2)", "Year 7 (Line 5)", "Year 8", "Year 9 (Line 1)", "Year 9 (Line 7)"],
-      fixtures: [
-        { week: 3, "Year 7 (Line 2)": "Netball", "Year 7 (Line 5)": "T-Ball", "Year 8": "Pool Sports", "Year 9 (Line 1)": "Volleyball", "Year 9 (Line 7)": "Touch Football" },
-        { week: 4, "Year 7 (Line 2)": "T-Ball", "Year 7 (Line 5)": "Soccer", "Year 8": "Multi-Sport", "Year 9 (Line 1)": "Touch Football", "Year 9 (Line 7)": "Netball" },
-      ],
-      results: {
-        "Year 7 (Line 2)": {
-          standings: [
-            { team: "Mingle Masters Kungari 3", wins: 8, draws: 2, losses: 4, points: 73.5, tpsr: 41.5 },
-            { team: "Watermelon Goats Kungari 2", wins: 7, draws: 1, losses: 5, points: 73, tpsr: 45 },
-            { team: "Pondi Predators", wins: 6, draws: 0, losses: 6, points: 67, tpsr: 43 },
-            { team: "Tilted Towers Kungari 1", wins: 5, draws: 1, losses: 8, points: 66, tpsr: 41 },
-          ],
-          matches: [
-            { homeTeam: "Tilted Towers Kungari 1", awayTeam: "Watermelon Goats Kungari 2", score: "2-1", round: "Round 1", status: "Final" },
-            { homeTeam: "Pondi Pelicans", awayTeam: "Watermelon Goats Kungari 2", score: "Live", round: "Round 2", status: "Live" },
-          ],
-        },
-      },
-      teams: {
-        "Year 9 Line 7": {
-          "Blue Swans": ["Hallie", "Lashyia", "Riley", "Zedino", "Tamkia", "Ella", "Josh", "Nhial", "Jay"],
-          "Blue Tongues": ["Rocco", "Enchi", "Kobi P", "Carter", "Jordan", "Zion", "Calliope", "CJ", "Anbella"],
-          Stingrays: ["Shayla", "Nate", "Emily", "Mia N", "Kedan", "Kobe", "Eddy", "Steph", "Jaiden"],
-        },
-      },
+      houses,
+      yearLevels,
+      fixtures,
+      results,
+      teams: {},
       loaded: true,
       lastUpdated: new Date().toLocaleString(),
     };
