@@ -1,4 +1,5 @@
 {
   "apiUrl": "https://script.google.com/macros/s/YOUR_EXEC_ID/exec",
-  "staffFormUrl": "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true"
+  "staffFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSePDRo1gKjSh1z-SwTCt1BcKYbHvMGUl8GrNv02XxDx280RVw/viewform?embedded=true
+"
 }
