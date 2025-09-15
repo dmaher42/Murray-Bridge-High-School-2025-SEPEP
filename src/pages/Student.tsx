@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import '../index.css';
 import { loadConfig } from '../lib/config';
 import { fetchSummary } from '../lib/api';
+import { formatScore } from '../lib/format';
 import Card from '../components/ui/Card';
 import Ladder from '../components/ui/Ladder';
 
@@ -17,9 +18,16 @@ function StudentApp() {
   const [error, setError] = useState<string>('');
   const [liveMessage, setLiveMessage] = useState<string>('');
 
-  const toResults = (rws: Row[] = []) => rws
-    .filter(r => r.HomeTeam && r.AwayTeam)
-    .map(r => ({ homeTeam: r.HomeTeam, awayTeam: r.AwayTeam, score: `${r.HomeScore}-${r.AwayScore}`, round: r.Round || 'Latest', status: r.Status || 'Final' }));
+  const toResults = (rws: Row[] = []) =>
+    rws
+      .filter(r => r.HomeTeam && r.AwayTeam)
+      .map(r => ({
+        homeTeam: r.HomeTeam,
+        awayTeam: r.AwayTeam,
+        score: formatScore(r.HomeScore, r.AwayScore),
+        round: r.Round || 'Latest',
+        status: r.Status || 'Final',
+      }));
 
   const tick = async () => {
     try {
