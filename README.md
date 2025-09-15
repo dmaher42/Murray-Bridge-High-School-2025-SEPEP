@@ -4,9 +4,26 @@ React + Tailwind demo for managing school sports tournaments.
 
 ## Setup
 
+### 1. Install Dependencies
 ```bash
 npm install
 ```
+
+### 2. Environment Configuration
+**⚠️ Required for builds**: Copy `.env.example` to `.env` and configure:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your actual values:
+```bash
+VITE_SEPEP_API_URL=https://script.google.com/macros/s/YOUR_APP_SCRIPT_ID/exec
+VITE_API_BASE=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+VITE_POLL_MS=15000
+```
+
+**Note**: The app will work for development with placeholder values, but you need real API URLs for production deployment.
 
 ### UI Elements
 
