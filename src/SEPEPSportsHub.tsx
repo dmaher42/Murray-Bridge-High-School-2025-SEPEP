@@ -9,15 +9,16 @@ import {
   Medal,
   Target,
   RefreshCw,
-  Save,
   Cloud,
   CloudOff,
   Plus,
   Edit3,
   Check,
-  X,
 } from "lucide-react";
-import { loadConfig } from "./lib/config";
+import useGoogleSheets from "./hooks/useGoogleSheets";
+import ScoreUpdateModal from "./components/ScoreUpdateModal";
+import NotificationList from "./components/NotificationList";
+import { useNotifications } from "./hooks/useNotifications";
 
 /* =========================================
    Types
@@ -55,255 +56,6 @@ type SepepData = {
   lastUpdated: string | null;
 };
 
-type Notification = {
-  id: number;
-  message: string;
-  type: "info" | "success" | "error";
-  timestamp: Date;
-};
-
-/* =========================================
-   Google Sheets integration
-========================================= */
-
-const useGoogleSheets = () => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [sheetUrl, setSheetUrl] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [lastSync, setLastSync] = useState<Date | null>(null);
-
-  const extractSheetId = (url: string) => {
-    const match = url.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-    return match ? match[1] : null;
-  };
-
-  const connectToSheets = useCallback(async (url: string, key = "") => {
-    const sheetId = extractSheetId(url);
-    if (!sheetId) throw new Error("Invalid Google Sheets URL");
-
-    setSheetUrl(url);
-    setApiKey(key);
-    setIsConnected(true);
-    setLastSync(new Date());
-
-    localStorage.setItem("sepep_sheet_url", url);
-    localStorage.setItem("sepep_api_key", key);
-
-    return sheetId;
-  }, []);
-
-  const readFromSheets = useCallback(async (sheetId: string, ranges: string[]) => {
-    const cfg = await loadConfig();
-    const base = (cfg.apiUrl || "").replace(/\/exec.*$/, "");
-    const url = new URL(base ? base + "/exec" : "");
-    url.searchParams.set("action", "read");
-    url.searchParams.set("id", sheetId);
-    url.searchParams.set("ranges", ranges.join(","));
-    if (apiKey) url.searchParams.set("key", apiKey);
-
-    const r = await fetch(url.toString(), { cache: "no-store" });
-    if (!r.ok) throw new Error(`Sheets API ${r.status}`);
-    return r.json();
-  }, [apiKey]);
-
-  const writeToSheets = useCallback(async (sheetId: string, updates: any[]) => {
-    const cfg = await loadConfig();
-    const base = (cfg.apiUrl || "").replace(/\/exec.*$/, "");
-    const url = base ? base + "/exec" : "";
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "update", id: sheetId, updates, key: apiKey }),
-    });
-    if (!r.ok) throw new Error(`Sheets API ${r.status}`);
-    setLastSync(new Date());
-    return r.json();
-  }, [apiKey]);
-
-  useEffect(() => {
-    const savedUrl = localStorage.getItem("sepep_sheet_url");
-    const savedKey = localStorage.getItem("sepep_api_key");
-    if (savedUrl) {
-      setSheetUrl(savedUrl);
-      setApiKey(savedKey || "");
-      setIsConnected(true);
-    }
-  }, []);
-
-  return {
-    isConnected,
-    sheetUrl,
-    apiKey,
-    lastSync,
-    connectToSheets,
-    readFromSheets,
-    writeToSheets,
-  };
-};
-
-/* =========================================
-   Score Update Modal
-========================================= */
-
-const ScoreUpdateModal: React.FC<{
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (d: any) => Promise<void> | void;
-  yearLevels: string[];
-  teams: string[];
-}> = ({ isOpen, onClose, onSave, yearLevels, teams }) => {
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedTeam1, setSelectedTeam1] = useState("");
-  const [selectedTeam2, setSelectedTeam2] = useState("");
-  const [score1, setScore1] = useState("");
-  const [score2, setScore2] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!selectedTeam1 || !selectedTeam2 || !score1 || !score2) return;
-    setSaving(true);
-
-    const updateData = {
-      yearLevel: selectedYear,
-      homeTeam: selectedTeam1,
-      awayTeam: selectedTeam2,
-      homeScore: parseInt(score1, 10),
-      awayScore: parseInt(score2, 10),
-      timestamp: new Date().toISOString(),
-    };
-
-    await onSave(updateData);
-
-    setSelectedTeam1("");
-    setSelectedTeam2("");
-    setScore1("");
-    setScore2("");
-    setSaving(false);
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
-        <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-xl font-bold text-mbhs-navy">Update Score</h3>
-          <button onClick={onClose} className="rounded-lg p-2 transition-colors hover:bg-slate-100">
-            <X className="h-5 w-5 text-slate-600" />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Year Level</label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
-            >
-              <option value="">Select year level</option>
-              {yearLevels.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Home Team</label>
-              <select
-                value={selectedTeam1}
-                onChange={(e) => setSelectedTeam1(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
-              >
-                <option value="">Select team</option>
-                {teams.map((team) => (
-                  <option key={team} value={team}>
-                    {team}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Away Team</label>
-              <select
-                value={selectedTeam2}
-                onChange={(e) => setSelectedTeam2(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
-              >
-                <option value="">Select team</option>
-                {teams
-                  .filter((team) => team !== selectedTeam1)
-                  .map((team) => (
-                    <option key={team} value={team}>
-                      {team}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Home Score</label>
-              <input
-                type="number"
-                value={score1}
-                onChange={(e) => setScore1(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
-                min={0}
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Away Score</label>
-              <input
-                type="number"
-                value={score2}
-                onChange={(e) => setScore2(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-gold focus:ring-2 focus:ring-mbhs-gold"
-                min={0}
-                placeholder="0"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 flex space-x-3">
-          <button onClick={onClose} className="flex-1 rounded-lg bg-slate-100 px-4 py-2 font-medium text-slate-600 transition-colors hover:bg-slate-200">
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving || !selectedTeam1 || !selectedTeam2 || !score1 || !score2}
-            className="flex-1 btn btn-accent justify-center space-x-2 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {saving ? (
-              <>
-                <RefreshCw className="h-4 w-4 animate-spin" />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4" />
-                <span>Save to Sheet</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* =========================================
-   Main App
-========================================= */
-
 const SEPEPSportsHub: React.FC = () => {
   const [activeSection, setActiveSection] = useState<"upload" | "overview" | "houses" | "fixtures" | "results" | "teams">("upload");
 
@@ -320,7 +72,7 @@ const SEPEPSportsHub: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedYearLevel, setSelectedYearLevel] = useState<"all" | string>("all");
   const [showScoreModal, setShowScoreModal] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { notifications, showNotification } = useNotifications();
 
   const sheets = useGoogleSheets();
 
@@ -330,12 +82,6 @@ const SEPEPSportsHub: React.FC = () => {
     Kungari: "from-hood-kungari to-hood-kungari",
     "No:RI": "from-hood-nori to-hood-nori",
   };
-
-  const showNotification = useCallback((message: string, type: Notification["type"] = "info") => {
-    const notification: Notification = { id: Date.now(), message, type, timestamp: new Date() };
-    setNotifications((prev) => [...prev, notification]);
-    setTimeout(() => setNotifications((prev) => prev.filter((n) => n.id !== notification.id)), 5000);
-  }, []);
 
   const saveToLocalStorage = useCallback((data: SepepData) => {
     try {
@@ -636,18 +382,7 @@ const SEPEPSportsHub: React.FC = () => {
       </nav>
 
       {/* Notifications */}
-      <div className="fixed right-4 top-20 z-50 space-y-2">
-        {notifications.map((n) => (
-          <div
-            key={n.id}
-            className={`max-w-sm transform rounded-lg p-4 shadow-lg backdrop-blur-lg transition-all duration-300 ${
-              n.type === "success" ? "bg-green-500/90 text-white" : n.type === "error" ? "bg-red-500/90 text-white" : "bg-mbhs-blue/90 text-white"
-            }`}
-          >
-            <p className="text-sm font-medium">{n.message}</p>
-          </div>
-        ))}
-      </div>
+      <NotificationList notifications={notifications} />
 
       {/* Main */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
