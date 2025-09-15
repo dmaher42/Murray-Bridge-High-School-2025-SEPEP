@@ -54,6 +54,7 @@ The Admin page includes tools to export current results as JSON and import fixtu
 Use the top bar toggle to switch Teacher Mode on/off. The state persists in `localStorage` and will be used to gate admin-only actions.
 
 ## Testing
+This project uses [Vitest](https://vitest.dev) for unit tests. Run them with:
 
 ```bash
 npm test
