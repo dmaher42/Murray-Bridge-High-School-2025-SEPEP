@@ -30,13 +30,13 @@ npm run build
 
 ## Environment Variables
 
-Set `VITE_API_BASE` to control the base URL used for data API requests. Define it in a `.env` file:
+Set `VITE_SEPEP_API_URL` to control the API URL used for data requests. Define it in a `.env` file:
 
 ```bash
-VITE_API_BASE=https://script.google.com/macros/s/APP_SCRIPT_ID/exec
+VITE_SEPEP_API_URL=https://script.google.com/macros/s/APP_SCRIPT_ID/exec
 ```
 
-If unset, the application falls back to a placeholder URL. See `.env.example` for a template.
+If unset, the application falls back to a placeholder URL or the `apiUrl` value in `public/sepep.config.json`. See `.env.example` for a template.
 
 ## Data schema
 
