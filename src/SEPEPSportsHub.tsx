@@ -92,8 +92,8 @@ const SEPEPSportsHub: React.FC = () => {
           savedAt: new Date().toISOString(),
         })
       );
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error("Failed to save data", e);
     }
   }, []);
 
@@ -101,8 +101,8 @@ const SEPEPSportsHub: React.FC = () => {
     try {
       const saved = localStorage.getItem("sepep_data");
       if (saved) return JSON.parse(saved) as SepepData;
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error("Failed to load saved data", e);
     }
     return null;
   }, []);
