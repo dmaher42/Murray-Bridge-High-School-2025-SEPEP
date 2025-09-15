@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LiveRegion from '../components/LiveRegion';
 import ReactDOM from 'react-dom/client';
 import '../index.css';
 import { loadConfig } from '../lib/config';
@@ -7,19 +8,20 @@ import Card from '../components/ui/Card';
 function TeacherApp(){
   const [formUrl, setFormUrl] = useState<string>('');
   const [apiUrl, setApiUrl] = useState<string>('');
+  const [liveMessage, setLiveMessage] = useState<string>('');
 
   useEffect(() => {
     (async () => {
       const cfg = await loadConfig();
       if (cfg.apiUrl) { localStorage.setItem('sepep_api_url', cfg.apiUrl); setApiUrl(cfg.apiUrl); }
       if (cfg.staffFormUrl) setFormUrl(cfg.staffFormUrl);
-      document.getElementById('a11y-updates')!.textContent = `Scores updated ${new Date().toLocaleTimeString()}`;
+      setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
     })();
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
-      <div role="status" aria-live="polite" className="sr-only" id="a11y-updates" />
+      <LiveRegion message={liveMessage} />
       <header className="bg-mbhs-navy text-white sticky top-0 z-40">
         <div className="max-w-6xl mx-auto pad flex items-center justify-between">
           <h1 className="text-2xl font-bold">SEPEP Teacher</h1>
