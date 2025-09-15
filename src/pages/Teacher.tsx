@@ -9,13 +9,19 @@ function TeacherApp(){
   const [formUrl, setFormUrl] = useState<string>('');
   const [apiUrl, setApiUrl] = useState<string>('');
   const [liveMessage, setLiveMessage] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     (async () => {
-      const cfg = await loadConfig();
-      if (cfg.apiUrl) { localStorage.setItem('sepep_api_url', cfg.apiUrl); setApiUrl(cfg.apiUrl); }
-      if (cfg.staffFormUrl) setFormUrl(cfg.staffFormUrl);
-      setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
+      try {
+        const cfg = await loadConfig();
+        if (cfg.apiUrl) { localStorage.setItem('sepep_api_url', cfg.apiUrl); setApiUrl(cfg.apiUrl); }
+        if (cfg.staffFormUrl) setFormUrl(cfg.staffFormUrl);
+        setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
+      } catch (e) {
+        console.error(e);
+        setError('Failed to load configuration');
+      }
     })();
   }, []);
 
@@ -30,6 +36,7 @@ function TeacherApp(){
       </header>
 
       <main className="max-w-6xl mx-auto pad space-y-4">
+        {error && <div className="card pad text-danger bg-danger/10 border-danger/20">{error}</div>}
         {formUrl ? (
           <Card title="Staff Results Form">
             <iframe title="SEPEP Staff Form" src={formUrl} className="w-full h-[80vh] rounded-lg" />

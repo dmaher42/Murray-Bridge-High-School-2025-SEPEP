@@ -23,18 +23,24 @@ function StudentApp() {
 
   useEffect(() => {
     (async () => {
-      const cfg = await loadConfig();
-      if (cfg.apiUrl) localStorage.setItem('sepep_api_url', cfg.apiUrl);
+      try {
+        const cfg = await loadConfig();
+        if (cfg.apiUrl) localStorage.setItem('sepep_api_url', cfg.apiUrl);
+      } catch (e) {
+        console.error(e);
+        setError('Failed to load configuration');
+      }
       const tick = async () => {
         try {
           const data = await fetchSummary();
-          setHouses(data.houses || {});
-          setRows(data.rows || []);
+          setHouses(data.houses);
+          setRows(data.rows);
           setLastUpdated(new Date().toLocaleString());
           setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
           setError('');
-        } catch (e:any) {
-          setError('Missing or invalid API URL (see sepep.config.json)');
+        } catch (e: any) {
+          console.error(e);
+          setError(e.message || 'Failed to fetch scores');
         }
       };
       await tick();
