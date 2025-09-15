@@ -21,6 +21,20 @@ function StudentApp() {
     .filter(r => r.HomeTeam && r.AwayTeam)
     .map(r => ({ homeTeam: r.HomeTeam, awayTeam: r.AwayTeam, score: `${r.HomeScore}-${r.AwayScore}`, round: r.Round || 'Latest', status: r.Status || 'Final' }));
 
+  const tick = async () => {
+    try {
+      const data = await fetchSummary();
+      setHouses(data.houses);
+      setRows(data.rows);
+      setLastUpdated(new Date().toLocaleString());
+      setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
+      setError('');
+    } catch (e: any) {
+      console.error(e);
+      setError(e.message || 'Failed to fetch scores');
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -30,23 +44,11 @@ function StudentApp() {
         console.error(e);
         setError('Failed to load configuration');
       }
-      const tick = async () => {
-        try {
-          const data = await fetchSummary();
-          setHouses(data.houses);
-          setRows(data.rows);
-          setLastUpdated(new Date().toLocaleString());
-          setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
-          setError('');
-        } catch (e: any) {
-          console.error(e);
-          setError(e.message || 'Failed to fetch scores');
-        }
-      };
-      await tick();
-      const id = setInterval(tick, Number((import.meta as any).env?.VITE_POLL_MS ?? 15000));
-      return () => clearInterval(id);
     })();
+
+    tick();
+    const id = setInterval(tick, Number((import.meta as any).env?.VITE_POLL_MS ?? 15000));
+    return () => clearInterval(id);
   }, []);
 
   const latest = toResults(rows).slice(0, 10);
