@@ -58,3 +58,5 @@ Use the top bar toggle to switch Teacher Mode on/off. The state persists in `loc
 ```bash
 npm test
 ```
+
+Runs the [Vitest](https://vitest.dev) test runner.
