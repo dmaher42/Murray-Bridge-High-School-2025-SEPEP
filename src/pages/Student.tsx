@@ -71,9 +71,12 @@ function StudentApp() {
         <Card title="Latest Matches">
           <div className="space-y-3">
             {latest.map((m,i)=>(
-              <div key={i} className="flex items-center justify-between bg-white odd:bg-slate-50 rounded-lg p-3">
-                <span className="text-mbhs-navy font-medium">{m.homeTeam} vs {m.awayTeam}</span>
-                <span className="font-bold text-mbhs-navy text-right">{m.score}</span>
+              <div
+                key={i}
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0 bg-white odd:bg-slate-50 rounded-lg p-3"
+              >
+                <span className="text-mbhs-navy font-medium break-words">{m.homeTeam} vs {m.awayTeam}</span>
+                <span className="font-bold text-mbhs-navy text-left sm:text-right">{m.score}</span>
               </div>
             ))}
             {!latest.length && <p className="text-mbhs-navy/70">No recent results yet.</p>}
