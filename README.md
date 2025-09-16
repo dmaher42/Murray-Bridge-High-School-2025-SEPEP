@@ -38,30 +38,7 @@ VITE_SEPEP_API_URL=https://script.google.com/macros/s/APP_SCRIPT_ID/exec
 
 If unset, the application falls back to the bundled JSON under `public/data/*.json` so local development still works offline. See `.env.example` for a template.
 
-The legacy “Add Team” demo posts to a separate Apps Script endpoint configured via `VITE_API_BASE`:
-
-```bash
-VITE_API_BASE=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
-```
-
-Enable automatic polling of fixtures and results by setting `VITE_POLLING_ENABLED=true`. Polling runs every `VITE_POLL_MS`
-milliseconds (default: 60000) when a remote API is configured. Leave `VITE_POLLING_ENABLED` unset or `false` to fetch data
-only once on page load.
-
-After updating `.env`, rebuild and redeploy to update the GitHub Pages site.
-
-## Add Team API (Apps Script)
-
-`apps-script/Code.gs` contains a sheet-bound Apps Script that appends team rows. Deploy it as a Web App:
-
-1. In the Script editor choose **Deploy → New deployment → Web app**.
-2. **Execute as:** Me.
-3. **Who has access:** Anyone with the link.
-4. Copy the `/exec` URL and set `VITE_API_BASE`.
-
-When you edit the script later, use **Deploy → Manage deployments** and either create a new deployment or edit the existing one to point at the latest head version.
-
-Apps Script web apps must return a `ContentService` or HTML payload. The script uses `ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON)` so `fetch` can parse the JSON response. Handlers `doGet(e)` and `doPost(e)` receive query-string parameters via the `e.parameter` object.
+Enable automatic polling of fixtures and results by setting `VITE_POLLING_ENABLED=true`. Polling runs every 60 seconds when a remote API is configured. Leave `VITE_POLLING_ENABLED` unset or `false` to fetch data only once on page load.
 
 ## Data schema
 
@@ -69,10 +46,6 @@ Sample JSON files live in `public/data`:
 - `teams.json`
 - `fixtures.json`
 - `results.json`
-
-## Import / Export
-
-The Admin page includes tools to export current results as JSON and import fixtures from either JSON or Excel (`.xlsx`) files.
 
 ## Read-only client
 
