@@ -1,15 +1,17 @@
-const rawBase = ((import.meta as any).env?.VITE_SEPEP_API_URL ?? '') as string;
-const BASE = rawBase.trim();
-const rawBaseUrl = ((import.meta as any).env?.BASE_URL ?? '/') as string;
-const BASE_URL = rawBaseUrl.endsWith('/') ? rawBaseUrl : `${rawBaseUrl}/`;
-
+const BASE = import.meta.env.VITE_SEPEP_API_URL;
+const BASE_URL = ((import.meta as any).env?.BASE_URL ?? '/') as string;
 const LOCAL_FIXTURES_URL = `${BASE_URL}data/fixtures.json`;
 const LOCAL_RESULTS_URL = `${BASE_URL}data/results.json`;
 
 async function getJson(url: string) {
-  const res = await fetch(url, { method: 'GET' });
-  if (!res.ok) throw new Error(`${url} -> ${res.status}`);
-  return res.json();
+  try {
+    const res = await fetch(url, { method: 'GET' });
+    if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error('Fetch failed:', e);
+    return null;
+  }
 }
 
 export const hasRemoteApi = Boolean(BASE);
