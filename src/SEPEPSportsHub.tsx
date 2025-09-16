@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState, type ComponentType } from 'react';
 import { CalendarDays, Home as HomeIcon, ListChecks, RefreshCcw } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Card from './components/ui/Card';
 import ErrorBanner from './components/ui/ErrorBanner';
 import {
@@ -134,6 +135,12 @@ export default function SEPEPSportsHub() {
             <div className="text-sm text-white/80">
               Last updated: {lastUpdated ? lastUpdated.toLocaleString() : '—'}
             </div>
+            <Link
+              to="/neighbourhoods"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20"
+            >
+              View neighbourhoods
+            </Link>
             <button
               type="button"
               onClick={() => refresh({ showSpinner: true })}
