@@ -26,6 +26,13 @@ export async function getResults() {
   return getJson(`${BASE}?endpoint=results`);
 }
 
+export async function getNeighbourhoods() {
+  if (!BASE) return [];
+  const res = await fetch(`${BASE}?endpoint=neighbourhoods`);
+  if (!res.ok) throw new Error('Neighbourhoods fetch failed');
+  return res.json();
+}
+
 export async function getLocalFixtures() {
   return getJson(LOCAL_FIXTURES_URL);
 }
