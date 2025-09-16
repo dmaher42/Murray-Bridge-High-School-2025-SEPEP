@@ -1,961 +1,362 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState, type ComponentType } from 'react';
+import { CalendarDays, Home as HomeIcon, ListChecks, RefreshCcw } from 'lucide-react';
+import Card from './components/ui/Card';
 import {
-  Trophy,
-  Home,
-  Users,
-  Calendar,
-  BarChart3,
-  Settings,
-  Medal,
-  Target,
-  RefreshCw,
-  Cloud,
-  CloudOff,
-  Plus,
-  Edit3,
-  Check,
-} from "lucide-react";
-import useGoogleSheets from "./hooks/useGoogleSheets";
-import ScoreUpdateModal from "./components/ScoreUpdateModal";
-import NotificationList from "./components/NotificationList";
-import { useNotifications } from "./hooks/useNotifications";
+  groupByRound,
+  normaliseFixtures,
+  normaliseResults,
+  sortByDateAsc,
+  sortByDateDesc,
+  type Fixture,
+  type Result,
+} from './lib/data';
+import {
+  getFixtures,
+  getResults,
+  getLocalFixtures,
+  getLocalResults,
+  hasRemoteApi,
+} from './lib/api';
 
-/* =========================================
-   Types
-========================================= */
+const POLL_INTERVAL = Number(((import.meta as any).env?.VITE_POLL_MS ?? 60000) || 60000);
 
-type Stand = {
-  team: string;
-  wins: number;
-  draws: number;
-  losses: number;
-  points: number;
-  tpsr: number;
+type TabId = 'home' | 'fixtures' | 'results';
+
+type NormalisedData = {
+  fixtures: Fixture[];
+  results: Result[];
 };
 
-type MatchRow = {
-  homeTeam: string;
-  awayTeam: string;
-  score: string;
-  round?: string;
-  status?: string;
-};
+const tabs: { id: TabId; label: string; icon: ComponentType<{ className?: string }> }[] = [
+  { id: 'home', label: 'Home', icon: HomeIcon },
+  { id: 'fixtures', label: 'Fixtures', icon: CalendarDays },
+  { id: 'results', label: 'Results', icon: ListChecks },
+];
 
-type YearData = {
-  standings?: Stand[];
-  matches?: MatchRow[];
-};
+export default function SEPEPSportsHub() {
+  const [activeTab, setActiveTab] = useState<TabId>('home');
+  const [data, setData] = useState<NormalisedData>({ fixtures: [], results: [] });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(
+    hasRemoteApi ? null : 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.',
+  );
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-type SepepData = {
-  houses: Record<string, number>;
-  yearLevels: string[];
-  fixtures: Array<Record<string, string | number>>;
-  results: Record<string, YearData>;
-  teams: Record<string, Record<string, string[]>>;
-  loaded: boolean;
-  lastUpdated: string | null;
-};
+  const fetchFixtures = useCallback(async () => {
+    if (!hasRemoteApi) {
+      const localFixtures = await getLocalFixtures();
+      return { fixtures: normaliseFixtures(localFixtures), usedFallback: true };
+    }
 
-const SEPEPSportsHub: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<"upload" | "overview" | "houses" | "fixtures" | "results" | "teams">("upload");
-
-  const [sepepData, setSepepData] = useState<SepepData>({
-    houses: { Wirakuthi: 0, Pondi: 0, Kungari: 0, "No:RI": 0 },
-    yearLevels: [],
-    fixtures: [],
-    results: {},
-    teams: {},
-    loaded: false,
-    lastUpdated: null,
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [selectedYearLevel, setSelectedYearLevel] = useState<"all" | string>("all");
-  const [showScoreModal, setShowScoreModal] = useState(false);
-  const { notifications, showNotification } = useNotifications();
-
-  const sheets = useGoogleSheets();
-
-  const houseColors: Record<string, string> = {
-    Wirakuthi: "from-hood-wirakuthi to-hood-wirakuthi",
-    Pondi: "from-hood-pondi to-hood-pondi",
-    Kungari: "from-hood-kungari to-hood-kungari",
-    "No:RI": "from-hood-nori to-hood-nori",
-  };
-
-  const saveToLocalStorage = useCallback((data: SepepData) => {
     try {
-      localStorage.setItem(
-        "sepep_data",
-        JSON.stringify({
-          ...data,
-          savedAt: new Date().toISOString(),
-        })
-      );
-    } catch (e) {
-      console.error("Failed to save data", e);
+      const liveFixtures = await getFixtures();
+      return { fixtures: normaliseFixtures(liveFixtures), usedFallback: false };
+    } catch (err) {
+      console.error('Failed to fetch live fixtures', err);
+      const localFixtures = await getLocalFixtures();
+      return { fixtures: normaliseFixtures(localFixtures), usedFallback: true };
     }
   }, []);
 
-  const loadFromLocalStorage = useCallback((): SepepData | null => {
-    try {
-      const saved = localStorage.getItem("sepep_data");
-      if (saved) return JSON.parse(saved) as SepepData;
-    } catch (e) {
-      console.error("Failed to load saved data", e);
+  const fetchResults = useCallback(async () => {
+    if (!hasRemoteApi) {
+      const localResults = await getLocalResults();
+      return { results: normaliseResults(localResults), usedFallback: true };
     }
-    return null;
+
+    try {
+      const liveResults = await getResults();
+      return { results: normaliseResults(liveResults), usedFallback: false };
+    } catch (err) {
+      console.error('Failed to fetch live results', err);
+      const localResults = await getLocalResults();
+      return { results: normaliseResults(localResults), usedFallback: true };
+    }
   }, []);
 
-  const parseGoogleSheetsData = useCallback((data: any): SepepData => {
-    const houses: Record<string, number> = {};
-    const yearLevels: string[] = [];
-    const fixtures: Array<Record<string, string | number>> = [];
-    const results: Record<string, YearData> = {};
-
-    data?.valueRanges?.forEach((vr: any) => {
-      const sheet = vr.range.split("!")[0];
-      const values = vr.values || [];
-      if (/^Scoreboard/i.test(sheet)) {
-        values.slice(2).forEach((row: any[]) => {
-          const name = row[1];
-          const pts = Number(row[2]);
-          if (name) houses[name] = pts;
-        });
-      } else if (/^Fixture/i.test(sheet)) {
-        if (values.length) {
-          const [header, ...rows] = values;
-          rows.forEach((r: any[]) => {
-            if (!r.length) return;
-            const obj: Record<string, string | number> = {};
-            header.forEach((h: string, i: number) => {
-              obj[h] = r[i];
-            });
-            fixtures.push(obj);
-          });
-        }
-      } else {
-        yearLevels.push(sheet);
-        const standings: Stand[] = [];
-        const matches: MatchRow[] = [];
-        let i = 1;
-        for (; i < values.length; i++) {
-          const row = values[i];
-          if (!row || !row[0]) break;
-          standings.push({
-            team: row[0],
-            wins: Number(row[1] || 0),
-            draws: Number(row[2] || 0),
-            losses: Number(row[3] || 0),
-            points: Number(row[4] || 0),
-            tpsr: Number(row[5] || 0),
-          });
-        }
-        while (i < values.length && (!values[i] || !values[i][0])) i++;
-        const matchHeaders = values[i] || [];
-        for (i = i + 1; i < values.length; i++) {
-          const row = values[i];
-          if (!row || !row[0]) continue;
-          const obj: any = {};
-          matchHeaders.forEach((h: string, idx: number) => {
-            obj[h] = row[idx];
-          });
-          matches.push({
-            homeTeam: obj.HomeTeam || obj.Home || row[0],
-            awayTeam: obj.AwayTeam || obj.Away || row[1],
-            score: obj.Score || obj.Result || row[2],
-            round: obj.Round,
-            status: obj.Status,
-          });
-        }
-        results[sheet] = { standings, matches };
-      }
-    });
-
-    return {
-      houses,
-      yearLevels,
-      fixtures,
-      results,
-      teams: {},
-      loaded: true,
-      lastUpdated: new Date().toLocaleString(),
-    };
-  }, []);
-
-  const handleSheetsConnection = useCallback(
-    async (url: string, apiKey = "") => {
-      try {
-        setLoading(true);
-        showNotification("🔗 Connecting to Google Sheets...", "info");
-        const sheetId = await sheets.connectToSheets(url, apiKey);
-        const ranges = ["Scoreboard!A:C", "Year 7 (Line 2)!A:N", "Year 7 (Line 5)!A:Q", "Fixture!A:G"];
-        const data = await sheets.readFromSheets(sheetId!, ranges);
-        const parsed = parseGoogleSheetsData(data);
-        setSepepData(parsed);
-        saveToLocalStorage(parsed);
-        showNotification("✅ Successfully connected to Google Sheets!", "success");
-      } catch (e: any) {
-        showNotification(`❌ Connection failed: ${e.message}`, "error");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [sheets, showNotification, saveToLocalStorage, parseGoogleSheetsData]
-  );
-
-  const handleScoreSave = useCallback(
-    async (updateData: any) => {
-      try {
-        showNotification("💾 Saving score to Google Sheets...", "info");
-
-        const updatedResults = { ...sepepData.results };
-        const yd = updatedResults[updateData.yearLevel];
-        if (yd) {
-          yd.matches = yd.matches || [];
-          yd.matches.unshift({
-            homeTeam: updateData.homeTeam,
-            awayTeam: updateData.awayTeam,
-            score: `${updateData.homeScore}-${updateData.awayScore}`,
-            round: "Latest",
-            status: "Final",
-          });
-
-          const standings = (yd.standings || []) as Stand[];
-          const homeTeam = standings.find((t) => t.team === updateData.homeTeam);
-          const awayTeam = standings.find((t) => t.team === updateData.awayTeam);
-          if (homeTeam && awayTeam) {
-            if (updateData.homeScore > updateData.awayScore) {
-              homeTeam.wins += 1;
-              awayTeam.losses += 1;
-              homeTeam.points += 3;
-            } else if (updateData.homeScore < updateData.awayScore) {
-              awayTeam.wins += 1;
-              homeTeam.losses += 1;
-              awayTeam.points += 3;
-            } else {
-              homeTeam.draws += 1;
-              awayTeam.draws += 1;
-              homeTeam.points += 1;
-              awayTeam.points += 1;
-            }
-          }
-        }
-
-        const newData: SepepData = {
-          ...sepepData,
-          results: updatedResults,
-          lastUpdated: new Date().toLocaleString(),
-        };
-
-        setSepepData(newData);
-        saveToLocalStorage(newData);
-
-        if (sheets.isConnected) {
-          const sheetId = sheets.sheetUrl ? "connected" : "demo";
-          await sheets.writeToSheets(sheetId, [updateData]);
-        }
-
-        showNotification("✅ Score saved successfully!", "success");
-      } catch (e: any) {
-        showNotification(`❌ Failed to save score: ${e.message}`, "error");
-      }
-    },
-    [sepepData, sheets, showNotification, saveToLocalStorage]
-  );
-
-  const loadSampleData = useCallback(() => {
+  const refresh = useCallback(async () => {
     setLoading(true);
-    showNotification("📊 Loading sample SEPEP data...", "info");
-    setTimeout(() => {
-      const sampleData = parseGoogleSheetsData(null);
-      setSepepData(sampleData);
-      saveToLocalStorage(sampleData);
+    setError(null);
+    try {
+      const [fixtureData, resultData] = await Promise.all([fetchFixtures(), fetchResults()]);
+      const fixtures = fixtureData.fixtures;
+      const results = resultData.results;
+      setData({ fixtures, results });
+      const usedFallback = fixtureData.usedFallback || resultData.usedFallback;
+      if (!hasRemoteApi) {
+        setNotice('Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.');
+      } else if (usedFallback) {
+        setNotice('Live data unavailable right now. Showing cached data.');
+      } else {
+        setNotice(null);
+      }
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : 'Unable to load SEPEP data');
+    } finally {
       setLoading(false);
-      showNotification("✅ Sample data loaded successfully!", "success");
-    }, 1000);
-  }, [parseGoogleSheetsData, saveToLocalStorage, showNotification]);
+    }
+  }, [fetchFixtures, fetchResults]);
 
   useEffect(() => {
-    if (sheets.isConnected) {
-      const interval = setInterval(() => {
-        // placeholder for auto-sync logic
-        // console.log("Auto-syncing...");
-      }, 30000);
-      return () => clearInterval(interval);
-    }
-  }, [sheets.isConnected]);
+    refresh();
+  }, [refresh]);
 
   useEffect(() => {
-    const saved = loadFromLocalStorage();
-    if (saved && saved.loaded) {
-      setSepepData(saved);
-      showNotification("📂 Loaded saved SEPEP data", "info");
-    }
-  }, [loadFromLocalStorage, showNotification]);
+    if (!hasRemoteApi) return;
+    if (!Number.isFinite(POLL_INTERVAL) || POLL_INTERVAL < 1000) return;
+    const timer = setInterval(() => {
+      refresh();
+    }, POLL_INTERVAL);
+    return () => clearInterval(timer);
+  }, [refresh]);
 
-  const getAllTeams = useCallback((): string[] => {
-    const setTeams = new Set<string>();
-    Object.values(sepepData.results).forEach((yearData) => {
-      yearData.standings?.forEach((s) => setTeams.add(s.team));
-    });
-    return Array.from(setTeams);
-  }, [sepepData.results]);
+  const sortedFixtures = useMemo(() => {
+    return [...data.fixtures].sort(sortByDateAsc);
+  }, [data.fixtures]);
 
-  const navItems = [
-    { id: "upload", label: "Setup", icon: Settings },
-    { id: "overview", label: "Overview", icon: Home },
-    { id: "houses", label: "House Scores", icon: Trophy },
-    { id: "fixtures", label: "Fixtures", icon: Calendar },
-    { id: "results", label: "Results", icon: BarChart3 },
-    { id: "teams", label: "Teams", icon: Users },
-  ] as const;
+  const groupedFixtures = useMemo(() => groupByRound(sortedFixtures), [sortedFixtures]);
+
+  const sortedResults = useMemo(() => {
+    return [...data.results].sort(sortByDateDesc);
+  }, [data.results]);
+
+  const latestResults = useMemo(() => sortedResults.slice(0, 6), [sortedResults]);
+  const upcomingFixtures = useMemo(() => sortedFixtures.slice(0, 6), [sortedFixtures]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-mbhs-navy text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Trophy className="h-8 w-8 text-mbhs-gold" />
-              <div>
-                <h1 className="text-2xl font-bold">2024 Neighbourhood SEPEP</h1>
-                <p className="text-sm text-white/80">Live Sports Hub with Google Sheets</p>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white text-mbhs-navy">
+      <header className="bg-mbhs-navy text-white">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">SEPEP Sports Hub</h1>
+            <p className="text-white/80">Live fixtures and results powered by Google Sheets</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="text-sm text-white/80">
+              Last updated: {lastUpdated ? lastUpdated.toLocaleString() : '—'}
             </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                {sheets.isConnected ? (
-                  <>
-                    <Cloud className="h-4 w-4 text-green-500" />
-                    <span className="text-sm font-medium text-green-400">Connected</span>
-                  </>
-                ) : (
-                  <>
-                    <CloudOff className="h-4 w-4 text-white/70" />
-                    <span className="text-sm text-white/70">Offline</span>
-                  </>
-                )}
-              </div>
-
-              {sepepData.loaded && (
-                <button
-                  onClick={() => setShowScoreModal(true)}
-                  className="btn btn-accent text-sm"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Update Score</span>
-                </button>
-              )}
-
-              {sheets.lastSync && <span className="text-xs text-white/70">Last sync: {sheets.lastSync.toLocaleTimeString()}</span>}
-            </div>
+            <button
+              type="button"
+              onClick={refresh}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:opacity-60"
+            >
+              <RefreshCcw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Navigation */}
-      <nav className="border-b border-slate-200/60 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-1 overflow-x-auto py-4">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`whitespace-nowrap rounded-full px-4 py-2 font-medium transition-all duration-200 ${
-                    activeSection === item.id ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
-                  }`}
-                >
-                  <span className="inline-flex items-center space-x-2">
-                    <Icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+      <nav className="border-b border-slate-200/50 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActiveTab(id)}
+              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
+                activeTab === id
+                  ? 'bg-mbhs-navy text-white shadow'
+                  : 'bg-slate-100 text-mbhs-navy hover:bg-slate-200'
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </button>
+          ))}
         </div>
       </nav>
 
-      {/* Notifications */}
-      <NotificationList notifications={notifications} />
-
-      {/* Main */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Setup */}
-        {activeSection === "upload" && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Setup & Google Sheets Integration</h2>
-              <p className="text-slate-600">Connect your Google Sheet for real-time data sync</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              {/* Sheets connect */}
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl backdrop-blur-lg">
-                <h3 className="mb-6 flex items-center text-xl font-semibold text-mbhs-navy">
-                  <Cloud className="mr-2 h-5 w-5 text-mbhs-blue" />
-                  Google Sheets Integration
-                </h3>
-
-                {!sheets.isConnected ? (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-700">Google Sheets URL</label>
-                      <input
-                        type="text"
-                        placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-mbhs-blue focus:ring-2 focus:ring-mbhs-blue"
-                        onChange={() => {
-                          /* noop: controlled by connect button below */
-                        }}
-                      />
-                      <p className="mt-1 text-xs text-slate-500">Make sure your sheet is set to “Anyone with the link can view”.</p>
-                    </div>
-
-                    <button
-                      onClick={() => handleSheetsConnection("https://docs.google.com/spreadsheets/d/sample-demo-sheet")}
-                      disabled={loading}
-                      className="btn btn-primary w-full items-center justify-center space-x-2 disabled:opacity-50"
-                    >
-                      {loading ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 animate-spin" />
-                          <span>Connecting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Cloud className="h-4 w-4" />
-                          <span>Connect to Google Sheets</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-2 rounded-lg border border-green-200 bg-green-50 p-3">
-                      <Check className="h-5 w-5 text-green-600" />
-                      <span className="font-medium text-green-800">Connected to Google Sheets</span>
-                    </div>
-                    <div className="text-sm text-slate-600">
-                      <p>
-                        <strong>Status:</strong> Real-time sync enabled
-                      </p>
-                      <p>
-                        <strong>Last sync:</strong> {sheets.lastSync?.toLocaleString() || "Never"}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem("sepep_sheet_url");
-                        localStorage.removeItem("sepep_api_key");
-                        window.location.reload();
-                      }}
-                      className="rounded-lg border border-red-200 px-4 py-2 text-red-600 transition-colors hover:bg-red-50"
-                    >
-                      Disconnect
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Sample Data */}
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl backdrop-blur-lg">
-                <h3 className="mb-6 text-xl font-semibold text-mbhs-navy">Try Sample Data</h3>
-                <p className="mb-6 text-slate-600">Load demo data that matches your SEPEP format to see the app in action.</p>
-
-                <button
-                  onClick={loadSampleData}
-                  disabled={loading}
-                  className="btn btn-primary w-full items-center justify-center space-x-2 disabled:opacity-50"
-                >
-                  {loading ? (
-                    <>
-                      <RefreshCw className="h-4 w-4 animate-spin" />
-                      <span>Loading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Target className="h-4 w-4" />
-                      <span>Load Sample Data</span>
-                    </>
-                  )}
-                </button>
-
-                <div className="mt-6 rounded-2xl border border-mbhs-blue/20 bg-mbhs-blue/10 p-6">
-                  <h4 className="mb-2 text-lg font-semibold text-mbhs-navy">📋 How to Connect Your Google Sheet</h4>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div>
-                      <h5 className="mb-2 font-medium text-mbhs-blue">Step 1: Prepare Your Sheet</h5>
-                      <ul className="list-inside list-disc space-y-1 text-sm text-mbhs-blue">
-                        <li>Open your “2024 SEPEP Fixture and Results.xlsx”</li>
-                        <li>Upload to Google Drive and convert to Google Sheets</li>
-                        <li>Ensure tabs: Scoreboard, Fixture, Year level sheets</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="mb-2 font-medium text-mbhs-blue">Step 2: Share Your Sheet</h5>
-                      <ul className="list-inside list-disc space-y-1 text-sm text-mbhs-blue">
-                        <li>Click “Share” in Google Sheets</li>
-                        <li>Change to “Anyone with the link can view”</li>
-                        <li>Copy the URL and connect above</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {sepepData.loaded && (
-                  <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-6">
-                    <div className="flex items-center space-x-3">
-                      <Trophy className="h-6 w-6 text-green-600" />
-                      <div>
-                        <h4 className="text-lg font-medium text-green-800">SEPEP Data Active!</h4>
-                        <p className="text-green-700">
-                          Your sports hub is live. {sheets.isConnected && "Changes will sync automatically with your Google Sheet."}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
+        {notice && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+            {notice}
+          </div>
+        )}
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
           </div>
         )}
 
-        {/* Overview */}
-        {activeSection === "overview" && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="mb-2 text-3xl font-bold text-mbhs-navy">Season Overview</h2>
-              <p className="text-slate-600">Your 2024 Neighbourhood SEPEP at a glance</p>
-            </div>
-
-            {!sepepData.loaded ? (
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl backdrop-blur-lg">
-                <Settings className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Data Loaded</h3>
-                <p className="mb-4 text-slate-600">Connect your Google Sheet or load sample data to see the overview.</p>
-                <button
-                  onClick={() => setActiveSection("upload")}
-                  className="btn btn-accent inline-flex items-center space-x-2"
-                >
-                  <Settings className="h-4 w-4" />
-                  <span>Go to Setup</span>
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Total Matches</p>
-                      <p className="text-3xl font-bold text-mbhs-navy">
-                        {Object.values(sepepData.results).reduce((total, year) => total + (year.matches?.length || 0), 0)}
-                      </p>
-                    </div>
-                    <Target className="h-8 w-8 text-mbhs-blue" />
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Active Teams</p>
-                      <p className="text-3xl font-bold text-mbhs-navy">
-                        {Object.values(sepepData.results).reduce((total, year) => total + (year.standings?.length || 0), 0)}
-                      </p>
-                    </div>
-                    <Users className="h-8 w-8 text-green-600" />
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Year Levels</p>
-                      <p className="text-3xl font-bold text-mbhs-navy">{sepepData.yearLevels.length}</p>
-                    </div>
-                    <BarChart3 className="h-8 w-8 text-purple-600" />
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">{sheets.isConnected ? "Live Updates" : "Offline Mode"}</p>
-                      <p className="text-3xl font-bold text-mbhs-navy">{sheets.isConnected ? "🔗" : "💾"}</p>
-                    </div>
-                    {sheets.isConnected ? <Cloud className="h-8 w-8 text-green-600" /> : <CloudOff className="h-8 w-8 text-slate-400" />}
-                  </div>
-                </div>
-
-                <div className="lg:col-span-4 rounded-2xl bg-mbhs-gold p-8 text-white">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="mb-2 text-2xl font-bold">Championship Leader</h3>
-                      <p className="text-4xl font-bold">
-                        {Object.entries(sepepData.houses).sort(([, a], [, b]) => (b as number) - (a as number))[0]?.[0] || "Loading..."}
-                      </p>
-                      <p className="text-xl opacity-90">
-                        {Object.entries(sepepData.houses).sort(([, a], [, b]) => (b as number) - (a as number))[0]?.[1] || 0} points
-                      </p>
-                    </div>
-                    <Trophy className="h-16 w-16 opacity-80" />
-                  </div>
-                </div>
-              </div>
-            )}
+        {loading ? (
+          <div className="flex items-center justify-center py-24 text-mbhs-navy/70">
+            <RefreshCcw className="mr-3 h-5 w-5 animate-spin" /> Loading SEPEP data…
           </div>
-        )}
-
-        {/* Houses */}
-        {activeSection === "houses" && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">House Championships</h2>
-              <p className="text-slate-600">{sheets.isConnected ? "Live standings synced with Google Sheets" : "Standings from local/sample data"}</p>
-            </div>
-
-            {!sepepData.loaded ? (
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
-                <Trophy className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No House Data Available</h3>
-                <p className="text-slate-600">Connect your Google Sheet or load sample data to see house scores.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {Object.entries(sepepData.houses)
-                  .sort(([, a], [, b]) => (b as number) - (a as number))
-                  .map(([house, score], index) => {
-                    const position = index + 1;
-                    const medal = position === 1 ? "🥇" : position === 2 ? "🥈" : position === 3 ? "🥉" : "🏆";
-                    return (
+        ) : (
+          <>
+            {activeTab === 'home' && (
+              <div className="grid gap-6 lg:grid-cols-2">
+                <Card title="Upcoming fixtures">
+                  <div className="space-y-4">
+                    {upcomingFixtures.length === 0 && (
+                      <p className="text-sm text-mbhs-navy/70">No fixtures scheduled yet.</p>
+                    )}
+                    {upcomingFixtures.map((fixture) => (
                       <div
-                        key={house}
-                        className={`transform rounded-2xl bg-gradient-to-br ${houseColors[house] ?? "from-slate-500 to-slate-600"} p-8 text-white shadow-xl transition-all duration-200 hover:scale-105`}
+                        key={fixture.id}
+                        className="rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm"
                       >
-                        <div className="text-center">
-                          <div className="mb-4 text-4xl">{medal}</div>
-                          <h3 className="mb-2 text-2xl font-bold">{house}</h3>
-                          <div className="mb-2 text-4xl font-bold">{score}</div>
-                          <p className="text-lg opacity-90">
-                            {position === 1 ? "1st Place" : position === 2 ? "2nd Place" : position === 3 ? "3rd Place" : `${position}th Place`}
-                          </p>
-                          {sheets.isConnected && (
-                            <div className="mt-3 flex items-center justify-center space-x-1 opacity-75">
-                              <Cloud className="h-3 w-3" />
-                              <span className="text-xs">Live</span>
-                            </div>
-                          )}
+                        <div className="text-xs uppercase text-mbhs-navy/60">{fixture.round ?? 'Fixture'}</div>
+                        <div className="mt-1 text-lg font-semibold">
+                          {fixture.home} vs {fixture.away}
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-mbhs-navy/70">
+                          {fixture.date && <span>{fixture.date}</span>}
+                          {fixture.time && <span>{fixture.time}</span>}
+                          {fixture.court && <span>{fixture.court}</span>}
+                          {fixture.division && <span>{fixture.division}</span>}
                         </div>
                       </div>
-                    );
-                  })}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Fixtures */}
-        {activeSection === "fixtures" && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Competition Fixtures</h2>
-              <p className="text-slate-600">Weekly sport schedules by year level</p>
-            </div>
-
-            {!sepepData.loaded ? (
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
-                <Calendar className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Fixture Data Available</h3>
-                <p className="text-slate-600">Load your SEPEP data to see weekly fixtures.</p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {sepepData.fixtures.map((week) => (
-                  <div key={String(week.week)} className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
-                    <h3 className="mb-6 text-2xl font-bold text-mbhs-navy">Week {String(week.week)}</h3>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                      {Object.entries(week)
-                        .filter(([k]) => k !== "week")
-                        .map(([yearLevel, sport]) => (
-                          <div key={yearLevel} className="rounded-xl border-l-4 border-mbhs-gold bg-slate-50 p-6">
-                            <h4 className="mb-2 font-semibold text-mbhs-navy">{yearLevel}</h4>
-                            <p className="text-slate-600">{String(sport)}</p>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Results */}
-        {activeSection === "results" && (
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-              <div className="flex-1 text-center">
-                <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Live Results</h2>
-                <p className="text-slate-600">Team standings and match results</p>
-              </div>
-
-              {sepepData.loaded && (
-                <button
-                  onClick={() => setShowScoreModal(true)}
-                  className="btn btn-accent inline-flex items-center space-x-2"
-                >
-                  <Edit3 className="h-4 w-4" />
-                  <span>Update Score</span>
-                </button>
-              )}
-            </div>
-
-            {sepepData.loaded && (
-              <div className="flex justify-center">
-                <div className="rounded-full border border-white/20 bg-white/60 p-2 backdrop-blur-lg">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => setSelectedYearLevel("all")}
-                      className={`rounded-full px-4 py-2 font-medium transition-colors ${
-                        selectedYearLevel === "all" ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
-                      }`}
-                    >
-                      All Years
-                    </button>
-                    {sepepData.yearLevels.map((year) => (
-                      <button
-                        key={year}
-                        onClick={() => setSelectedYearLevel(year)}
-                        className={`rounded-full px-4 py-2 font-medium transition-colors ${
-                          selectedYearLevel === year ? "bg-mbhs-navy text-white" : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        {year.replace("Year ", "Y").replace(" (", " L").replace(")", "")}
-                      </button>
                     ))}
                   </div>
-                </div>
-              </div>
-            )}
+                </Card>
 
-            {!sepepData.loaded ? (
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
-                <BarChart3 className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Results Data Available</h3>
-                <p className="text-slate-600">Connect your Google Sheet or load sample data to see results.</p>
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {Object.entries(sepepData.results)
-                  .filter(([yearLevel]) => selectedYearLevel === "all" || selectedYearLevel === yearLevel)
-                  .map(([yearLevel, data]) => (
-                    <div key={yearLevel} className="space-y-6">
-                      <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
-                        <div className="mb-6 flex items-center justify-between">
-                          <h3 className="flex items-center text-2xl font-bold text-mbhs-navy">
-                            <Medal className="mr-2 h-6 w-6 text-mbhs-gold" />
-                            {yearLevel} - Team Standings
-                          </h3>
-                          {sheets.isConnected && (
-                            <div className="flex items-center space-x-1 text-green-600">
-                              <Cloud className="h-4 w-4" />
-                              <span className="text-sm font-medium">Live</span>
+                <Card title="Latest results">
+                  <div className="space-y-4">
+                    {latestResults.length === 0 && (
+                      <p className="text-sm text-mbhs-navy/70">No results recorded yet.</p>
+                    )}
+                    {latestResults.map((result) => {
+                      const hasScore =
+                        typeof result.homeScore === 'number' && typeof result.awayScore === 'number';
+                      return (
+                        <div
+                          key={result.id}
+                          className="rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm"
+                        >
+                          <div className="text-xs uppercase text-mbhs-navy/60">{result.round ?? 'Result'}</div>
+                          <div className="mt-1 text-lg font-semibold">
+                            {result.home} vs {result.away}
+                          </div>
+                          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-mbhs-navy/70">
+                            {result.date && <span>{result.date}</span>}
+                            {result.time && <span>{result.time}</span>}
+                            {result.court && <span>{result.court}</span>}
+                            {result.status && <span>{result.status}</span>}
+                          </div>
+                          {hasScore && (
+                            <div className="mt-2 text-xl font-bold text-mbhs-navy">
+                              {result.homeScore} – {result.awayScore}
                             </div>
                           )}
                         </div>
-
-                        {data.standings && data.standings.length > 0 ? (
-                          <div className="overflow-x-auto">
-                            <table className="w-full">
-                              <thead>
-                                <tr className="border-b border-slate-200">
-                                  <th className="py-3 px-4 text-left font-semibold text-mbhs-navy">Position</th>
-                                  <th className="py-3 px-4 text-left font-semibold text-mbhs-navy">Team</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">W</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">D</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">L</th>
-                                  <th className="py-3 px-4 text-center font-semibold text-mbhs-navy">TPSR</th>
-                                  <th className="py-3 px-4 text-right font-semibold text-mbhs-navy">Points</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {data.standings
-                                  .slice()
-                                  .sort((a, b) => b.points - a.points)
-                                  .map((team, index) => (
-                                    <tr key={team.team} className="border-b border-slate-100 transition-colors hover:bg-slate-50">
-                                      <td className="py-4 px-4">
-                                        <span className="flex items-center space-x-2">
-                                          <span className="font-bold text-mbhs-navy">{index + 1}</span>
-                                          {index === 0 && <span>🥇</span>}
-                                          {index === 1 && <span>🥈</span>}
-                                          {index === 2 && <span>🥉</span>}
-                                        </span>
-                                      </td>
-                                      <td className="py-4 px-4 font-semibold text-mbhs-navy">{team.team}</td>
-                                      <td className="py-4 px-4 text-center font-medium text-green-600">{team.wins}</td>
-                                      <td className="py-4 px-4 text-center font-medium text-yellow-600">{team.draws}</td>
-                                      <td className="py-4 px-4 text-center font-medium text-red-600">{team.losses}</td>
-                                      <td className="py-4 px-4 text-center text-slate-600">{team.tpsr}</td>
-                                      <td className="py-4 px-4 text-right font-bold text-mbhs-navy">{team.points}</td>
-                                    </tr>
-                                  ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        ) : (
-                          <p className="py-8 text-center text-slate-600">No standings data available for {yearLevel}</p>
-                        )}
-                      </div>
-
-                      {data.matches && data.matches.length > 0 && (
-                        <div className="rounded-2xl border border-white/20 bg-white/80 p-8 shadow-xl">
-                          <h3 className="mb-6 flex items-center text-2xl font-bold text-mbhs-navy">
-                            <Target className="mr-2 h-6 w-6 text-mbhs-blue" />
-                            {yearLevel} - Recent Matches
-                          </h3>
-
-                          <div className="space-y-4">
-                            {data.matches.slice(0, 10).map((match, idx) => (
-                              <div key={`${match.homeTeam}-${match.awayTeam}-${idx}`} className="rounded-xl border-l-4 border-mbhs-blue bg-slate-50 p-6">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-4">
-                                    <span className="font-semibold text-mbhs-navy">
-                                      {match.homeTeam} vs {match.awayTeam}
-                                    </span>
-                                    {match.status === "Live" && (
-                                      <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
-                                        <span className="mr-1 h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                                        LIVE
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <span className="text-lg font-bold text-mbhs-navy">{match.score}</span>
-                                    {match.round && <span className="text-sm text-slate-500">({match.round})</span>}
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
+                </Card>
               </div>
             )}
-          </div>
-        )}
 
-        {/* Teams */}
-        {activeSection === "teams" && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="mb-4 text-3xl font-bold text-mbhs-navy">Team Information</h2>
-              <p className="text-slate-600">Team rosters and player lists</p>
-            </div>
-
-            {!sepepData.loaded ? (
-              <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl">
-                <Users className="mx-auto mb-4 h-16 w-16 text-slate-400" />
-                <h3 className="mb-2 text-xl font-semibold text-mbhs-navy">No Team Data Available</h3>
-                <p className="text-slate-600">Load your SEPEP data to see team rosters.</p>
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {Object.entries(sepepData.teams).map(([yearLevel, teams]) => (
-                  <div key={yearLevel} className="space-y-6">
-                    <h3 className="text-2xl font-bold text-mbhs-navy">{yearLevel}</h3>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                      {Object.entries(teams).map(([teamName, players]) => (
-                        <div key={teamName} className="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl">
-                          <h4 className="mb-4 flex items-center text-xl font-bold text-mbhs-navy">
-                            <Users className="mr-2 h-5 w-5 text-mbhs-blue" />
-                            {teamName}
-                          </h4>
-                          <p className="mb-3 text-sm font-medium text-slate-600">Players ({players.length})</p>
-                          <div className="flex flex-wrap gap-2">
-                            {players.map((p, i) => (
-                              <span key={`${teamName}-${i}`} className="inline-block rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
-                                {p}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+            {activeTab === 'fixtures' && (
+              <div className="space-y-6">
+                {groupedFixtures.map(([round, fixtures]) => (
+                  <Card key={round} title={round}>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-slate-200 text-sm">
+                        <thead>
+                          <tr className="bg-slate-50">
+                            <th className="px-3 py-2 text-left font-semibold">Match</th>
+                            <th className="px-3 py-2 text-left font-semibold">Details</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200">
+                          {fixtures.map((fixture) => (
+                            <tr key={fixture.id} className="bg-white/80">
+                              <td className="px-3 py-3">
+                                <div className="font-semibold text-mbhs-navy">
+                                  {fixture.home} vs {fixture.away}
+                                </div>
+                                {fixture.division && (
+                                  <div className="text-xs text-mbhs-navy/70">{fixture.division}</div>
+                                )}
+                              </td>
+                              <td className="px-3 py-3 text-sm text-mbhs-navy/80">
+                                <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                  {fixture.date && <span>{fixture.date}</span>}
+                                  {fixture.time && <span>{fixture.time}</span>}
+                                  {fixture.court && <span>{fixture.court}</span>}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
+                  </Card>
                 ))}
-
-                {Object.keys(sepepData.teams).length === 0 && (
-                  <div className="rounded-xl border border-mbhs-gold/20 bg-mbhs-gold/10 p-6">
-                    <div className="flex items-center space-x-3">
-                      <Users className="h-6 w-6 text-mbhs-gold" />
-                      <div>
-                        <h3 className="text-lg font-medium text-mbhs-navy">Limited Team Data</h3>
-                        <p className="text-mbhs-navy/80">Team roster information will appear after you connect your full Google Sheet.</p>
-                      </div>
-                    </div>
+                {groupedFixtures.length === 0 && (
+                  <div className="rounded-lg border border-slate-200 bg-white/80 px-4 py-6 text-center text-sm text-mbhs-navy/70">
+                    No fixtures available yet.
                   </div>
                 )}
               </div>
             )}
-          </div>
+
+            {activeTab === 'results' && (
+              <Card title="Season results">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-slate-200 text-sm">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="px-3 py-2 text-left font-semibold">Match</th>
+                        <th className="px-3 py-2 text-left font-semibold">Score</th>
+                        <th className="px-3 py-2 text-left font-semibold">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      {sortedResults.map((result) => {
+                        const hasScore =
+                          typeof result.homeScore === 'number' && typeof result.awayScore === 'number';
+                        return (
+                          <tr key={result.id} className="bg-white/80">
+                            <td className="px-3 py-3">
+                              <div className="font-semibold text-mbhs-navy">
+                                {result.home} vs {result.away}
+                              </div>
+                              {result.round && (
+                                <div className="text-xs text-mbhs-navy/70">{result.round}</div>
+                              )}
+                            </td>
+                            <td className="px-3 py-3 font-semibold text-mbhs-navy">
+                              {hasScore ? (
+                                <span>
+                                  {result.homeScore} – {result.awayScore}
+                                </span>
+                              ) : (
+                                <span className="text-sm text-mbhs-navy/60">Scheduled</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-3 text-sm text-mbhs-navy/80">
+                              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                {result.date && <span>{result.date}</span>}
+                                {result.time && <span>{result.time}</span>}
+                                {result.court && <span>{result.court}</span>}
+                                {result.status && <span>{result.status}</span>}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {sortedResults.length === 0 && (
+                  <div className="py-6 text-center text-sm text-mbhs-navy/70">No results recorded yet.</div>
+                )}
+              </Card>
+            )}
+          </>
         )}
       </main>
 
-      {/* Modal */}
-      <ScoreUpdateModal
-        isOpen={showScoreModal}
-        onClose={() => setShowScoreModal(false)}
-        onSave={handleScoreSave}
-        yearLevels={sepepData.yearLevels}
-        teams={getAllTeams()}
-      />
-
-      {/* Footer */}
-      <footer className="mt-16 bg-mbhs-navy text-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Trophy className="h-6 w-6 text-mbhs-gold" />
-              <div>
-                <h3 className="font-semibold">2024 Neighbourhood SEPEP</h3>
-                <p className="text-sm text-white/70">
-                  Live Sports Hub {sheets.isConnected ? "with Google Sheets Integration" : "with Local Storage"}
-                </p>
-              </div>
-            </div>
-            <div className="text-sm text-slate-400">
-              Built with React • Powered by your SEPEP data
-              {sheets.isConnected && (
-                <div className="mt-1 flex items-center space-x-1">
-                  <Cloud className="h-3 w-3" />
-                  <span>Real-time sync enabled</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+      <footer className="bg-white/70 py-6 text-center text-xs text-mbhs-navy/60">
+        Powered by Murray Bridge High School SEPEP
       </footer>
-
-      {/* Loading Overlay */}
-      {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-          <div className="flex items-center space-x-4 rounded-2xl bg-white p-8 shadow-2xl">
-            <RefreshCw className="h-6 w-6 animate-spin text-mbhs-gold" />
-            <span className="font-medium text-mbhs-navy">Processing your SEPEP data...</span>
-          </div>
-        </div>
-      )}
     </div>
   );
-};
-
-export default SEPEPSportsHub;
+}

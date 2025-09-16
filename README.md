@@ -1,6 +1,6 @@
 # SEPEP Tournament Hub
 
-React + Tailwind demo for managing school sports tournaments.
+React + Tailwind site for presenting Murray Bridge High School's SEPEP fixtures and results.
 
 ## Setup
 
@@ -30,15 +30,15 @@ npm run build
 
 ## Environment Variables
 
-Set `VITE_SEPEP_API_URL` to control the API URL used for data requests. Define it in a `.env` file:
+Set `VITE_SEPEP_API_URL` to point at the deployed Google Apps Script that exposes read-only fixtures and results. Define it in a `.env` file:
 
 ```bash
 VITE_SEPEP_API_URL=https://script.google.com/macros/s/APP_SCRIPT_ID/exec
 ```
 
-If unset, the application falls back to a placeholder URL or the `apiUrl` value in `public/sepep.config.json`. See `.env.example` for a template.
+If unset, the application falls back to the bundled JSON under `public/data/*.json` so local development still works offline. See `.env.example` for a template.
 
-The Add Team page posts to a separate Apps Script endpoint configured via `VITE_API_BASE`:
+The legacy “Add Team” demo posts to a separate Apps Script endpoint configured via `VITE_API_BASE`:
 
 ```bash
 VITE_API_BASE=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
@@ -70,9 +70,9 @@ Sample JSON files live in `public/data`:
 
 The Admin page includes tools to export current results as JSON and import fixtures from either JSON or Excel (`.xlsx`) files.
 
-## Teacher Mode
+## Read-only client
 
-Use the top bar toggle to switch Teacher Mode on/off. The state persists in `localStorage` and will be used to gate admin-only actions.
+The public build is read-only. Teachers update match data directly in Google Sheets and the site simply polls the deployed Apps Script endpoint. No write operations are issued from the browser UI.
 
 ## Testing
 This project uses [Vitest](https://vitest.dev) for unit tests. Run them with:

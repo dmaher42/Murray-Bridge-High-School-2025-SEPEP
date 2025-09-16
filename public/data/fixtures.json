@@ -1,11 +1,20 @@
 {
-  "rounds": [
+  "rows": [
     {
-      "round": 1,
-      "date": "2025-10-21",
-      "matches": [
-        { "id": "R1M1", "division": "A", "home": "A01", "away": "A02", "venue": "Court 1", "time": "10:30" }
-      ]
+      "Round": "Round 1",
+      "Date": "2025-10-21",
+      "Time": "10:30",
+      "Court": "Court 1",
+      "HomeTeam": "Wirakuthi 1",
+      "AwayTeam": "Pondi 1"
+    },
+    {
+      "Round": "Round 1",
+      "Date": "2025-10-21",
+      "Time": "11:15",
+      "Court": "Court 2",
+      "HomeTeam": "Kungari 1",
+      "AwayTeam": "No:RI 1"
     }
   ]
 }
