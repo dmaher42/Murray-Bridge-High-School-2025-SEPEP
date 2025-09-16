@@ -1,17 +1,18 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import LiveRegion from '../components/LiveRegion';
 import ReactDOM from 'react-dom/client';
 import '../index.css';
 import Card from '../components/ui/Card';
 import Ladder from '../components/ui/Ladder';
 import { formatScore } from '../lib/format';
+import { RefreshCcw } from 'lucide-react';
 import {
   getLocalResults,
   getResults,
   hasRemoteApi,
 } from '../lib/api';
 import { normaliseResults, sortByDateDesc, type Result } from '../lib/data';
-import usePollingFetch from '../hooks/usePollingFetch';
+import usePollingFetch from '../lib/usePollingFetch';
 
 type Houses = Record<string, number>;
 
@@ -36,54 +37,71 @@ function buildLadder(results: Result[]): Houses {
   return ladder;
 }
 
-const env = (import.meta as any).env ?? {};
-const POLL_INTERVAL = Number((env?.VITE_POLL_MS ?? 60000) || 60000);
-const POLLING_ENABLED =
-  String(env?.VITE_POLLING_ENABLED ?? env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
+const POLL_INTERVAL = 60_000;
+const POLLING_ENABLED = String(import.meta.env.VITE_POLLING_ENABLED ?? '').toLowerCase() === 'true';
 
 function StudentApp() {
   const [houses, setHouses] = useState<Houses>({});
   const [results, setResults] = useState<Result[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [notice, setNotice] = useState<string>(
-    hasRemoteApi ? '' : 'Using demo data. Add VITE_SEPEP_API_URL for live updates.',
-  );
+  const demoNotice = 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.';
+  const [notice, setNotice] = useState<string>(hasRemoteApi ? '' : demoNotice);
   const [liveMessage, setLiveMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const hasLoadedRef = useRef(false);
 
   const loadResults = useCallback(async () => {
-    try {
-      const data = await getResults();
-      const parsed = normaliseResults(data);
+    if (!hasLoadedRef.current) {
+      setLoading(true);
+    }
+
+    const applyResults = (raw: unknown) => {
+      const parsed = normaliseResults(raw);
       setResults(parsed);
       setHouses(buildLadder(parsed));
-      setNotice(hasRemoteApi ? '' : 'Using demo data. Add VITE_SEPEP_API_URL for live updates.');
-      setError('');
       const now = new Date();
       setLastUpdated(now.toLocaleString());
       setLiveMessage(`Scores updated ${now.toLocaleTimeString()}`);
-    } catch (err) {
-      console.error('Failed to fetch live results', err);
-      try {
-        const fallback = await getLocalResults();
-        const parsed = normaliseResults(fallback);
-        setResults(parsed);
-        setHouses(buildLadder(parsed));
-        setNotice('Live data unavailable. Showing cached results.');
-        setError('');
-        const now = new Date();
-        setLastUpdated(now.toLocaleString());
-        setLiveMessage(`Scores updated ${now.toLocaleTimeString()}`);
-      } catch (fallbackErr) {
-        console.error('Failed to load fallback results', fallbackErr);
-        setResults([]);
-        setHouses({});
-        setError('Unable to load SEPEP results right now.');
-      }
-    }
-  }, []);
+    };
 
-  usePollingFetch(loadResults, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
+    try {
+      const data = await getResults();
+      if (data) {
+        applyResults(data);
+        setNotice(hasRemoteApi ? '' : demoNotice);
+        setError('');
+      } else {
+        const fallback = await getLocalResults();
+        if (fallback) {
+          applyResults(fallback);
+          setNotice('');
+          setError('Live data unavailable right now. Showing cached results.');
+        } else {
+          setResults([]);
+          setHouses({});
+          setNotice('');
+          setError('Unable to load SEPEP results right now.');
+          setLastUpdated('');
+          setLiveMessage('');
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load SEPEP results', err);
+      setResults([]);
+      setHouses({});
+      setNotice('');
+      setError('Unable to load SEPEP results right now.');
+      setLastUpdated('');
+      setLiveMessage('');
+    } finally {
+      hasLoadedRef.current = true;
+      setLoading(false);
+    }
+  }, [hasRemoteApi]);
+
+  const pollResults = useCallback(() => loadResults(), [loadResults]);
+  usePollingFetch(pollResults, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
 
   const latest = useMemo(() => {
     return [...results].sort(sortByDateDesc).slice(0, 10);
@@ -105,28 +123,36 @@ function StudentApp() {
         )}
         {error && <div className="card pad text-danger bg-danger/10 border-danger/20">{error}</div>}
 
-        <Card title="Team Ladder">
-          <Ladder houses={houses} />
-        </Card>
-
-        <Card title="Latest Matches">
-          <div className="space-y-3">
-            {latest.map((match) => (
-              <div
-                key={match.id}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0 bg-white odd:bg-slate-50 rounded-lg p-3"
-              >
-                <span className="text-mbhs-navy font-medium break-words">
-                  {match.home} vs {match.away}
-                </span>
-                <span className="font-bold text-mbhs-navy text-left sm:text-right">
-                  {formatScore(match.homeScore ?? undefined, match.awayScore ?? undefined)}
-                </span>
-              </div>
-            ))}
-            {!latest.length && <p className="text-mbhs-navy/70">No recent results yet.</p>}
+        {loading ? (
+          <div className="flex items-center justify-center py-16 text-mbhs-navy/70">
+            <RefreshCcw className="mr-3 h-5 w-5 animate-spin" /> Loading results…
           </div>
-        </Card>
+        ) : (
+          <>
+            <Card title="Team Ladder">
+              <Ladder houses={houses} />
+            </Card>
+
+            <Card title="Latest Matches">
+              <div className="space-y-3">
+                {latest.map((match) => (
+                  <div
+                    key={match.id}
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0 bg-white odd:bg-slate-50 rounded-lg p-3"
+                  >
+                    <span className="text-mbhs-navy font-medium break-words">
+                      {match.home} vs {match.away}
+                    </span>
+                    <span className="font-bold text-mbhs-navy text-left sm:text-right">
+                      {formatScore(match.homeScore ?? undefined, match.awayScore ?? undefined)}
+                    </span>
+                  </div>
+                ))}
+                {!latest.length && <p className="text-mbhs-navy/70">No recent results yet.</p>}
+              </div>
+            </Card>
+          </>
+        )}
       </main>
 
       <footer className="text-center muted py-6">© SEPEP</footer>

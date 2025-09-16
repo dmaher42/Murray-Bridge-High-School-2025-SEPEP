@@ -18,12 +18,10 @@ import {
   getLocalResults,
   hasRemoteApi,
 } from './lib/api';
-import usePollingFetch from './hooks/usePollingFetch';
+import usePollingFetch from './lib/usePollingFetch';
 
-const env = (import.meta as any).env ?? {};
-const POLL_INTERVAL = Number((env?.VITE_POLL_MS ?? 60000) || 60000);
-const POLLING_ENABLED =
-  String(env?.VITE_POLLING_ENABLED ?? env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
+const POLL_INTERVAL = 60_000;
+const POLLING_ENABLED = String(import.meta.env.VITE_POLLING_ENABLED ?? '').toLowerCase() === 'true';
 const DEFAULT_NOTICE = hasRemoteApi
   ? null
   : 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.';
@@ -108,7 +106,8 @@ export default function SEPEPSportsHub() {
     }
   }, [loadWithFallback]);
 
-  usePollingFetch(refresh, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
+  const pollForUpdates = useCallback(() => refresh(), [refresh]);
+  usePollingFetch(pollForUpdates, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
 
   const sortedFixtures = useMemo(() => {
     return [...data.fixtures].sort(sortByDateAsc);
