@@ -10,44 +10,36 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            **/package-lock.json
 
-      - name: Show tree (debug)
-        run: |
-          pwd
-          ls -la
-          if [ -f package.json ]; then cat package.json | head -n 40; fi
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Install deps (ci if lockfile; else install)
+      - name: Set Vite environment variables
         run: |
-          if [ -f package-lock.json ]; then
-            echo "Using npm ci"
-            npm ci
-          else
-            echo "No package-lock.json found; falling back to npm install"
-            npm install --no-fund --no-audit
-          fi
+          echo "VITE_SEPEP_API_URL=${{ secrets.VITE_SEPEP_API_URL }}" >> $GITHUB_ENV
+          echo "VITE_POLLING_ENABLED=false" >> $GITHUB_ENV
 
       - name: Build
         run: npm run build
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -58,6 +50,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
-
