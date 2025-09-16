@@ -1,5 +1,24 @@
 {
-  "results": [
-    { "matchId": "R1M1", "homeScore": 23, "awayScore": 19, "status": "Final", "mvpVotes": { "A01": 2, "A02": 1 }, "fairPlay": {"A01":1,"A02":1} }
+  "rows": [
+    {
+      "Round": "Round 1",
+      "Date": "2025-10-21",
+      "Time": "10:30",
+      "Court": "Court 1",
+      "HomeTeam": "Wirakuthi 1",
+      "AwayTeam": "Pondi 1",
+      "HomeScore": 23,
+      "AwayScore": 19,
+      "Status": "Final"
+    },
+    {
+      "Round": "Round 1",
+      "Date": "2025-10-21",
+      "Time": "11:15",
+      "Court": "Court 2",
+      "HomeTeam": "Kungari 1",
+      "AwayTeam": "No:RI 1",
+      "Status": "Scheduled"
+    }
   ]
 }
