@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ComponentType } from 'react';
 import { CalendarDays, Home as HomeIcon, ListChecks, RefreshCcw } from 'lucide-react';
 import Card from './components/ui/Card';
+import ErrorBanner from './components/ui/ErrorBanner';
 import {
   groupByRound,
   normaliseFixtures,
@@ -19,6 +20,11 @@ import {
 } from './lib/api';
 
 const POLL_INTERVAL = Number(((import.meta as any).env?.VITE_POLL_MS ?? 60000) || 60000);
+const POLLING_ENABLED =
+  String((import.meta as any).env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
+const DEFAULT_NOTICE = hasRemoteApi
+  ? null
+  : 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.';
 
 type TabId = 'home' | 'fixtures' | 'results';
 
@@ -33,79 +39,72 @@ const tabs: { id: TabId; label: string; icon: ComponentType<{ className?: string
   { id: 'results', label: 'Results', icon: ListChecks },
 ];
 
+type LoadResult = {
+  value: unknown;
+  fallbackUsed: boolean;
+  failed: boolean;
+};
+
 export default function SEPEPSportsHub() {
   const [activeTab, setActiveTab] = useState<TabId>('home');
   const [data, setData] = useState<NormalisedData>({ fixtures: [], results: [] });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(
-    hasRemoteApi ? null : 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.',
-  );
+  const [notice, setNotice] = useState<string | null>(DEFAULT_NOTICE);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchFixtures = useCallback(async () => {
-    if (!hasRemoteApi) {
-      const localFixtures = await getLocalFixtures();
-      return { fixtures: normaliseFixtures(localFixtures), usedFallback: true };
-    }
-
-    try {
-      const liveFixtures = await getFixtures();
-      return { fixtures: normaliseFixtures(liveFixtures), usedFallback: false };
-    } catch (err) {
-      console.error('Failed to fetch live fixtures', err);
-      const localFixtures = await getLocalFixtures();
-      return { fixtures: normaliseFixtures(localFixtures), usedFallback: true };
-    }
-  }, []);
-
-  const fetchResults = useCallback(async () => {
-    if (!hasRemoteApi) {
-      const localResults = await getLocalResults();
-      return { results: normaliseResults(localResults), usedFallback: true };
-    }
-
-    try {
-      const liveResults = await getResults();
-      return { results: normaliseResults(liveResults), usedFallback: false };
-    } catch (err) {
-      console.error('Failed to fetch live results', err);
-      const localResults = await getLocalResults();
-      return { results: normaliseResults(localResults), usedFallback: true };
-    }
-  }, []);
+  const loadWithFallback = useCallback(
+    async (primary: () => Promise<any>, fallback: () => Promise<any>): Promise<LoadResult> => {
+      const primaryData = await primary();
+      if (primaryData !== null && primaryData !== undefined) {
+        return { value: primaryData, fallbackUsed: false, failed: false } satisfies LoadResult;
+      }
+      const fallbackData = await fallback();
+      if (fallbackData !== null && fallbackData !== undefined) {
+        return { value: fallbackData, fallbackUsed: true, failed: false } satisfies LoadResult;
+      }
+      return { value: [], fallbackUsed: true, failed: true } satisfies LoadResult;
+    }, []);
 
   const refresh = useCallback(async () => {
     setLoading(true);
+    setNotice(DEFAULT_NOTICE);
     setError(null);
+
     try {
-      const [fixtureData, resultData] = await Promise.all([fetchFixtures(), fetchResults()]);
-      const fixtures = fixtureData.fixtures;
-      const results = resultData.results;
+      const [fixtureResult, resultResult] = await Promise.all([
+        loadWithFallback(() => getFixtures(), () => getLocalFixtures()),
+        loadWithFallback(() => getResults(), () => getLocalResults()),
+      ]);
+
+      const fixtures = normaliseFixtures(fixtureResult.value);
+      const results = normaliseResults(resultResult.value);
       setData({ fixtures, results });
-      const usedFallback = fixtureData.usedFallback || resultData.usedFallback;
-      if (!hasRemoteApi) {
-        setNotice('Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.');
-      } else if (usedFallback) {
-        setNotice('Live data unavailable right now. Showing cached data.');
-      } else {
-        setNotice(null);
+
+      let nextError: string | null = null;
+      if (fixtureResult.failed || resultResult.failed) {
+        nextError = 'Unable to load SEPEP data right now. Please try again soon.';
+      } else if (hasRemoteApi && (fixtureResult.fallbackUsed || resultResult.fallbackUsed)) {
+        nextError = 'Live data unavailable right now. Showing cached information.';
       }
+      setError(nextError);
+
       setLastUpdated(new Date());
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Unable to load SEPEP data');
+      setData({ fixtures: [], results: [] });
+      setError('Unable to load SEPEP data right now. Please try again soon.');
     } finally {
       setLoading(false);
     }
-  }, [fetchFixtures, fetchResults]);
+  }, [loadWithFallback]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
   useEffect(() => {
-    if (!hasRemoteApi) return;
+    if (!POLLING_ENABLED || !hasRemoteApi) return;
     if (!Number.isFinite(POLL_INTERVAL) || POLL_INTERVAL < 1000) return;
     const timer = setInterval(() => {
       refresh();
@@ -159,9 +158,7 @@ export default function SEPEPSportsHub() {
               type="button"
               onClick={() => setActiveTab(id)}
               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                activeTab === id
-                  ? 'bg-mbhs-navy text-white shadow'
-                  : 'bg-slate-100 text-mbhs-navy hover:bg-slate-200'
+                activeTab === id ? 'bg-mbhs-navy text-white shadow' : 'bg-slate-100 text-mbhs-navy hover:bg-slate-200'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -173,15 +170,9 @@ export default function SEPEPSportsHub() {
 
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
         {notice && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-            {notice}
-          </div>
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">{notice}</div>
         )}
-        {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
+        {error && <ErrorBanner message={error} />}
 
         {loading ? (
           <div className="flex items-center justify-center py-24 text-mbhs-navy/70">

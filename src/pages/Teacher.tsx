@@ -1,52 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import LiveRegion from '../components/LiveRegion';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '../index.css';
-import { loadConfig } from '../lib/config';
-import Card from '../components/ui/Card';
 
-function TeacherApp(){
-  const [formUrl, setFormUrl] = useState<string>('');
-  const [apiUrl, setApiUrl] = useState<string>('');
-  const [liveMessage, setLiveMessage] = useState<string>('');
-  const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const cfg = await loadConfig();
-        if (cfg.apiUrl) { localStorage.setItem('sepep_api_url', cfg.apiUrl); setApiUrl(cfg.apiUrl); }
-        if (cfg.staffFormUrl) setFormUrl(cfg.staffFormUrl);
-        setLiveMessage(`Scores updated ${new Date().toLocaleTimeString()}`);
-      } catch (e) {
-        console.error(e);
-        setError('Failed to load configuration');
-      }
-    })();
-  }, []);
-
+function TeacherApp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white">
-      <LiveRegion message={liveMessage} />
-      <header className="bg-mbhs-navy text-white sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto pad flex items-center justify-between">
-          <h1 className="text-2xl font-bold">SEPEP Teacher</h1>
-          <div className="muted truncate max-w-[60%] text-white/80">API: {apiUrl || 'not set (see sepep.config.json)'}</div>
+      <header className="bg-mbhs-navy text-white">
+        <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-6 text-center">
+          <h1 className="text-3xl font-bold">SEPEP Teacher Hub</h1>
+          <p className="text-white/80">Live management happens directly in Google Sheets.</p>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto pad space-y-4">
-        {error && <div className="card pad text-danger bg-danger/10 border-danger/20">{error}</div>}
-        {formUrl ? (
-          <Card title="Staff Results Form">
-            <iframe title="SEPEP Staff Form" src={formUrl} className="w-full h-[80vh] rounded-lg" />
-            <p className="muted mt-3">Submissions appear in the Student Hub within ~15s.</p>
-          </Card>
-        ) : (
-          <div className="card pad text-warning bg-warning/10 border-warning/20">
-            Add your Google Form embed URL to <code>public/sepep.config.json</code>.
-          </div>
-        )}
+      <main className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-12">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 text-center shadow-sm">
+          <h2 className="text-2xl font-semibold text-mbhs-navy">Read-only access</h2>
+          <p className="mt-3 text-mbhs-navy/70">
+            The public SEPEP site now reads live fixtures and results from the official Google Sheets
+            backend. Teachers can continue updating scores in Sheets—no extra configuration is
+            required here.
+          </p>
+          <p className="mt-3 text-mbhs-navy/70">
+            This page remains for reference only and does not include editing tools or form embeds.
+            Please use the shared spreadsheets for any updates.
+          </p>
+        </div>
       </main>
     </div>
   );
