@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ComponentType } from 'react';
+import { useCallback, useMemo, useRef, useState, type ComponentType } from 'react';
 import { CalendarDays, Home as HomeIcon, ListChecks, RefreshCcw } from 'lucide-react';
 import Card from './components/ui/Card';
 import ErrorBanner from './components/ui/ErrorBanner';
@@ -18,10 +18,12 @@ import {
   getLocalResults,
   hasRemoteApi,
 } from './lib/api';
+import usePollingFetch from './hooks/usePollingFetch';
 
-const POLL_INTERVAL = Number(((import.meta as any).env?.VITE_POLL_MS ?? 60000) || 60000);
+const env = (import.meta as any).env ?? {};
+const POLL_INTERVAL = Number((env?.VITE_POLL_MS ?? 60000) || 60000);
 const POLLING_ENABLED =
-  String((import.meta as any).env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
+  String(env?.VITE_POLLING_ENABLED ?? env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
 const DEFAULT_NOTICE = hasRemoteApi
   ? null
   : 'Using bundled demo data. Configure VITE_SEPEP_API_URL for live updates.';
@@ -52,6 +54,7 @@ export default function SEPEPSportsHub() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(DEFAULT_NOTICE);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const hasLoadedRef = useRef(false);
 
   const loadWithFallback = useCallback(
     async (primary: () => Promise<any>, fallback: () => Promise<any>): Promise<LoadResult> => {
@@ -66,8 +69,11 @@ export default function SEPEPSportsHub() {
       return { value: [], fallbackUsed: true, failed: true } satisfies LoadResult;
     }, []);
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
+  const refresh = useCallback(async ({ showSpinner }: { showSpinner?: boolean } = {}) => {
+    const shouldShowSpinner = showSpinner ?? !hasLoadedRef.current;
+    if (shouldShowSpinner) {
+      setLoading(true);
+    }
     setNotice(DEFAULT_NOTICE);
     setError(null);
 
@@ -95,22 +101,14 @@ export default function SEPEPSportsHub() {
       setData({ fixtures: [], results: [] });
       setError('Unable to load SEPEP data right now. Please try again soon.');
     } finally {
-      setLoading(false);
+      hasLoadedRef.current = true;
+      if (shouldShowSpinner) {
+        setLoading(false);
+      }
     }
   }, [loadWithFallback]);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
-  useEffect(() => {
-    if (!POLLING_ENABLED || !hasRemoteApi) return;
-    if (!Number.isFinite(POLL_INTERVAL) || POLL_INTERVAL < 1000) return;
-    const timer = setInterval(() => {
-      refresh();
-    }, POLL_INTERVAL);
-    return () => clearInterval(timer);
-  }, [refresh]);
+  usePollingFetch(refresh, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
 
   const sortedFixtures = useMemo(() => {
     return [...data.fixtures].sort(sortByDateAsc);
@@ -139,7 +137,7 @@ export default function SEPEPSportsHub() {
             </div>
             <button
               type="button"
-              onClick={refresh}
+              onClick={() => refresh({ showSpinner: true })}
               disabled={loading}
               className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:opacity-60"
             >
