@@ -44,6 +44,10 @@ The legacy “Add Team” demo posts to a separate Apps Script endpoint configur
 VITE_API_BASE=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
 ```
 
+Enable automatic polling of fixtures and results by setting `VITE_POLLING_ENABLED=true`. Polling runs every `VITE_POLL_MS`
+milliseconds (default: 60000) when a remote API is configured. Leave `VITE_POLLING_ENABLED` unset or `false` to fetch data
+only once on page load.
+
 After updating `.env`, rebuild and redeploy to update the GitHub Pages site.
 
 ## Add Team API (Apps Script)

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import LiveRegion from '../components/LiveRegion';
 import ReactDOM from 'react-dom/client';
 import '../index.css';
@@ -11,6 +11,7 @@ import {
   hasRemoteApi,
 } from '../lib/api';
 import { normaliseResults, sortByDateDesc, type Result } from '../lib/data';
+import usePollingFetch from '../hooks/usePollingFetch';
 
 type Houses = Record<string, number>;
 
@@ -35,6 +36,11 @@ function buildLadder(results: Result[]): Houses {
   return ladder;
 }
 
+const env = (import.meta as any).env ?? {};
+const POLL_INTERVAL = Number((env?.VITE_POLL_MS ?? 60000) || 60000);
+const POLLING_ENABLED =
+  String(env?.VITE_POLLING_ENABLED ?? env?.VITE_ENABLE_POLLING ?? 'false').toLowerCase() === 'true';
+
 function StudentApp() {
   const [houses, setHouses] = useState<Houses>({});
   const [results, setResults] = useState<Result[]>([]);
@@ -44,8 +50,6 @@ function StudentApp() {
     hasRemoteApi ? '' : 'Using demo data. Add VITE_SEPEP_API_URL for live updates.',
   );
   const [liveMessage, setLiveMessage] = useState<string>('');
-
-  const pollInterval = Number(((import.meta as any).env?.VITE_POLL_MS ?? 60000) || 60000);
 
   const loadResults = useCallback(async () => {
     try {
@@ -79,27 +83,7 @@ function StudentApp() {
     }
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const tick = async () => {
-      if (cancelled) return;
-      await loadResults();
-    };
-
-    tick();
-    if (!hasRemoteApi || !Number.isFinite(pollInterval) || pollInterval < 1000) {
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    const id = setInterval(tick, pollInterval);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, [loadResults, pollInterval]);
+  usePollingFetch(loadResults, POLL_INTERVAL, POLLING_ENABLED && hasRemoteApi);
 
   const latest = useMemo(() => {
     return [...results].sort(sortByDateDesc).slice(0, 10);
