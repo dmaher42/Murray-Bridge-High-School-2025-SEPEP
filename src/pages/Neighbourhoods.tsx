@@ -2,7 +2,7 @@ import { RefreshCcw } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../components/ui/Card';
-import usePollingFetch from '../hooks/usePollingFetch';
+import usePollingFetch from '../lib/usePollingFetch';
 import { getNeighbourhoods, hasRemoteApi } from '../lib/api';
 
 type NeighbourhoodRow = {

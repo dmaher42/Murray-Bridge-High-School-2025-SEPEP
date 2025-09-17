@@ -21,19 +21,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
+          cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Set Vite environment variables
+      - name: Inject Vite env (from secrets)
         run: |
+          if [ -z "${{ secrets.VITE_SEPEP_API_URL }}" ]; then
+            echo "❌ Missing Actions secret: VITE_SEPEP_API_URL" && exit 1
+          fi
           echo "VITE_SEPEP_API_URL=${{ secrets.VITE_SEPEP_API_URL }}" >> $GITHUB_ENV
           echo "VITE_POLLING_ENABLED=false" >> $GITHUB_ENV
+          echo "✅ Exported VITE_SEPEP_API_URL to build env"
+
+      - name: Show env (redacted)
+        run: |
+          echo "VITE_SEPEP_API_URL length: ${#VITE_SEPEP_API_URL}"
+          echo "VITE_POLLING_ENABLED: $VITE_POLLING_ENABLED"
 
       - name: Build
         run: npm run build
@@ -50,6 +59,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
