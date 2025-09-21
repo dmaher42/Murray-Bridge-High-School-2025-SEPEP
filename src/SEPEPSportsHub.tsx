@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type ComponentType } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { CalendarDays, Home as HomeIcon, ListChecks, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Card from './components/ui/Card';
@@ -34,6 +34,11 @@ type NormalisedData = {
   results: Result[];
 };
 
+type PredictionChoice = 'home' | 'away';
+type PredictionMap = Record<string, PredictionChoice>;
+
+const PREDICTIONS_STORAGE_KEY = 'sepep-predictions';
+
 const tabs: { id: TabId; label: string; icon: ComponentType<{ className?: string }> }[] = [
   { id: 'home', label: 'Home', icon: HomeIcon },
   { id: 'fixtures', label: 'Fixtures', icon: CalendarDays },
@@ -53,7 +58,43 @@ export default function SEPEPSportsHub() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(DEFAULT_NOTICE);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [predictions, setPredictions] = useState<PredictionMap>(() => {
+    if (typeof window === 'undefined') {
+      return {};
+    }
+    try {
+      const stored = window.localStorage.getItem(PREDICTIONS_STORAGE_KEY);
+      if (!stored) {
+        return {};
+      }
+      const parsed = JSON.parse(stored);
+      if (!parsed || typeof parsed !== 'object') {
+        return {};
+      }
+      const sanitised: PredictionMap = {};
+      for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
+        if (value === 'home' || value === 'away') {
+          sanitised[key] = value;
+        }
+      }
+      return sanitised;
+    } catch (err) {
+      console.warn('Unable to read stored predictions', err);
+      return {};
+    }
+  });
   const hasLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      window.localStorage.setItem(PREDICTIONS_STORAGE_KEY, JSON.stringify(predictions));
+    } catch (err) {
+      console.warn('Unable to save predictions', err);
+    }
+  }, [predictions]);
 
   const loadWithFallback = useCallback(
     async (primary: () => Promise<any>, fallback: () => Promise<any>): Promise<LoadResult> => {
@@ -116,12 +157,33 @@ export default function SEPEPSportsHub() {
 
   const groupedFixtures = useMemo(() => groupByRound(sortedFixtures), [sortedFixtures]);
 
+  const togglePrediction = useCallback((fixtureId: string, choice: PredictionChoice) => {
+    setPredictions((prev) => {
+      if (prev[fixtureId] === choice) {
+        const { [fixtureId]: _removed, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [fixtureId]: choice };
+    });
+  }, []);
+
+  const getPredictionButtonClass = useCallback(
+    (isActive: boolean) =>
+      `rounded-full border px-3 py-1 text-xs font-semibold transition ${
+        isActive
+          ? 'border-mbhs-navy bg-mbhs-navy text-white shadow'
+          : 'border-slate-300 bg-white/80 text-mbhs-navy hover:bg-slate-100'
+      }`,
+    [],
+  );
+
   const sortedResults = useMemo(() => {
     return [...data.results].sort(sortByDateDesc);
   }, [data.results]);
 
   const latestResults = useMemo(() => sortedResults.slice(0, 6), [sortedResults]);
   const upcomingFixtures = useMemo(() => sortedFixtures.slice(0, 6), [sortedFixtures]);
+  const predictionsCount = useMemo(() => Object.keys(predictions).length, [predictions]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mbhs-white via-slate-50 to-mbhs-white text-mbhs-navy">
@@ -188,6 +250,16 @@ export default function SEPEPSportsHub() {
               <div className="grid gap-6 lg:grid-cols-2">
                 <Card title="Upcoming fixtures">
                   <div className="space-y-4">
+                    <div className="rounded-lg border border-mbhs-navy/10 bg-mbhs-navy/5 p-3 text-sm text-mbhs-navy/80">
+                      <p className="font-semibold text-mbhs-navy">Prediction tracker</p>
+                      <p className="mt-1">
+                        {predictionsCount === 0
+                          ? 'You have not made any predictions yet. Tap a team below to back a winner!'
+                          : `You’ve locked in ${predictionsCount} ${
+                              predictionsCount === 1 ? 'prediction' : 'predictions'
+                            }. Tap any team again to switch sides.`}
+                      </p>
+                    </div>
                     {upcomingFixtures.length === 0 && (
                       <p className="text-sm text-mbhs-navy/70">No fixtures scheduled yet.</p>
                     )}
@@ -205,6 +277,34 @@ export default function SEPEPSportsHub() {
                           {fixture.time && <span>{fixture.time}</span>}
                           {fixture.court && <span>{fixture.court}</span>}
                           {fixture.division && <span>{fixture.division}</span>}
+                        </div>
+                        <div className="mt-3 rounded-lg bg-mbhs-navy/5 p-3 text-sm">
+                          <p className="text-xs font-semibold uppercase text-mbhs-navy/60">Fan prediction</p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => togglePrediction(fixture.id, 'home')}
+                              className={getPredictionButtonClass(predictions[fixture.id] === 'home')}
+                              aria-pressed={predictions[fixture.id] === 'home'}
+                            >
+                              {fixture.home}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => togglePrediction(fixture.id, 'away')}
+                              className={getPredictionButtonClass(predictions[fixture.id] === 'away')}
+                              aria-pressed={predictions[fixture.id] === 'away'}
+                            >
+                              {fixture.away}
+                            </button>
+                          </div>
+                          <p className="mt-2 text-xs text-mbhs-navy/70">
+                            {predictions[fixture.id]
+                              ? `You’re cheering for ${
+                                  predictions[fixture.id] === 'home' ? fixture.home : fixture.away
+                                }! ${predictions[fixture.id] === 'home' ? '🎉' : '🔥'}`
+                              : 'Not sure yet? Make a pick – tap again to clear it.'}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -257,28 +357,61 @@ export default function SEPEPSportsHub() {
                           <tr className="bg-slate-50">
                             <th className="px-3 py-2 text-left font-semibold">Match</th>
                             <th className="px-3 py-2 text-left font-semibold">Details</th>
+                            <th className="px-3 py-2 text-left font-semibold">Your pick</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200">
-                          {fixtures.map((fixture) => (
-                            <tr key={fixture.id} className="bg-white/80">
-                              <td className="px-3 py-3">
-                                <div className="font-semibold text-mbhs-navy">
-                                  {fixture.home} vs {fixture.away}
-                                </div>
-                                {fixture.division && (
-                                  <div className="text-xs text-mbhs-navy/70">{fixture.division}</div>
-                                )}
-                              </td>
-                              <td className="px-3 py-3 text-sm text-mbhs-navy/80">
-                                <div className="flex flex-wrap gap-x-4 gap-y-1">
-                                  {fixture.date && <span>{fixture.date}</span>}
-                                  {fixture.time && <span>{fixture.time}</span>}
-                                  {fixture.court && <span>{fixture.court}</span>}
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                          {fixtures.map((fixture) => {
+                            const fixturePrediction = predictions[fixture.id];
+                            return (
+                              <tr key={fixture.id} className="bg-white/80">
+                                <td className="px-3 py-3">
+                                  <div className="font-semibold text-mbhs-navy">
+                                    {fixture.home} vs {fixture.away}
+                                  </div>
+                                  {fixture.division && (
+                                    <div className="text-xs text-mbhs-navy/70">{fixture.division}</div>
+                                  )}
+                                </td>
+                                <td className="px-3 py-3 text-sm text-mbhs-navy/80">
+                                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                    {fixture.date && <span>{fixture.date}</span>}
+                                    {fixture.time && <span>{fixture.time}</span>}
+                                    {fixture.court && <span>{fixture.court}</span>}
+                                  </div>
+                                </td>
+                                <td className="px-3 py-3 text-sm text-mbhs-navy/80">
+                                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                                    <div className="flex flex-wrap gap-2">
+                                      <button
+                                        type="button"
+                                        onClick={() => togglePrediction(fixture.id, 'home')}
+                                        className={getPredictionButtonClass(fixturePrediction === 'home')}
+                                        aria-pressed={fixturePrediction === 'home'}
+                                      >
+                                        {fixture.home}
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => togglePrediction(fixture.id, 'away')}
+                                        className={getPredictionButtonClass(fixturePrediction === 'away')}
+                                        aria-pressed={fixturePrediction === 'away'}
+                                      >
+                                        {fixture.away}
+                                      </button>
+                                    </div>
+                                    <div className="text-xs text-mbhs-navy/60">
+                                      {fixturePrediction
+                                        ? `Backing ${
+                                            fixturePrediction === 'home' ? fixture.home : fixture.away
+                                          }! 🏆`
+                                        : 'Pick a side to add your prediction.'}
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
